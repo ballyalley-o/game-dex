@@ -8,6 +8,8 @@ export const GLOBAL = {
   API_URL: process.env.API_URL,
   //  :database
   DB_URI: process.env.DB_URI,
+  DB_HOST: (db: any) => db.connection.host,
+  DB_NAME: (db: any) => db.connection.name,
   // :env
   ENV: process.env.ENV || 'development'
 }

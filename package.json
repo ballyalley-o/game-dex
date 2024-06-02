@@ -1,0 +1,43 @@
+{
+  "name": "nba-api",
+  "version": "1.0.0",
+  "description": "Elevate the numbers game with advanced analytics. From PER to Win Shares, App puts the power of cutting-edge metrics.",
+  "main": "app.ts",
+  "scripts": {
+    "start": "nodemon dist/app.js",
+    "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/goodeinc/nba-api.git"
+  },
+  "keywords": [
+    "nba",
+    "api",
+    "typescript",
+    "server"
+  ],
+  "author": "goode inc <bgoodies.dev@outlook.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/goodeinc/nba-api/issues"
+  },
+  "homepage": "https://github.com/goodeinc/nba-api#readme",
+  "dependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.13.0",
+    "axios": "^1.7.2",
+    "colors": "^1.4.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "good-logs": "^1.2.4",
+    "mongoose": "^8.4.1",
+    "nodemon": "^3.1.2",
+    "typescript": "^5.4.5"
+  },
+  "devDependencies": {
+    "tsc-alias": "^1.8.10",
+    "typedoc": "^0.25.13"
+  }
+}

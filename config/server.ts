@@ -4,7 +4,7 @@ import morgan from 'morgan'
 import { LogInitRequest, ConnectionStatus } from 'decorator'
 import { mainRoute } from 'route'
 import { AppRouter } from 'app-router'
-import { GLOBAL } from 'config/global'
+import { GLOBAL, connectDb } from 'config'
 import { KEY } from 'constant'
 import dotenv from 'dotenv'
 dotenv.config()
@@ -16,9 +16,12 @@ class App {
   private _app: Application
   isConnected: boolean = false
 
+  public static globalConfig = GLOBAL
+
   static app() {
     const app = new App()
     app.start()
+    app.connectDb()
   }
 
   constructor() {
@@ -33,6 +36,12 @@ class App {
     this._app.use(AppRouter.instance)
     AppRouter.serverRouter()
     mainRoute(this._app)
+  }
+
+  public async connectDb() {
+    try {
+      await connectDb(true)
+    } catch (error) {}
   }
 
   @ConnectionStatus

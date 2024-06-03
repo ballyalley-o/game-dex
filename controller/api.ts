@@ -11,7 +11,7 @@ class ApiController {
   }
 
   public static async getApi(req: Request, res: Response, next: NextFunction) {
-    const python = spawn('python3', ['nba-live.py'])
+    const python = spawn('python3', ['scraper/nba-live.py'])
     let dataToSend: any
 
     python.stdout.on('data', function (data) {
@@ -21,7 +21,7 @@ class ApiController {
 
     python.on('close', (code) => {
       console.log(`child process close all stdio with code ${code}`)
-      res.status(200).json(dataToSend)
+      res.status(200).send(dataToSend)
     })
   }
 }

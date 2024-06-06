@@ -1,7 +1,8 @@
 #!/bin/bash
 
-python3 scraper/server-stats.py
+# python3 scraper/server-stats.py
 # python3 scraper/server-players.py
+python3 scraper/server-players-teams.py
 
 # Path: scrape.sh
 #!/bin/bash

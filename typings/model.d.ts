@@ -110,20 +110,25 @@ declare interface Turnover {
   turnovers: number
 }
 
-declare interface PersonalFoul {
+declare interface Foul {
+  teamFouls: number
   personalFouls: number
   technicalFouls: number
   flagrantFouls: number
   [key: string]: any
 }
 
-declare interface Stats extends Minute, Rebound, Assist, Steal, Block, Turnover, PersonalFoul, Point {
+declare interface Stats extends Minute, Rebound, Assist, Steal, Block, Turnover, Foul, Point {
   _id: Schema.Types.ObjectId
   apiCode: string
 }
 
 declare interface PlayerStats extends Stats {
   player: Schema.Types.ObjectId
+  regularSeasonStats: Schema.Types.ObjectId
+  allStarStats: Schema.Types.ObjectId
+  playoffStats: Schema.Types.ObjectId
+  finalsStats: Schema.Types.ObjectId
 }
 
 declare interface TeamStats extends Stats {
@@ -150,6 +155,77 @@ declare interface FinalsStats extends PlayoffStats {
   playoffs: Schema.Types.ObjectId
 }
 
+declare interface Awards {
+  _id: Schema.Types.ObjectId
+  apiCode: string
+  season: Schema.Types.ObjectId
+  mvp: Schema.Types.ObjectId
+  dpoy: Schema.Types.ObjectId
+  roy: Schema.Types.ObjectId
+  [key: string]: any
+}
+
+declare interface PlayoffAwards {
+  _id: Schema.Types.ObjectId
+  apiCode: string
+  playoffs: Schema.Types.ObjectId
+  conferenceChampion: Schema.Types.ObjectId
+  conferenceMvp: Schema.Types.ObjectId
+  champion: Schema.Types.ObjectId
+  finalsMvp: Schema.Types.ObjectId
+  [key: string]: any
+}
+
+declare interface MVP {
+  _id: Schema.Types.ObjectId
+  apiCode: string
+  season: Schema.Types.ObjectId
+  player: Schema.Types.ObjectId
+}
+
+declare interface DPOY {
+  _id: Schema.Types.ObjectId
+  apiCode: string
+  season: Schema.Types.ObjectId
+  player: Schema.Types.ObjectId
+}
+
+declare interface ROY {
+  _id: Schema.Types.ObjectId
+  apiCode: string
+  season: Schema.Types.ObjectId
+  player: Schema.Types.ObjectId
+}
+
+declare interface ConferenceChampion {
+  _id: Schema.Types.ObjectId
+  apiCode: string
+  playoffs: Schema.Types.ObjectId
+  team: Schema.Types.ObjectId
+}
+
+declare interface ConferenceMVP {
+  _id: Schema.Types.ObjectId
+  apiCode: string
+  playoffs: Schema.Types.ObjectId
+  player: Schema.Types.ObjectId
+}
+
+declare interface Champion {
+  _id: Schema.Types.ObjectId
+  apiCode: string
+  season: Schema.Types.ObjectId
+  playoffs: Schema.Types.ObjectId
+  team: Schema.Types.ObjectId
+}
+
+declare interface FinalsMVP {
+  _id: Schema.Types.ObjectId
+  apiCode: string
+  playoffs: Schema.Types.ObjectId
+  player: Schema.Types.ObjectId
+}
+
 declare interface Playoffs {
   _id: Schema.Types.ObjectId
   apiCode: string
@@ -166,9 +242,12 @@ declare interface Player {
   lastname: string
   team: Schema.Types.ObjectId
   record: string
-  stats: Schema.Types.ObjectId
   draft: Schema.Types.ObjectId
+  stats: Schema.Types.ObjectId
+  allStar: Schema.Types.ObjectId
+  awards: Schema.Types.ObjectId[]
   jerseys: Schema.Types.ObjectId[]
+  isRetired: boolean
   isActive: boolean
   [key: string]: any
 }

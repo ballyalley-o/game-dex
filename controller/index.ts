@@ -1,1 +1,1 @@
-export { default as ApiController } from './api'
+export { default as SDKController } from './sdk'

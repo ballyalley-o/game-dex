@@ -118,12 +118,12 @@ def get_team_info(team_id):
     dict: A dictionary containing the full information of the team.
     """
     team_info = teaminfocommon.TeamInfoCommon(team_id)
-    team_full_info = team_info.get_dict()
+    team_full_info = team_info.get_normalized_json()
 
     return team_full_info
 
 
-@app.route('/teams/draft', methods=['GET'])
+@app.route('/draft/history', methods=['GET'])
 def get_team_draft_info():
     """
     Retrieves the draft information for NBA teams.
@@ -132,7 +132,7 @@ def get_team_draft_info():
         dict: A dictionary containing the draft information for NBA teams.
     """
     draaft_info = drafthistory.DraftHistory()
-    draaft_full_info = draaft_info.get_json()
+    draaft_full_info = draaft_info.get_normalized_json()
 
     return draaft_full_info
 

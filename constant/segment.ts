@@ -1,12 +1,19 @@
+/**
+ * Enum representing different segments for the NBA API.
+ */
 export enum SEGMENT {
   ABBV = 'abbv',
+  ABBV_PARAM = ':abbv',
   API = 'api',
-  USER = 'user',
+  AWARD = 'award',
+  CAREER = 'career',
+  DRAFT = 'draft',
+  FIND = 'find',
+  HISTORY = 'history',
+  ID = ':id',
+  INFO = 'info',
   PLAYER = 'player',
   SDK = 'sdk',
   TEAM = 'team',
-  FIND = 'find',
-  INFO = 'info',
-  DRAFT = 'draft',
-  HISTORY = 'history'
+  USER = 'user'
 }

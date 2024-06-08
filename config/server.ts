@@ -12,6 +12,9 @@ dotenv.config()
 const PORT = GLOBAL.API_PORT
 const ENV = GLOBAL.ENV
 
+/**
+ * Represents the main application class.
+ */
 class App {
   private _app: Application
   isConnected: boolean = false
@@ -38,6 +41,9 @@ class App {
     mainRoute(this._app)
   }
 
+  /**
+   * Connects to the database.
+   */
   public async connectDb() {
     try {
       await connectDb(true)
@@ -45,6 +51,9 @@ class App {
   }
 
   @ConnectionStatus
+  /**
+   * Starts the application server.
+   */
   public start() {
     let _ENV = ENV === KEY.DEVELOPMENT ? ('DEVELOPMENT' as keyof Env) : ('PRODUCTION' as keyof Env)
 

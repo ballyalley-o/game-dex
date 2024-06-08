@@ -9,9 +9,6 @@ import { KEY } from 'constant'
 import dotenv from 'dotenv'
 dotenv.config()
 
-const PORT = GLOBAL.API_PORT
-const ENV = GLOBAL.ENV
-
 /**
  * Represents the main application class.
  */
@@ -20,6 +17,8 @@ class App {
   isConnected: boolean = false
 
   public static globalConfig = GLOBAL
+  private _PORT: number | string
+  private _ENV: string
 
   static app() {
     const app = new App()
@@ -31,6 +30,8 @@ class App {
     this._app = express()
     this._app.use(express.json())
     this._app.use(morgan('combined'))
+    this._PORT = GLOBAL.API_PORT
+    this._ENV = GLOBAL.ENV
     this.registerRoute()
   }
 
@@ -55,15 +56,15 @@ class App {
    * Starts the application server.
    */
   public start() {
-    let _ENV = ENV === KEY.DEVELOPMENT ? ('DEVELOPMENT' as keyof Env) : ('PRODUCTION' as keyof Env)
+    let _ENV = this._ENV === KEY.DEVELOPMENT ? ('DEVELOPMENT' as keyof Env) : ('PRODUCTION' as keyof Env)
 
     try {
-      this._app.listen(PORT, () => {
-        goodlog.server(PORT, GLOBAL.API_VERSION, _ENV, this.isConnected)
+      this._app.listen(this._PORT, () => {
+        goodlog.server(this._PORT, GLOBAL.API_VERSION, _ENV, this.isConnected)
       })
     } catch (error: any) {
       process.on(KEY.UNHANDLED_REJECTION, (err) => {
-        goodlog.server(PORT, GLOBAL.API_VERSION, _ENV, this.isConnected)
+        goodlog.server(this._PORT, GLOBAL.API_VERSION, _ENV, this.isConnected)
         goodlog.error(error.message)
         this.isConnected = false
       })

@@ -214,6 +214,8 @@ const PY = {
 }
 
 export const MESSAGE = {
+  NO_ID: 'No ID provided',
+  NO_ABBV: 'No abbreviation provided',
   NOT_FOUND: 'Resource not found'
 }
 

@@ -5,7 +5,7 @@ from flask import Flask, jsonify
 
 app = Flask(__name__)
 
-@app.route('/players', methods=['GET'])
+@app.route('/player', methods=['GET'])
 def get_players_all():
     """
     Retrieve all players.
@@ -16,7 +16,7 @@ def get_players_all():
     players_all = players_static.get_players()
     return jsonify(players_all)
 
-@app.route('/players/find', methods=['GET'])
+@app.route('/player/find', methods=['GET'])
 def get_player():
     """
     Retrieves information about a specific player.
@@ -29,7 +29,7 @@ def get_player():
     return jsonify(lebron)
 
 
-@app.route('/players/info/<int:player_id>', methods=['GET'])
+@app.route('/player/info/<int:player_id>', methods=['GET'])
 def get_player_info(player_id):
     """
     Retrieve information about a specific player.
@@ -45,7 +45,7 @@ def get_player_info(player_id):
 
     return player_full_info
 
-@app.route('/players/awards/<int:player_id>', methods=['GET'])
+@app.route('/player/award/<int:player_id>', methods=['GET'])
 def get_player_awards(player_id):
     """
     Retrieve the awards of a specific player.
@@ -61,7 +61,7 @@ def get_player_awards(player_id):
 
     return player_awards_all
 
-@app.route('/players/career/<int:player_id>', methods=['GET'])
+@app.route('/player/career/<int:player_id>', methods=['GET'])
 def get_player_career(player_id):
     """
     Retrieves the career statistics of a player based on their player ID.
@@ -80,7 +80,7 @@ def get_player_career(player_id):
 
 # teams
 
-@app.route('/teams', methods=['GET'])
+@app.route('/team', methods=['GET'])
 def get_teams_all():
     """
     Retrieves all teams from the database and returns them as a JSON response.
@@ -91,7 +91,7 @@ def get_teams_all():
     teams_all = teams_static.get_teams()
     return jsonify(teams_all)
 
-@app.route('/teams/find/<string:abbv>', methods=['GET'])
+@app.route('/team/find/<string:abbv>', methods=['GET'])
 def get_team(abbv):
     """
     Retrieves the team information based on the given abbreviation.
@@ -106,7 +106,7 @@ def get_team(abbv):
     team_abbv = teams_static.find_team_by_abbreviation(abbv)
     return jsonify(team_abbv)
 
-@app.route('/teams/info/<int:team_id>', methods=['GET'])
+@app.route('/team/info/<int:team_id>', methods=['GET'])
 def get_team_info(team_id):
     """
     Retrieves information about a specific NBA team.

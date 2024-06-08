@@ -24,9 +24,9 @@ def get_player():
     Returns:
         A JSON response containing information about the player.
     """
-    lebron = players_static.find_players_by_full_name("Lebron James")
+    player = players_static.find_players_by_full_name("Lebron James")
 
-    return jsonify(lebron)
+    return jsonify(player)
 
 
 @app.route('/player/info/<int:player_id>', methods=['GET'])
@@ -41,7 +41,7 @@ def get_player_info(player_id):
         dict: A dictionary containing the player's information.
     """
     player_info = commonplayerinfo.CommonPlayerInfo(player_id)
-    player_full_info = player_info.get_dict()
+    player_full_info = player_info.get_normalized_json()
 
     return player_full_info
 
@@ -57,7 +57,7 @@ def get_player_awards(player_id):
         dict: A dictionary containing the player's awards in JSON format.
     """
     player_awards = playerawards.PlayerAwards(player_id)
-    player_awards_all = player_awards.get_json()
+    player_awards_all = player_awards.get_normalized_json()
 
     return player_awards_all
 
@@ -73,7 +73,7 @@ def get_player_career(player_id):
     dict: A dictionary containing the career statistics of the player in JSON format.
     """
     player_career_stats = playercareerstats.PlayerCareerStats(player_id)
-    player_career_stats_all = player_career_stats.get_json()
+    player_career_stats_all = player_career_stats.get_normalized_json()
 
     return player_career_stats_all
 

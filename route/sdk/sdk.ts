@@ -5,6 +5,7 @@ const router = Router()
 
 router.get('/team', SDKController.getAllTeam)
 router.get('/team/:id', SDKController.getTeam)
+router.get('/team/find/:abbv', SDKController.getTeamByAbbv)
 router.get('/player', SDKController.getAllPlayer)
 router.get('/player/:id', SDKController.getAllPlayer)
 router.get('/draft/history', SDKController.getDraftHistory)

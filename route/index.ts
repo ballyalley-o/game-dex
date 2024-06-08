@@ -1,8 +1,8 @@
 import { Application } from 'express'
-import { linkApiRoute } from 'route/sdk'
+import { linkSdkRoute } from 'route/sdk'
 
 const mainRoute = (app: Application) => {
-  linkApiRoute(app)
+  linkSdkRoute(app)
 }
 
 export { mainRoute }

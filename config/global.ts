@@ -32,6 +32,8 @@ export const GLOBAL = {
 
   /**
    * The URL for the SDK. Must be provided in the environment variables.
+   *
+   * @url http://127.0.0.1:5001
    */
   SDK_URL: process.env.SDK_URL,
 

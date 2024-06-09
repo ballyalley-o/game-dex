@@ -1,3 +1,5 @@
+import { TEAM_ID } from './team-id'
+
 export const SCOPE = {
   S: 'S'
 }
@@ -26,12 +28,18 @@ export const STAT_CATEGORY_ABBV = {
   FT_PCT: 'FT_PCT'
 }
 
+export const FRANCHISE_LEADER = {
+  TEAM_ID: TEAM_ID,
+  LEAGUE_ID_NULLABLE: '00'
+}
+
 export const PLAYER_OR_TEAM = {
   PLAYER: 'Player',
   TEAM: 'Team'
 }
 
 export const QPARAM = {
+  ...FRANCHISE_LEADER,
   ...PLAYER_OR_TEAM,
   ...SCOPE,
   ...SEASON_TYPE_ALL_STAR,

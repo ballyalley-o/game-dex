@@ -43,6 +43,15 @@ class SDKController {
     }
   }
 
+  static setQueryParamsFranchise(req: Request) {
+    const { team_id, league_id_nullable } = req.query
+
+    return {
+      team_id,
+      league_id_nullable
+    }
+  }
+
   /**
    * Retrieves all teams.
    *
@@ -426,6 +435,37 @@ class SDKController {
         res.status(CODE.NOT_FOUND).send(RESPONSE.NOT_FOUND(MESSAGE.NOT_FOUND))
       } else {
         res.status(CODE.OK).send(RESPONSE.OK(allTimeTotal.data))
+      }
+    } catch (error: any) {
+      goodlog.error(error)
+      res.status(CODE.INTERNAL_SERVER_ERROR).send(RESPONSE.INTERNAL_SERVER_ERROR(error.message))
+    }
+  }
+
+  // franchise module
+
+  /**
+   * Retrieves all franchise leaders.
+   *
+   * @route   {GET} /sdk/franchise/leader
+   * @access  public
+   * **/
+  public static async getAllFranchiseLeader(req: Request, res: Response, _next: NextFunction) {
+    SDKController.setQueryParamsFranchise(req)
+    try {
+      const { team_id, league_id_nullable } = SDKController.setQueryParamsFranchise(req)
+
+      const franchiseLeader = await axios.get(SDK_DIR.FRANCHISE_LEADER, {
+        params: {
+          team_id,
+          league_id_nullable
+        }
+      })
+
+      if (!franchiseLeader.data) {
+        res.status(CODE.NOT_FOUND).send(RESPONSE.NOT_FOUND(MESSAGE.NOT_FOUND))
+      } else {
+        res.status(CODE.OK).send(RESPONSE.OK(franchiseLeader.data))
       }
     } catch (error: any) {
       goodlog.error(error)

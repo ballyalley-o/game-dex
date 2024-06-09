@@ -25,6 +25,8 @@ router.get(PATH_SDK.LEADER_AST_PLAYER, SDKController.getLeaderAstPlayer)
 router.get(PATH_SDK.ALL_TIME_LEADER, SDKController.getAllTimeLeader)
 router.get(PATH_SDK.ALL_TIME_TOTAL, SDKController.getAllTimeTotal)
 
+router.get(PATH_SDK.FRANCHISE_LEADER, SDKController.getAllFranchiseLeader)
+
 /**
  * Route for SDK module
  *

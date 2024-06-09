@@ -142,5 +142,11 @@ export const PATH_SDK = {
    * The franchise leader by team-id directory path.
    * @route /franchise/leader
    **/
-  FRANCHISE_LEADER: conNexSegment(SEGMENT.FRANCHISE, SEGMENT.LEADER)
+  FRANCHISE_LEADER: conNexSegment(SEGMENT.FRANCHISE, SEGMENT.LEADER),
+
+  /**
+   * The scoreboard directory path.
+   * @route /scoreboard
+   */
+  SCOREBOARD: conNexSegment(SEGMENT.SCOREBOARD)
 }

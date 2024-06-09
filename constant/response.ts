@@ -216,7 +216,9 @@ const PY = {
 export const MESSAGE = {
   NO_ID: 'No ID provided',
   NO_ABBV: 'No abbreviation provided',
-  NOT_FOUND: 'Resource not found'
+  NOT_FOUND: 'Resource not found',
+  NO_TEAM: 'No team provided',
+  NO_STATE: 'No state provided'
 }
 
 export const RESPONSE = {

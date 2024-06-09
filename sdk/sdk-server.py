@@ -1,6 +1,7 @@
 from nba_api.stats.endpoints import playerawards, playercareerstats, drafthistory, commonplayerinfo, teaminfocommon
 from nba_api.stats.static import players as players_static, teams as teams_static
-from nba_api.stats.endpoints import alltimeleadersgrids, assistleaders, leagueleaders, franchiseleaders
+from nba_api.stats.endpoints import alltimeleadersgrids, assistleaders, leagueleaders, franchiseleaders, scoreboardv2 as scoreboard
+
 
 from flask import Flask, jsonify, request
 
@@ -285,6 +286,30 @@ def get_franchise_leader():
     franchise_json = franchise.get_normalized_json()
 
     return franchise_json
+
+# scoreboard
+
+@app.route('/scoreboard', methods=['GET'])
+def get_scoreboard():
+    """
+    Retrieves the scoreboard data from the NBA API.
+
+    Returns:
+        dict: A dictionary containing the scoreboard data.
+    """
+    try:
+        games = scoreboard.ScoreboardV2()
+        games_data = games.get_normalized_json()
+        return games_data
+
+    except requests.exceptions.RequestException as e:
+        app.logger.error(f"API request failed: {e}")
+        return jsonify({"error": "Failed to fetch scoreboard data"}), 500
+
+    except Exception as e:
+
+        app.logger.error(f"An error occurred: {e}")
+        return jsonify({"error": "An internal error occurred"}), 500
 
 
 

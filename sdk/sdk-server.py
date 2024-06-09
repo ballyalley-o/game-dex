@@ -1,6 +1,6 @@
 from nba_api.stats.endpoints import playerawards, playercareerstats, drafthistory, commonplayerinfo, teaminfocommon
 from nba_api.stats.static import players as players_static, teams as teams_static
-from nba_api.stats.endpoints import alltimeleadersgrids, assistleaders, leagueleaders
+from nba_api.stats.endpoints import alltimeleadersgrids, assistleaders, leagueleaders, franchiseleaders
 
 from flask import Flask, jsonify, request
 
@@ -153,6 +153,7 @@ def get_team_draft_info():
     return draaft_full_info
 
 # current leader module
+
 @app.route('/leader', methods=['GET'])
 def get_leader():
     """
@@ -258,6 +259,33 @@ def get_all_time_total():
     all_time_total_json = all_time_total.get_normalized_json()
 
     return all_time_total_json
+
+
+# franchise
+
+@app.route('/franchise/leader', methods=['GET'])
+def get_franchise_leader():
+    """
+    Retrieves the franchise leader data for a specific team.
+
+    Parameters:
+    - team_id (str): The ID of the team. Defaults to '1610612737' (Atlanta Hawks).
+    - league_id_nullable (str): The ID of the league. Defaults to '00' (NBA).
+
+    Returns:
+    - franchise_json (str): The franchise leader data in JSON format.
+    """
+    team_id = request.args.get('team_id', '1610612737')
+    league_id_nullable = request.args.get('league_id_nullable', '00')
+
+    franchise = franchiseleaders.FranchiseLeaders(
+        team_id=team_id,
+        league_id_nullable=league_id_nullable
+    )
+    franchise_json = franchise.get_normalized_json()
+
+    return franchise_json
+
 
 
 

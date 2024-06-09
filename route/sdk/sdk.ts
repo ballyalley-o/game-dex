@@ -27,6 +27,8 @@ router.get(PATH_SDK.ALL_TIME_TOTAL, SDKController.getAllTimeTotal)
 
 router.get(PATH_SDK.FRANCHISE_LEADER, SDKController.getAllFranchiseLeader)
 
+router.get(PATH_SDK.SCOREBOARD, SDKController.getScoreboard)
+
 /**
  * Route for SDK module
  *

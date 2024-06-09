@@ -38,6 +38,19 @@ export const PLAYER_OR_TEAM = {
   TEAM: 'Team'
 }
 
+export const PER_MODE = {
+  PER_GAME: 'PerGame',
+  PER_36: 'Per36',
+  TOTAL: 'Totals'
+}
+
+export const ALL_TIME_LEADER_GRID = {
+  LEAGUE_ID: '00',
+  PER_MODE: PER_MODE,
+  SEASON_TYPE: SEASON_TYPE_ALL_STAR,
+  TOP_X: 10
+}
+
 export const QPARAM = {
   ...FRANCHISE_LEADER,
   ...PLAYER_OR_TEAM,

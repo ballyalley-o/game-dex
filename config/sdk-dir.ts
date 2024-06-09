@@ -152,5 +152,12 @@ export const SDK_DIR = {
    *
    * {base_sdk_url}/franchise/leader
    */
-  FRANCHISE_LEADER: conNex(GLOBAL.SDK_URL, SEGMENT.FRANCHISE, SEGMENT.LEADER)
+  FRANCHISE_LEADER: conNex(GLOBAL.SDK_URL, SEGMENT.FRANCHISE, SEGMENT.LEADER),
+
+  /**
+   * Returns the scoreboard directory path for latest games.
+   *
+   * {base_sdk_url}/scoreboard
+   */
+  SCOREBOARD: conNex(GLOBAL.SDK_URL, SEGMENT.SCOREBOARD)
 }

@@ -37,6 +37,14 @@ export const PATH_SDK = {
   TEAM: conNexSegment(SEGMENT.TEAM),
 
   /**
+   * The team state directory path.
+   * @route /team/state/{state}
+   * @param state - The team state.
+   * @returns The team state directory path.
+   */
+  TEAM_STATE: conNexSegment(SEGMENT.TEAM, SEGMENT.STATE, SEGMENT.STATE_PARAM),
+
+  /**
    * Returns the team info directory path for the specified team ID.
    * @route /team/{id}
    * @param id - The team ID.
@@ -68,23 +76,65 @@ export const PATH_SDK = {
 
   /**
    * Returns the player award directory path for the specified player ID.
-   * @route /player/award/{id}
+   * @route /player/{id}/award
    * @param id - The player ID.
    * @returns The player find directory path.
    */
-  PLAYER_AWARD: conNexSegment(SEGMENT.PLAYER, SEGMENT.AWARD, SEGMENT.ID),
+  PLAYER_AWARD: conNexSegment(SEGMENT.PLAYER, SEGMENT.ID, SEGMENT.AWARD),
 
   /**
    * Returns the player career directory path for the specified player ID.
-   * @route /player/career/{id}
+   * @route /player/{id}/career
    * @param id - The player ID.
    * @returns The player career directory path.
    */
-  PLAYER_CAREER: conNexSegment(SEGMENT.PLAYER, SEGMENT.CAREER, SEGMENT.ID),
+  PLAYER_CAREER: conNexSegment(SEGMENT.PLAYER, SEGMENT.ID, SEGMENT.CAREER),
 
   /**
    * The draft history directory path.
    * @route /draft/history
    */
-  DRAFT_HISTORY: conNexSegment(SEGMENT.DRAFT, SEGMENT.HISTORY)
+  DRAFT_HISTORY: conNexSegment(SEGMENT.DRAFT, SEGMENT.HISTORY),
+
+  /**
+   * Get all currrent league leader players  directory path. (default: Team)
+   * @route /leader
+   **/
+  LEADER_ALL: conNexSegment(SEGMENT.LEADER),
+
+  /**
+   * The player current leader in assist directory path
+   * @route /leader/pt
+   **/
+  LEADER_PT: conNexSegment(SEGMENT.LEADER, SEGMENT.PT),
+
+  /**
+   * The player current leader in points directory path
+   * @route /leader/pt/player
+   **/
+  LEADER_PT_PLAYER: conNexSegment(SEGMENT.LEADER, SEGMENT.PT, SEGMENT.PLAYER),
+
+  /**
+   * Get all currrent players leader in assist directory path. (default: Team)
+   * @route /leader/ast
+   **/
+  LEADER_AST: conNexSegment(SEGMENT.LEADER, SEGMENT.AST),
+
+  /**
+   * Get all currrent players leader in assist directory path. (default: Team)
+   * @route /leader/ast/player
+   **/
+  LEADER_AST_PLAYER: conNexSegment(SEGMENT.LEADER, SEGMENT.AST, SEGMENT.PLAYER),
+
+  /**
+   * All time league leader directory path.
+   * @route /all-time/leader
+   */
+  ALL_TIME_LEADER: conNexSegment(SEGMENT.ALL_TIME, SEGMENT.LEADER),
+
+  /**
+   * The player all time points directory path.
+   * @route /all-time/total
+   **/
+  ALL_TIME_TOTAL: conNexSegment(SEGMENT.ALL_TIME, SEGMENT.TOTAL)
 }

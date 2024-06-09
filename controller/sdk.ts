@@ -473,6 +473,29 @@ class SDKController {
     }
   }
 
+  // scoreboard module
+
+  /**
+   * Retrieves the scoreboard for the latest games.
+   *
+   * @route   {GET} /sdk/scoreboard
+   * @access  public
+   * **/
+  public static async getScoreboard(_req: Request, res: Response, _next: NextFunction) {
+    try {
+      const scoreboard = await axios.get(SDK_DIR.SCOREBOARD)
+
+      if (!scoreboard.data) {
+        res.status(CODE.NOT_FOUND).send(RESPONSE.NOT_FOUND(MESSAGE.NOT_FOUND))
+      } else {
+        res.status(CODE.OK).send(RESPONSE.OK(scoreboard.data))
+      }
+    } catch (error: any) {
+      goodlog.error(error)
+      res.status(CODE.INTERNAL_SERVER_ERROR).send(RESPONSE.INTERNAL_SERVER_ERROR(error.message))
+    }
+  }
+
   public static async spawnPy(_req: Request, res: Response, _next: NextFunction) {
     const python = spawn(KEY.PYTHON, ['sdk/server-games.py'])
     let dataToSend: any

@@ -21,6 +21,7 @@ export enum SEGMENT {
   PT = 'pt',
   POINT = 'point',
   PTS = 'pts',
+  SCOREBOARD = 'scoreboard',
   SDK = 'sdk',
   STATE = 'state',
   STATE_PARAM = ':state',

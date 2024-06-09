@@ -145,5 +145,12 @@ export const SDK_DIR = {
    *
    * {base_sdk_url}/all-time/total/assist
    */
-  ALL_TIME_ASSIST: conNex(GLOBAL.SDK_URL, SEGMENT.ALL_TIME, SEGMENT.ASSIST)
+  ALL_TIME_ASSIST: conNex(GLOBAL.SDK_URL, SEGMENT.ALL_TIME, SEGMENT.ASSIST),
+
+  /**
+   * Returns the franchise leader by team directory path.
+   *
+   * {base_sdk_url}/franchise/leader
+   */
+  FRANCHISE_LEADER: conNex(GLOBAL.SDK_URL, SEGMENT.FRANCHISE, SEGMENT.LEADER)
 }

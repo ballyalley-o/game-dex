@@ -136,5 +136,11 @@ export const PATH_SDK = {
    * The player all time points directory path.
    * @route /all-time/total
    **/
-  ALL_TIME_TOTAL: conNexSegment(SEGMENT.ALL_TIME, SEGMENT.TOTAL)
+  ALL_TIME_TOTAL: conNexSegment(SEGMENT.ALL_TIME, SEGMENT.TOTAL),
+
+  /**
+   * The franchise leader by team-id directory path.
+   * @route /franchise/leader
+   **/
+  FRANCHISE_LEADER: conNexSegment(SEGMENT.FRANCHISE, SEGMENT.LEADER)
 }

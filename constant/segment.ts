@@ -12,6 +12,7 @@ export enum SEGMENT {
   CAREER = 'career',
   DRAFT = 'draft',
   FIND = 'find',
+  FRANCHISE = 'franchise',
   HISTORY = 'history',
   ID = ':id',
   INFO = 'info',

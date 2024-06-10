@@ -257,6 +257,27 @@ class SDKController {
     }
   }
 
+  public static async getPlayerFantasyProfile(req: Request, res: Response, _next: NextFunction) {
+    try {
+      SDKController.setPlayerId(req)
+
+      if (!SDKController._playerId) {
+        res.status(CODE.UNPROCESSABLE_ENTITY).send(RESPONSE.UNPROCESSABLE_ENTITY(MESSAGE.NO_ID))
+      } else {
+        const playerCareer = await axios.get(SDK_DIR.PLAYER_CAREER(SDKController._playerId))
+
+        if (!playerCareer.data) {
+          res.status(CODE.NOT_FOUND).send(RESPONSE.NOT_FOUND(MESSAGE.NOT_FOUND))
+        } else {
+          res.status(CODE.OK).send(RESPONSE.OK(playerCareer.data))
+        }
+      }
+    } catch (error: any) {
+      goodlog.error(error)
+      res.status(CODE.INTERNAL_SERVER_ERROR).send(RESPONSE.INTERNAL_SERVER_ERROR(error.message))
+    }
+  }
+
   /**
    * Retrieves the draft history.
    *
@@ -587,6 +608,29 @@ class SDKController {
         res.status(CODE.NOT_FOUND).send(RESPONSE.NOT_FOUND(MESSAGE.NOT_FOUND))
       } else {
         res.status(CODE.OK).send(RESPONSE.OK(scoreboard.data))
+      }
+    } catch (error: any) {
+      goodlog.error(error)
+      res.status(CODE.INTERNAL_SERVER_ERROR).send(RESPONSE.INTERNAL_SERVER_ERROR(error.message))
+    }
+  }
+
+  // common module
+
+  /**
+   * Spawns the Python script for the server games.
+   *
+   * @route   {GET} /sdk/common/all/player
+   * @access  public
+   * **/
+  public static async getAllCommonPlayer(_req: Request, res: Response, _next: NextFunction) {
+    try {
+      const commonAllPlayer = await axios.get(SDK_DIR.COMMON_ALL_PLAYER)
+
+      if (!commonAllPlayer.data) {
+        res.status(CODE.NOT_FOUND).send(RESPONSE.NOT_FOUND(MESSAGE.NOT_FOUND))
+      } else {
+        res.status(CODE.OK).send(RESPONSE.OK(commonAllPlayer.data))
       }
     } catch (error: any) {
       goodlog.error(error)

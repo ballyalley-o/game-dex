@@ -1,6 +1,6 @@
 import { conNexSegment } from 'lib'
 import { GLOBAL } from 'config/global'
-import { SEGMENT } from 'constant'
+import { FRANCHISE_LEADER, SEGMENT } from 'constant'
 
 /**
  * The directory paths for different segments of the API.
@@ -143,6 +143,24 @@ export const PATH_SDK = {
    * @route /franchise/leader
    **/
   FRANCHISE_LEADER: conNexSegment(SEGMENT.FRANCHISE, SEGMENT.LEADER),
+
+  /**
+   * The franchise player by team_id directory path.
+   * @route /franchise/leader/player
+   **/
+  FRANCHISE_PLAYER: conNexSegment(SEGMENT.FRANCHISE, SEGMENT.PLAYER),
+
+  /**
+   * The franchise history directory path.
+   * @route /franchise/history
+   */
+  FRANCHISE_HISTORY: conNexSegment(SEGMENT.FRANCHISE, SEGMENT.HISTORY),
+
+  /**
+   * The rotation directory path.
+   * @route /rotation
+   */
+  ROTATION: conNexSegment(SEGMENT.ROTATION),
 
   /**
    * The scoreboard directory path.

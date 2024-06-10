@@ -1,6 +1,6 @@
 import { conNex } from 'lib'
 import { GLOBAL } from 'config/global'
-import { SEGMENT } from 'constant'
+import { FRANCHISE_LEADER, SEGMENT } from 'constant'
 
 /**
  * Represents the SDK directory paths.
@@ -153,6 +153,27 @@ export const SDK_DIR = {
    * {base_sdk_url}/franchise/leader
    */
   FRANCHISE_LEADER: conNex(GLOBAL.SDK_URL, SEGMENT.FRANCHISE, SEGMENT.LEADER),
+
+  /**
+   * Returns the franchise leader by team directory path.
+   *
+   * {base_sdk_url}/franchise/player
+   */
+  FRANCHISE_PLAYER: conNex(GLOBAL.SDK_URL, SEGMENT.FRANCHISE, SEGMENT.PLAYER),
+
+  /**
+   * Returns the franchise history directory path for the specified league ID.
+   *
+   * {base_sdk_url}/franchise/history
+   */
+  FRANCHISE_HISTORY: conNex(GLOBAL.SDK_URL, SEGMENT.FRANCHISE, SEGMENT.HISTORY),
+
+  /**
+   * Returns the rotation leader by game_id.
+   *
+   * {base_sdk_url}/rotation
+   */
+  ROTATION: conNex(GLOBAL.SDK_URL, SEGMENT.ROTATION),
 
   /**
    * Returns the scoreboard directory path for latest games.

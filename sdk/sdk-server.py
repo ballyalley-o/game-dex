@@ -1,8 +1,7 @@
 from nba_api.stats.endpoints import playerawards, playercareerstats, drafthistory, commonplayerinfo, teaminfocommon
 from nba_api.stats.static import players as players_static, teams as teams_static
-from nba_api.stats.endpoints import alltimeleadersgrids, assistleaders, leagueleaders, franchiseleaders, scoreboardv2 as scoreboard, FranchisePlayers, FranchiseHistory, GameRotation, VideoDetails, DefenseHub
+from nba_api.stats.endpoints import alltimeleadersgrids, assistleaders, leagueleaders, franchiseleaders, scoreboardv2 as scoreboard, FranchisePlayers, FranchiseHistory, GameRotation, VideoDetails, CommonAllPlayers, PlayerFantasyProfileBarGraph
 import requests
-import datetime
 
 
 from flask import Flask, jsonify, request
@@ -80,7 +79,6 @@ def get_player_career(player_id):
     player_career_stats_all = player_career_stats.get_normalized_json()
 
     return player_career_stats_all
-
 
 # teams
 
@@ -385,7 +383,39 @@ def get_game_rotation():
         app.logger.error(f"An error occurred: {e}")
         return jsonify({"error": "An internal error occurred"}), 500
 
+# common all player
+@app.route('/common/all/player', methods=['GET'])
+def get_common_all_player():
+    """
+    Retrieves the common all player data from the NBA API.
 
+    Returns:
+        dict: A dictionary containing the common all player data.
+    """
+    common_all_player = CommonAllPlayers()
+    common_all_player_json = common_all_player.get_normalized_json()
+
+    return common_all_player_json
+
+# fantasy profile
+@app.route('/player/<int:player_id>/fantasy', methods=['GET'])
+def get_player_fantasy_profile(player_id):
+    """
+    Retrieves the fantasy profile of a specific player.
+
+    Parameters:
+    - player_id (int): The ID of the player.
+
+    Returns:
+    - fantasy_profile_json (str): The fantasy profile of the player in JSON format.
+
+    """
+    # player_id = request.args.get('player_id', '2544')
+
+    player_fantasy_profile = PlayerFantasyProfileBarGraph(player_id)
+    fantasy_profile_json = player_fantasy_profile.get_normalized_json()
+
+    return fantasy_profile_json
 
 # video
 @app.route('/video/detail', methods=['GET'])

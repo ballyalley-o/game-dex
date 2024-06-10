@@ -13,6 +13,7 @@ router.get(PATH_SDK.PLAYER, SDKController.getAllPlayer)
 router.get(PATH_SDK.PLAYER_ID, SDKController.getPlayer)
 router.get(PATH_SDK.PLAYER_AWARD, SDKController.getPlayerAward)
 router.get(PATH_SDK.PLAYER_CAREER, SDKController.getPlayerCareer)
+router.get(PATH_SDK.PLAYER_FANTASY, SDKController.getPlayerFantasyProfile)
 
 router.get(PATH_SDK.DRAFT_HISTORY, SDKController.getDraftHistory)
 
@@ -30,6 +31,8 @@ router.get(PATH_SDK.FRANCHISE_PLAYER, SDKController.getAllFranchisePlayer)
 router.get(PATH_SDK.FRANCHISE_HISTORY, SDKController.getAllFranchiseHistory)
 
 router.get(PATH_SDK.ROTATION, SDKController.getRotationByGame)
+
+router.get(PATH_SDK.COMMON_ALL_PLAYER, SDKController.getAllCommonPlayer)
 
 router.get(PATH_SDK.SCOREBOARD, SDKController.getScoreboard)
 

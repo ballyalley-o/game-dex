@@ -44,11 +44,12 @@ class SDKController {
   }
 
   static setQueryParamsFranchise(req: Request) {
-    const { team_id, league_id_nullable } = req.query
+    const { team_id, league_id, game_id } = req.query
 
     return {
       team_id,
-      league_id_nullable
+      league_id,
+      game_id
     }
   }
 
@@ -453,12 +454,12 @@ class SDKController {
   public static async getAllFranchiseLeader(req: Request, res: Response, _next: NextFunction) {
     SDKController.setQueryParamsFranchise(req)
     try {
-      const { team_id, league_id_nullable } = SDKController.setQueryParamsFranchise(req)
+      const { team_id, league_id } = SDKController.setQueryParamsFranchise(req)
 
       const franchiseLeader = await axios.get(SDK_DIR.FRANCHISE_LEADER, {
         params: {
           team_id,
-          league_id_nullable
+          league_id
         }
       })
 
@@ -466,6 +467,93 @@ class SDKController {
         res.status(CODE.NOT_FOUND).send(RESPONSE.NOT_FOUND(MESSAGE.NOT_FOUND))
       } else {
         res.status(CODE.OK).send(RESPONSE.OK(franchiseLeader.data))
+      }
+    } catch (error: any) {
+      goodlog.error(error)
+      res.status(CODE.INTERNAL_SERVER_ERROR).send(RESPONSE.INTERNAL_SERVER_ERROR(error.message))
+    }
+  }
+
+  /**
+   * Retrieves all franchise players based on the provided query parameters.
+   *
+   * @route   {GET} /sdk/franchise/player
+   * @access  public
+   */
+  public static async getAllFranchisePlayer(req: Request, res: Response, _next: NextFunction) {
+    SDKController.setQueryParamsFranchise(req)
+    try {
+      const { team_id, league_id } = SDKController.setQueryParamsFranchise(req)
+
+      const franchisePlayers = await axios.get(SDK_DIR.FRANCHISE_PLAYER, {
+        params: {
+          team_id,
+          league_id
+        }
+      })
+
+      if (!franchisePlayers.data) {
+        res.status(CODE.NOT_FOUND).send(RESPONSE.NOT_FOUND(MESSAGE.NOT_FOUND))
+      } else {
+        res.status(CODE.OK).send(RESPONSE.OK(franchisePlayers.data))
+      }
+    } catch (error: any) {
+      goodlog.error(error)
+      res.status(CODE.INTERNAL_SERVER_ERROR).send(RESPONSE.INTERNAL_SERVER_ERROR(error.message))
+    }
+  }
+
+  /**
+   * Retrieves the franchise history of all teams.
+   *
+   * @route   {GET} /sdk/franchise/history
+   * @access  public
+   * **/
+  public static async getAllFranchiseHistory(req: Request, res: Response, _next: NextFunction) {
+    SDKController.setQueryParamsFranchise(req)
+    try {
+      const { league_id } = SDKController.setQueryParamsFranchise(req)
+
+      const franchiseHistory = await axios.get(SDK_DIR.FRANCHISE_HISTORY, {
+        params: {
+          league_id
+        }
+      })
+
+      if (!franchiseHistory.data) {
+        res.status(CODE.NOT_FOUND).send(RESPONSE.NOT_FOUND(MESSAGE.NOT_FOUND))
+      } else {
+        res.status(CODE.OK).send(RESPONSE.OK(franchiseHistory.data))
+      }
+    } catch (error: any) {
+      goodlog.error(error)
+      res.status(CODE.INTERNAL_SERVER_ERROR).send(RESPONSE.INTERNAL_SERVER_ERROR(error.message))
+    }
+  }
+
+  // rotation module
+
+  /**
+   * Retrieves the rotation for the specified game.
+   *
+   * @route   {GET} /sdk/rotation
+   * @access  public
+   * **/
+  public static async getRotationByGame(req: Request, res: Response, _next: NextFunction) {
+    SDKController.setQueryParamsFranchise(req)
+    try {
+      const { game_id } = SDKController.setQueryParamsFranchise(req)
+
+      const rotation = await axios.get(SDK_DIR.ROTATION, {
+        params: {
+          game_id
+        }
+      })
+
+      if (!rotation.data) {
+        res.status(CODE.NOT_FOUND).send(RESPONSE.NOT_FOUND(MESSAGE.NOT_FOUND))
+      } else {
+        res.status(CODE.OK).send(RESPONSE.OK(rotation.data))
       }
     } catch (error: any) {
       goodlog.error(error)
@@ -481,9 +569,19 @@ class SDKController {
    * @route   {GET} /sdk/scoreboard
    * @access  public
    * **/
-  public static async getScoreboard(_req: Request, res: Response, _next: NextFunction) {
+  public static async getScoreboard(req: Request, res: Response, _next: NextFunction) {
     try {
-      const scoreboard = await axios.get(SDK_DIR.SCOREBOARD)
+      const game_date = req.query.game_date
+      const league_id = req.query.league_id
+      const day_offset = req.query.day_offset
+
+      const scoreboard = await axios.get(SDK_DIR.SCOREBOARD, {
+        params: {
+          game_date,
+          league_id,
+          day_offset
+        }
+      })
 
       if (!scoreboard.data) {
         res.status(CODE.NOT_FOUND).send(RESPONSE.NOT_FOUND(MESSAGE.NOT_FOUND))

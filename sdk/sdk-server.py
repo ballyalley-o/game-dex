@@ -1,6 +1,8 @@
 from nba_api.stats.endpoints import playerawards, playercareerstats, drafthistory, commonplayerinfo, teaminfocommon
 from nba_api.stats.static import players as players_static, teams as teams_static
-from nba_api.stats.endpoints import alltimeleadersgrids, assistleaders, leagueleaders, franchiseleaders, scoreboardv2 as scoreboard
+from nba_api.stats.endpoints import alltimeleadersgrids, assistleaders, leagueleaders, franchiseleaders, scoreboardv2 as scoreboard, FranchisePlayers, FranchiseHistory, GameRotation, VideoDetails, DefenseHub
+import requests
+import datetime
 
 
 from flask import Flask, jsonify, request
@@ -285,22 +287,94 @@ def get_franchise_leader():
     )
     franchise_json = franchise.get_normalized_json()
 
+
+
     return franchise_json
 
-# scoreboard
-
-@app.route('/scoreboard', methods=['GET'])
-def get_scoreboard():
+@app.route('/franchise/player', methods=['GET'])
+def get_franchise_players():
     """
-    Retrieves the scoreboard data from the NBA API.
+    Retrieves franchise players data based on the provided team ID and league ID.
 
     Returns:
-        dict: A dictionary containing the scoreboard data.
+        JSON: The franchise players data in JSON format.
+
+    Raises:
+        requests.exceptions.RequestException: If the API request fails.
+        Exception: If an internal error occurs.
+    """
+
+    try:
+        team_id = request.args.get('team_id', '1610612737')
+        league_id = request.args.get('league_id_nullable', '00')
+
+        franchise_player = FranchisePlayers(
+            league_id=league_id,
+            team_id=team_id
+        )
+        franchise_player_json = franchise_player.get_normalized_json()
+
+        # example of getting the data in dictionary format:
+        # franchise_players_json = franchise_players.get_normalized_dict()
+        # for player in data['FranchisePlayers']:
+        #     print(f"Player: {player['PLAYER']}, Games Played: {player['GP']}, FGM: {player['FGM']}, FGA: {player['FGA']}, FG%: {player['FG_PCT']}")
+
+
+        return franchise_player_json
+
+    except requests.exceptions.RequestException as e:
+        app.logger.error(f"API request failed: {e}")
+        return jsonify({"error": "Failed to fetch scoreboard data"}), 500
+
+    except Exception as e:
+        app.logger.error(f"An error occurred: {e}")
+        return jsonify({"error": "An internal error occurred"}), 500
+
+@app.route('/franchise/history', methods=['GET'])
+def get_franchise_history():
+    """
+    Retrieves the franchise history data for all teams.
+
+    Parameters:
+    - team_id (str): The ID of the team. Defaults to '1610612737' (Atlanta Hawks).
+    - league_id_nullable (str): The ID of the league. Defaults to '00' (NBA).
+
+    Returns:
+    - franchise_json (str): The franchise history data in JSON format.
+    """
+    league_id = request.args.get('league_id', '00')
+
+    franchise_history = FranchiseHistory(
+        league_id=league_id
+    )
+    franchise_history_json = franchise_history.get_normalized_json()
+
+    return franchise_history_json
+
+# rotation
+@app.route('/rotation', methods=['GET'])
+def get_game_rotation():
+    """
+    Retrieves the game rotation data for a specific game.
+
+    Parameters:
+    - game_id (int): The ID of the game.
+
+    Returns:
+    - rotation_json (str): The game rotation data in JSON format.
     """
     try:
-        games = scoreboard.ScoreboardV2()
-        games_data = games.get_normalized_json()
-        return games_data
+        game_id = request.args.get('game_id', '0042300401' )
+        league_id = request.args.get('league_id', '00')
+
+        rotation = GameRotation(
+            game_id=game_id,
+            league_id=league_id
+            )
+
+        rotation_json = rotation.get_normalized_json()
+
+        return rotation_json
 
     except requests.exceptions.RequestException as e:
         app.logger.error(f"API request failed: {e}")
@@ -313,6 +387,118 @@ def get_scoreboard():
 
 
 
+# video
+@app.route('/video/detail', methods=['GET'])
+def get_video_details():
+    """
+    Retrieves the video details for a specific video.
+
+    Parameters:
+    - video_id (int): The ID of the video.
+
+    Returns:
+    - video_json (str): The video details in JSON format.
+    """
+    team_id = request.args.get('team_id', '1610612747')
+    player_id = request.args.get('player_id', '2544')
+    clutch_time_nullable = request.args.get('clutch_time_nullable', 'Last 5 Minutes')
+    # video_id = request.args.get('video_id', '0022000001')
+    # game_id = request.args.get('game_id', '0022000001')
+    # vs_division_nullable = request.args.get('vs_division_nullable', 'Atlantic')
+    # opponent_team_id = request.args.get('opponent_team_id', '1610612738')
+    # period = request.args.get('period', 0)
+    # season = request.args.get('season', '2023-24')
+    # ahead_behind_nullable = request.args.get('ahead_behind_nullable', 'Ahead or Behind')
+    # season_type_all_star = request.args.get('season_type_all_star', 'Regular Season')
+    # context_measure_detailed = request.args.get('context_measure_detailed', 'PTS')
+    # end_period_nullable = request.args.get('end_period_nullable', 0)
+    # end_range_nullable = request.args.get('end_range_nullable', 0)
+    # game_segment_nullable = request.args.get('game_segment_nullable', 'First Half')
+    # location_nullable = request.args.get('location_nullable', 'Home')
+    # outcome_nullable = request.args.get('outcome_nullable', 'W')
+    # point_diff_nullable = request.args.get('point_diff_nullable', 0)
+    # position_nullable = request.args.get('position_nullable', 'F')
+    # range_type_nullable = request.args.get('range_type_nullable', '0-3 Feet - Very Tight')
+    # rookie_year_nullable = request.args.get('rookie_year_nullable', '2023-24')
+    # season_segment_nullable = request.args.get('season_segment_nullable', 'Pre All-Star')
+    # start_period_nullable = request.args.get('start_period_nullable', 0)
+    # start_range_nullable = request.args.get('start_range_nullable', 0)
+    # vs_conference_nullable  = request.args.get('vs_conference_nullable', 'East')
+
+
+    video_details = VideoDetails(
+        team_id=team_id,
+        player_id=player_id,
+        clutch_time_nullable=clutch_time_nullable,
+        # video_id=video_id,
+        # context_measure_detailed=context_measure_detailed,
+        # last_n_games=LastNGames.default,
+        # month=Month.default,
+        # opponent_team_id=opponent_team_id,
+        # period=period,
+        # season=season,
+        # season_type_all_star=season_type_all_star,
+        # ahead_behind_nullable=ahead_behind_nullable,
+        # context_filter_nullable="",
+        # date_from_nullable="",
+        # date_to_nullable="",
+        # end_period_nullable=end_period_nullable,
+        # end_range_nullable=end_range_nullable,
+        # game_id_nullable=game_id,
+        # game_segment_nullable=game_segment_nullable,
+        # league_id_nullable=league_id_nullable,
+        # location_nullable=location_nullable,
+        # outcome_nullable=outcome_nullable,
+        # point_diff_nullable=point_diff_nullable,
+        # position_nullable=position_nullable,
+        # range_type_nullable=range_type_nullable,
+        # rookie_year_nullable=rookie_year_nullable,
+        # season_segment_nullable=season_segment_nullable,
+        # start_period_nullable=start_period_nullable,
+        # start_range_nullable=start_range_nullable,
+        # vs_conference_nullable=vs_conference_nullable,
+        # vs_division_nullable=vs_division_nullable,
+    )
+    video_json = video_details.get_normalized_json()
+
+    return video_json
+
+# scoreboard
+
+@app.route('/scoreboard', methods=['GET'])
+def get_scoreboard():
+    """
+    Retrieves the scoreboard data from the NBA API.
+
+    Returns:
+        dict: A dictionary containing the scoreboard data.
+    """
+    try:
+        game_date = request.args.get('game_date', '2024-06-09')
+        league_id = request.args.get('league_id', '00')
+        day_offset = request.args.get('day_offset', 0)
+
+        # game_date=(datetime.datetime.now() + datetime.timedelta(days=day_offset)).strftime('%Y-%m-%d'),
+        games = scoreboard.ScoreboardV2(
+            day_offset=day_offset,
+            game_date=game_date,
+            league_id=league_id,
+            proxy=None,
+            headers=None,
+            timeout=30,
+            get_request=True,
+        )
+        games_data = games.get_normalized_json()
+        return games_data
+
+    except requests.exceptions.RequestException as e:
+        app.logger.error(f"API request failed: {e}")
+        return jsonify({"error": "Failed to fetch scoreboard data"}), 500
+
+    except Exception as e:
+
+        app.logger.error(f"An error occurred: {e}")
+        return jsonify({"error": "An internal error occurred"}), 500
 
 
 if __name__ == '__main__':

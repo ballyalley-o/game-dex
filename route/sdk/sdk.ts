@@ -26,6 +26,10 @@ router.get(PATH_SDK.ALL_TIME_LEADER, SDKController.getAllTimeLeader)
 router.get(PATH_SDK.ALL_TIME_TOTAL, SDKController.getAllTimeTotal)
 
 router.get(PATH_SDK.FRANCHISE_LEADER, SDKController.getAllFranchiseLeader)
+router.get(PATH_SDK.FRANCHISE_PLAYER, SDKController.getAllFranchisePlayer)
+router.get(PATH_SDK.FRANCHISE_HISTORY, SDKController.getAllFranchiseHistory)
+
+router.get(PATH_SDK.ROTATION, SDKController.getRotationByGame)
 
 router.get(PATH_SDK.SCOREBOARD, SDKController.getScoreboard)
 

@@ -85,6 +85,16 @@ export const SDK_DIR = {
   PLAYER_CAREER: (id: any) => conNex(GLOBAL.SDK_URL, SEGMENT.PLAYER, id, SEGMENT.CAREER),
 
   /**
+   * Returns the player fantasy directory path for the specified player ID.
+   *
+   * {base_sdk_url}/player/{id}/fantasy
+   *
+   * @param id - The player ID.
+   * @returns The player fantasy directory path.
+   */
+  PLAYER_FANTASY: (id: any) => conNex(GLOBAL.SDK_URL, SEGMENT.PLAYER, id, SEGMENT.FANTASY),
+
+  /**
    * The league leaders directory path.
    *
    * {base_sdk_url}/leader
@@ -174,6 +184,13 @@ export const SDK_DIR = {
    * {base_sdk_url}/rotation
    */
   ROTATION: conNex(GLOBAL.SDK_URL, SEGMENT.ROTATION),
+
+  /**
+   * Returns the player all directory path.
+   *
+   * {base_sdk_url}/common/all/player
+   */
+  COMMON_ALL_PLAYER: conNex(GLOBAL.SDK_URL, SEGMENT.COMMON, SEGMENT.ALL, SEGMENT.PLAYER),
 
   /**
    * Returns the scoreboard directory path for latest games.

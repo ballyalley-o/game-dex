@@ -91,6 +91,14 @@ export const PATH_SDK = {
   PLAYER_CAREER: conNexSegment(SEGMENT.PLAYER, SEGMENT.ID, SEGMENT.CAREER),
 
   /**
+   * The player fantasy directory path.
+   * @route /player/{id}/fantasy
+   * @param id - The player ID.
+   * @returns The player fantasy directory path.
+   */
+  PLAYER_FANTASY: conNexSegment(SEGMENT.PLAYER, SEGMENT.ID, SEGMENT.FANTASY),
+
+  /**
    * The draft history directory path.
    * @route /draft/history
    */
@@ -161,6 +169,12 @@ export const PATH_SDK = {
    * @route /rotation
    */
   ROTATION: conNexSegment(SEGMENT.ROTATION),
+
+  /**
+   * The player all directory path.
+   * @route /common/all/player
+   */
+  COMMON_ALL_PLAYER: conNexSegment(SEGMENT.COMMON, SEGMENT.ALL, SEGMENT.PLAYER),
 
   /**
    * The scoreboard directory path.

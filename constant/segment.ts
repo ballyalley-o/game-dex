@@ -21,6 +21,7 @@ export enum SEGMENT {
   PT = 'pt',
   POINT = 'point',
   PTS = 'pts',
+  ROTATION = 'rotation',
   SCOREBOARD = 'scoreboard',
   SDK = 'sdk',
   STATE = 'state',

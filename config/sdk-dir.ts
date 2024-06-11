@@ -200,6 +200,13 @@ export const SDK_DIR = {
   SYNERGY_PT: conNex(GLOBAL.SDK_URL, SEGMENT.SYNERGY, SEGMENT.PT),
 
   /**
+   * Returns the compare directory path.
+   *
+   * {base_sdk_url}/compare
+   */
+  COMPARE: conNex(GLOBAL.SDK_URL, SEGMENT.COMPARE),
+
+  /**
    * Returns the scoreboard directory path for latest games.
    *
    * {base_sdk_url}/scoreboard

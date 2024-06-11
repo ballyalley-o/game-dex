@@ -183,6 +183,12 @@ export const PATH_SDK = {
   SYNERGY_PT: conNexSegment(SEGMENT.SYNERGY, SEGMENT.PT),
 
   /**
+   * The player compare directory path.
+   * @route /compare
+   */
+  COMPARE: conNexSegment(SEGMENT.COMPARE),
+
+  /**
    * The scoreboard directory path.
    * @route /scoreboard
    */

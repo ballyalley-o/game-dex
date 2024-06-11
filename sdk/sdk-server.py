@@ -1,6 +1,6 @@
 from nba_api.stats.endpoints import playerawards, playercareerstats, drafthistory, commonplayerinfo, teaminfocommon
 from nba_api.stats.static import players as players_static, teams as teams_static
-from nba_api.stats.endpoints import alltimeleadersgrids, assistleaders, leagueleaders, franchiseleaders, scoreboardv2 as scoreboard, FranchisePlayers, FranchiseHistory, GameRotation, VideoDetails, CommonAllPlayers, PlayerFantasyProfileBarGraph
+from nba_api.stats.endpoints import alltimeleadersgrids, assistleaders, leagueleaders, franchiseleaders, ScoreboardV2, FranchisePlayers, FranchiseHistory, GameRotation, VideoDetails, CommonAllPlayers, PlayerFantasyProfileBarGraph, SynergyPlayTypes
 import requests
 
 
@@ -417,6 +417,50 @@ def get_player_fantasy_profile(player_id):
 
     return fantasy_profile_json
 
+# synergy playtypes
+@app.route('/synergy/pt', methods=['GET'])
+def get_synergy_playtypes():
+    """
+    Retrieves the synergy playtypes data from the NBA API.
+
+    Returns:
+        dict: A dictionary containing the synergy playtypes data.
+    """
+
+    league_id = request.args.get('league_id', '00')
+    per_mode_simple = request.args.get('per_mode_simple', 'PerGame')
+    player_or_team_abbreviation = request.args.get('player_or_team_abbreviation', 'Player')
+    season_type_all_star = request.args.get('season_type_all_star', 'Regular Season')
+    season = request.args.get('season', '2023-24')
+    play_type_nullable = request.args.get('play_type_nullable', 'Transition')
+    type_grouping_nullable = request.args.get('type_grouping_nullable', 'offensive')
+
+    try:
+        synergy_playtypes = SynergyPlayTypes(
+            league_id=league_id,
+            per_mode_simple=per_mode_simple,
+            # player_or_team_abbreviation=player_or_team_abbreviation,
+            # season_type_all_star=season_type_all_star,
+            season=season,
+            play_type_nullable=play_type_nullable,
+            type_grouping_nullable=type_grouping_nullable
+        )
+        synergy_playtypes_json = synergy_playtypes.get_normalized_json()
+
+        return synergy_playtypes_json
+
+    except requests.exceptions.RequestException as e:
+
+        app.logger.error(f"API request failed: {e}")
+        return jsonify({"error": "Failed to fetch synergy playtypes data"}), 500
+
+    except Exception as e:
+
+        app.logger.error(f"An error occurred: {e}")
+        return jsonify({"error": "An internal error occurred"}), 500
+
+
+
 # video
 @app.route('/video/detail', methods=['GET'])
 def get_video_details():
@@ -509,7 +553,7 @@ def get_scoreboard():
         day_offset = request.args.get('day_offset', 0)
 
         # game_date=(datetime.datetime.now() + datetime.timedelta(days=day_offset)).strftime('%Y-%m-%d'),
-        games = scoreboard.ScoreboardV2(
+        games = ScoreboardV2(
             day_offset=day_offset,
             game_date=game_date,
             league_id=league_id,

@@ -36,6 +36,8 @@ router.get(PATH_SDK.COMMON_ALL_PLAYER, SDKController.getAllCommonPlayer)
 
 router.get(PATH_SDK.SYNERGY_PT, SDKController.getSynergyPlaytype)
 
+router.get(PATH_SDK.COMPARE, SDKController.getPlayerCompare)
+
 router.get(PATH_SDK.SCOREBOARD, SDKController.getScoreboard)
 
 /**

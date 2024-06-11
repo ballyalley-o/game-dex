@@ -12,6 +12,7 @@ export enum SEGMENT {
   AWARD = 'award',
   CAREER = 'career',
   COMMON = 'common',
+  COMPARE = 'compare',
   DRAFT = 'draft',
   FANTASY = 'fantasy',
   FIND = 'find',

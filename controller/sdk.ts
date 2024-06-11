@@ -672,6 +672,79 @@ class SDKController {
     }
   }
 
+  // player compare
+
+  /**
+   * Retrieves the player comparison data.
+   *
+   * @route   {GET} /sdk/player/compare
+   * @access  public
+   * **/
+  public static async getPlayerCompare(req: Request, res: Response, _next: NextFunction) {
+    try {
+      const player_id_list = req.query.player_id_list
+      const vs_player_id_list = req.query.vs_player_id_list
+      const season = req.query.season
+      const season_type_all_star = req.query.season_type_all_star
+      const stat_category_abbreviation = req.query.stat_category_abbreviation
+      const month = req.query.month
+      const opponent_team_id = req.query.opponent_team_id
+      const pace_adjust = req.query.pace_adjust
+      const plus_minus = req.query.plus_minus
+      const rank = req.query.rank
+      const season_type_playoffs = req.query.season_type_playoffs
+      const conference_nullable = req.query.conference_nullable
+      const date_from_nullable = req.query.date_from_nullable
+      const date_to_nullable = req.query.date_to_nullable
+      const game_segment_nullable = req.query.game_segment_nullable
+      const last_n_games = req.query.last_n_games
+      const location_nullable = req.query.location_nullable
+      const league_id_nullable = req.query.league_id_nullable
+      const outcome_nullable = req.query.outcome_nullable
+      const period = req.query.period
+      const shot_clock_range = req.query.shot_clock_range
+      const vs_conference_nullable = req.query.vs_conference_nullable
+      const vs_division_nullable = req.query.vs_division_nullable
+
+      const playerCompare = await axios.get(SDK_DIR.COMPARE, {
+        params: {
+          player_id_list,
+          vs_player_id_list,
+          season,
+          season_type_all_star,
+          stat_category_abbreviation,
+          month,
+          opponent_team_id,
+          pace_adjust,
+          plus_minus,
+          rank,
+          season_type_playoffs,
+          conference_nullable,
+          date_from_nullable,
+          date_to_nullable,
+          game_segment_nullable,
+          last_n_games,
+          location_nullable,
+          league_id_nullable,
+          outcome_nullable,
+          period,
+          shot_clock_range,
+          vs_conference_nullable,
+          vs_division_nullable
+        }
+      })
+
+      if (!playerCompare.data) {
+        res.status(CODE.NOT_FOUND).send(RESPONSE.NOT_FOUND(MESSAGE.NOT_FOUND))
+      } else {
+        res.status(CODE.OK).send(RESPONSE.OK(playerCompare.data))
+      }
+    } catch (error: any) {
+      goodlog.error(error)
+      res.status(CODE.INTERNAL_SERVER_ERROR).send(RESPONSE.INTERNAL_SERVER_ERROR(error.message))
+    }
+  }
+
   public static async spawnPy(_req: Request, res: Response, _next: NextFunction) {
     const python = spawn(KEY.PYTHON, ['sdk/server-games.py'])
     let dataToSend: any

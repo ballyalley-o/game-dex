@@ -177,6 +177,12 @@ export const PATH_SDK = {
   COMMON_ALL_PLAYER: conNexSegment(SEGMENT.COMMON, SEGMENT.ALL, SEGMENT.PLAYER),
 
   /**
+   * The synergy playtype directory path.
+   * @route /synergy/pt
+   */
+  SYNERGY_PT: conNexSegment(SEGMENT.SYNERGY, SEGMENT.PT),
+
+  /**
    * The scoreboard directory path.
    * @route /scoreboard
    */

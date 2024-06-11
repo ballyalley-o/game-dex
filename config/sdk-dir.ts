@@ -193,6 +193,13 @@ export const SDK_DIR = {
   COMMON_ALL_PLAYER: conNex(GLOBAL.SDK_URL, SEGMENT.COMMON, SEGMENT.ALL, SEGMENT.PLAYER),
 
   /**
+   * Returns the synergy directory path for the specified PT.
+   *
+   * {base_sdk_url}/synergy/pt
+   */
+  SYNERGY_PT: conNex(GLOBAL.SDK_URL, SEGMENT.SYNERGY, SEGMENT.PT),
+
+  /**
    * Returns the scoreboard directory path for latest games.
    *
    * {base_sdk_url}/scoreboard

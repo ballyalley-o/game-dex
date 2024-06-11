@@ -618,7 +618,7 @@ class SDKController {
   // common module
 
   /**
-   * Spawns the Python script for the server games.
+   * Retrieves all common players.
    *
    * @route   {GET} /sdk/common/all/player
    * @access  public
@@ -631,6 +631,40 @@ class SDKController {
         res.status(CODE.NOT_FOUND).send(RESPONSE.NOT_FOUND(MESSAGE.NOT_FOUND))
       } else {
         res.status(CODE.OK).send(RESPONSE.OK(commonAllPlayer.data))
+      }
+    } catch (error: any) {
+      goodlog.error(error)
+      res.status(CODE.INTERNAL_SERVER_ERROR).send(RESPONSE.INTERNAL_SERVER_ERROR(error.message))
+    }
+  }
+
+  // synergy module
+
+  /**
+   * Retrieves the synergy data.
+   *
+   * @route   {GET} /sdk/synergy
+   * @access  public
+   * **/
+  public static async getSynergyPlaytype(req: Request, res: Response, _next: NextFunction) {
+    try {
+      const playtype = req.query.playtype
+      const team_id = req.query.team_id
+      const season = req.query.season
+      const play_type_nullable = req.query.play_type_nullable
+
+      const synergy = await axios.get(SDK_DIR.SYNERGY_PT, {
+        params: {
+          playtype,
+          team_id,
+          season
+        }
+      })
+
+      if (!synergy.data) {
+        res.status(CODE.NOT_FOUND).send(RESPONSE.NOT_FOUND(MESSAGE.NOT_FOUND))
+      } else {
+        res.status(CODE.OK).send(RESPONSE.OK(synergy.data))
       }
     } catch (error: any) {
       goodlog.error(error)

@@ -1,6 +1,6 @@
 from nba_api.stats.endpoints import playerawards, playercareerstats, drafthistory, commonplayerinfo, teaminfocommon
 from nba_api.stats.static import players as players_static, teams as teams_static
-from nba_api.stats.endpoints import alltimeleadersgrids, assistleaders, leagueleaders, franchiseleaders, ScoreboardV2, FranchisePlayers, FranchiseHistory, GameRotation, VideoDetails, CommonAllPlayers, PlayerFantasyProfileBarGraph, SynergyPlayTypes
+from nba_api.stats.endpoints import alltimeleadersgrids, assistleaders, leagueleaders, franchiseleaders, ScoreboardV2, FranchisePlayers, FranchiseHistory, GameRotation, VideoDetails, CommonAllPlayers, PlayerFantasyProfileBarGraph, SynergyPlayTypes, PlayerCompare
 import requests
 
 
@@ -459,6 +459,85 @@ def get_synergy_playtypes():
         app.logger.error(f"An error occurred: {e}")
         return jsonify({"error": "An internal error occurred"}), 500
 
+# player compare
+@app.route('/compare', methods=['GET'])
+def get_compare_player():
+    """
+    Retrieves and compares player data based on the provided parameters.
+
+    Returns:
+        JSON: The compared player data in JSON format.
+
+    Raises:
+        RequestException: If there is an error in making the API request.
+        Exception: If there is an internal error.
+
+    """
+    player_id_list = request.args.get('player_id_list', '2544')
+    vs_player_id_list = request.args.get('vs_player_id_list', '201939')
+    last_n_games = request.args.get('last_n_games', 0)
+    measure_type_detailed_defense = request.args.get('measure_type_detailed_defense', 'Base')
+    month = request.args.get('month', 0)
+    opponent_team_id = request.args.get('opponent_team_id')
+    pace_adjust = request.args.get('pace_adjust', 'N')
+    per_mode_detailed = request.args.get('per_mode_detailed', 'Totals')
+    period = request.args.get('period', 0)
+    plus_minus = request.args.get('plus_minus', 'N')
+    rank = request.args.get('rank', 'N')
+    season = request.args.get('season', '2023-24')
+    season_type_playoffs = request.args.get('season_type_playoffs', 'Regular Season')
+    conference_nullable = request.args.get('conference_nullable')
+    date_from_nullable = request.args.get('date_from_nullable')
+    date_to_nullable = request.args.get('date_to_nullable')
+    division_simple_nullable = request.args.get('division_simple_nullable')
+    game_segment_nullable = request.args.get('game_segment_nullable')
+    league_id_nullable = request.args.get('league_id_nullable')
+    location_nullable = request.args.get('location_nullable')
+    outcome_nullable = request.args.get('outcome_nullable')
+    season_segment_nullable = request.args.get('season_segment_nullable')
+    shot_clock_range_nullable = request.args.get('shot_clock_range_nullable')
+    vs_conference_nullable = request.args.get('vs_conference_nullable')
+    vs_division_nullable = request.args.get('vs_division_nullable')
+
+    try:
+        compare_players = PlayerCompare(
+            player_id_list=player_id_list,
+            vs_player_id_list=vs_player_id_list,
+            last_n_games=last_n_games,
+            measure_type_detailed_defense=measure_type_detailed_defense,
+            month=month,
+            opponent_team_id=opponent_team_id,
+            pace_adjust=pace_adjust,
+            per_mode_detailed=per_mode_detailed,
+            period=period,
+            plus_minus=plus_minus,
+            rank=rank,
+            season=season,
+            season_type_playoffs=season_type_playoffs,
+            conference_nullable=conference_nullable,
+            date_from_nullable=date_from_nullable,
+            date_to_nullable=date_to_nullable,
+            division_simple_nullable=division_simple_nullable,
+            game_segment_nullable=game_segment_nullable,
+            league_id_nullable=league_id_nullable,
+            location_nullable=location_nullable,
+            outcome_nullable=outcome_nullable,
+            season_segment_nullable=season_segment_nullable,
+            shot_clock_range_nullable=shot_clock_range_nullable,
+            vs_conference_nullable=vs_conference_nullable,
+            vs_division_nullable=vs_division_nullable
+        )
+        compare_players_json = compare_players.get_normalized_json()
+
+        return compare_players_json
+
+    except requests.exceptions.RequestException as e:
+        app.logger.error(f"API request failed: {e}")
+        return jsonify({"error": "Failed to fetch player compare data"}), 500
+
+    except Exception as e:
+        app.logger.error(f"An error occurred: {e}")
+        return jsonify({"error": "An internal error occurred"}), 500
 
 
 # video

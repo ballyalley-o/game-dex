@@ -29,6 +29,7 @@ export enum SEGMENT {
   SDK = 'sdk',
   STATE = 'state',
   STATE_PARAM = ':state',
+  SYNERGY = 'synergy',
   TEAM = 'team',
   TOTAL = 'total',
   USER = 'user'

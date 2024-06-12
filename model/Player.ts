@@ -11,9 +11,10 @@ const PlayerSchema: Schema<Player> = new Schema<Player>({
   fullname: { type: String },
   birthDate: { type: Date },
   birthPlace: { type: String },
+  highSchool: { type: String },
   college: { type: String },
   height: { type: String },
   weight: { type: Number },
-  position: { type: String },
+  position: { type: [String] },
   nickname: { type: [String] }
 })

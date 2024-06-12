@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { SDKController } from 'controller'
+import { SDKController, SDKSetController } from 'controller'
 import { PATH_SDK } from 'config'
 
 const router = Router()
@@ -10,6 +10,7 @@ router.get(PATH_SDK.TEAM_ID, SDKController.getTeam)
 router.get(PATH_SDK.TEAM_ABBV, SDKController.getTeamByAbbv)
 
 router.get(PATH_SDK.PLAYER, SDKController.getAllPlayer)
+router.post(PATH_SDK.PLAYER, SDKSetController.createPlayerBase)
 router.get(PATH_SDK.PLAYER_ID, SDKController.getPlayer)
 router.get(PATH_SDK.PLAYER_AWARD, SDKController.getPlayerAward)
 router.get(PATH_SDK.PLAYER_CAREER, SDKController.getPlayerCareer)

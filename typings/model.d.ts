@@ -238,6 +238,7 @@ declare interface Playoffs {
 declare interface Player {
   _id: Schema.Types.ObjectId
   apiCode: string
+  playerCode: string
   firstname: string
   lastname: string
   fullname: string
@@ -256,7 +257,6 @@ declare interface Player {
   allStar: Schema.Types.ObjectId
   awards: Schema.Types.ObjectId[]
   jerseys: Schema.Types.ObjectId[]
-  record: string
   isActive: boolean
   [key: string]: any
 }

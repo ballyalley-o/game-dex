@@ -30,6 +30,13 @@ export const SUCCESS = {
       data
     }
   },
+
+  CREATED_ALL: {
+    success: true,
+    code: CODE.CREATED,
+    message: 'All resources created'
+  },
+
   /**
    * Returns a success response with ACCEPTED status code.
    * @param data - The data to be included in the response.

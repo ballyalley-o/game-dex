@@ -240,14 +240,23 @@ declare interface Player {
   apiCode: string
   firstname: string
   lastname: string
-  team: Schema.Types.ObjectId
-  record: string
+  fullname: string
+  nickname: string[]
+  age: number
+  height: string
+  weight: number
+  position: string[]
+  dateOfBirth: Date
+  birthPlace: string
+  highSchool: string
+  college: string
   draft: Schema.Types.ObjectId
+  team: Schema.Types.ObjectId[]
   stats: Schema.Types.ObjectId
   allStar: Schema.Types.ObjectId
   awards: Schema.Types.ObjectId[]
   jerseys: Schema.Types.ObjectId[]
-  isRetired: boolean
+  record: string
   isActive: boolean
   [key: string]: any
 }

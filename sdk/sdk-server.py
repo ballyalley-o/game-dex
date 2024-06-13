@@ -1,6 +1,6 @@
 from nba_api.stats.endpoints import playerawards, playercareerstats, drafthistory, commonplayerinfo, teaminfocommon
 from nba_api.stats.static import players as players_static, teams as teams_static
-from nba_api.stats.endpoints import alltimeleadersgrids, assistleaders, leagueleaders, franchiseleaders, ScoreboardV2, FranchisePlayers, FranchiseHistory, GameRotation, VideoDetails, CommonAllPlayers, PlayerFantasyProfileBarGraph, SynergyPlayTypes, PlayerCompare
+from nba_api.stats.endpoints import alltimeleadersgrids, assistleaders, leagueleaders, franchiseleaders, ScoreboardV2, FranchisePlayers, FranchiseHistory, GameRotation, VideoDetails, CommonAllPlayers, PlayerFantasyProfileBarGraph, SynergyPlayTypes, PlayerCompare, TeamDetails
 import requests
 
 
@@ -93,6 +93,27 @@ def get_teams_all():
     teams_all = teams_static.get_teams()
     return jsonify(teams_all)
 
+@app.route('/team/<int:team_id>/detail', methods=['GET'])
+def get_teams_details_all(team_id):
+    """
+    Retrieves all teams details from the database and returns them as a JSON response.
+
+    Returns:
+        A JSON response containing all teams.
+    """
+    try:
+        team_details = TeamDetails(team_id).get_normalized_json()
+
+        return team_details
+
+    except requests.exceptions.RequestException as e:
+        app.logger.error(f"API request failed: {e}")
+        return jsonify({"error": "Failed to fetch team details"}), 500
+
+    except Exception as e:
+        app.logger.error(f"An error occurred: {e}")
+        return jsonify({"error": "An internal error occurred"}), 500
+
 @app.route('/team/find/<string:abbv>', methods=['GET'])
 def get_team(abbv):
     """
@@ -108,7 +129,7 @@ def get_team(abbv):
     team_abbv = teams_static.find_team_by_abbreviation(abbv)
     return jsonify(team_abbv)
 
-@app.route('/team/info/<int:team_id>', methods=['GET'])
+@app.route('/team/<int:team_id>/info', methods=['GET'])
 def get_team_info(team_id):
     """
     Retrieves information about a specific NBA team.

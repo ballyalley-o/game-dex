@@ -225,7 +225,11 @@ export const MESSAGE = {
   NO_ABBV: 'No abbreviation provided',
   NOT_FOUND: 'Resource not found',
   NO_TEAM: 'No team provided',
-  NO_STATE: 'No state provided'
+  NO_STATE: 'No state provided',
+  ALREADY_EXISTS: 'Resource already exists',
+  FAILED_CREATE: 'Failed to create resource',
+  FAILED_UPDATE: 'Failed to update resource',
+  FAILED_DELETE: 'Failed to delete resource'
 }
 
 export const RESPONSE = {

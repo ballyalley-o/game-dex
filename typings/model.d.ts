@@ -55,10 +55,25 @@ declare interface Game {
   [key: string]: any
 }
 
+declare interface League {
+  _id: Schema.Types.ObjectId
+  apiCode: string
+  league: string
+  commissioner: string
+  abbv: string
+  founded: string
+  teams: Schema.Types.ObjectId[]
+  noOfTeams: number
+  headquarters: string
+  website: string
+  logo: string
+  [key: string]: any
+}
+
 declare interface StatCategory {
   _id: Schema.Types.ObjectId
   apiCode: string
-  name: string
+  leagueName: string
   [key: string]: any
 }
 

@@ -35,7 +35,7 @@ export const SDK_DIR = {
    * @param id - The team ID.
    * @returns The team info directory path.
    */
-  TEAM_INFO: (id: any) => conNex(GLOBAL.SDK_URL, SEGMENT.TEAM, SEGMENT.INFO, id),
+  TEAM_INFO: (id: any) => conNex(GLOBAL.SDK_URL, SEGMENT.TEAM, id, SEGMENT.INFO),
 
   /**
    * Returns the team find directory path for the specified team ID.
@@ -62,7 +62,7 @@ export const SDK_DIR = {
    * @param id - The player ID.
    * @returns The player info directory path.
    */
-  PLAYER_INFO: (id: any) => conNex(GLOBAL.SDK_URL, SEGMENT.PLAYER, SEGMENT.INFO, id),
+  PLAYER_INFO: (id: any) => conNex(GLOBAL.SDK_URL, SEGMENT.PLAYER, id, SEGMENT.INFO),
 
   /**
    * Returns the player award directory path for the specified player ID.

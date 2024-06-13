@@ -16,7 +16,15 @@ export const PATH_DIR = {
    * The directory path for the SDK segment.
    * @route /api/v1/sdk
    */
-  SDK: conNexSegment(SEGMENT.API, GLOBAL.API_VERSION, SEGMENT.SDK)
+  SDK: conNexSegment(SEGMENT.API, GLOBAL.API_VERSION, SEGMENT.SDK),
+
+  // Create
+
+  /**
+   * The league directory path.
+   * @route /player
+   */
+  LEAGUE: conNexSegment(SEGMENT.API, GLOBAL.API_VERSION, SEGMENT.LEAGUE)
 }
 
 /**

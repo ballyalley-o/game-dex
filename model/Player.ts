@@ -1,14 +1,14 @@
 import slugify from 'slugify'
 import goodlog from 'good-logs'
-import mongoose, { Schema, model } from 'mongoose'
-import { TAGS } from 'constant'
+import { Schema, model } from 'mongoose'
+import { TAGS, LOCALE } from 'constant'
 
 const TAG = TAGS.PLAYER
 
 const PlayerSchema: Schema<Player> = new Schema<Player>(
   {
     apiCode: { type: String, required: true, unique: true },
-    playerCode: { type: String, unique: true },
+    playerCode: { type: String },
     firstname: { type: String },
     lastname: { type: String },
     nickname: { type: [String] },
@@ -25,13 +25,13 @@ const PlayerSchema: Schema<Player> = new Schema<Player>(
     allStar: { type: Schema.Types.ObjectId, ref: 'AllStar' },
     awards: { type: [Schema.Types.ObjectId], ref: 'Award' },
     jerseys: { type: [Schema.Types.ObjectId], ref: 'Jersey' },
-    leagues: { type: [Schema.Types.ObjectId], ref: 'League' },
+    leagues: { type: [Schema.Types.ObjectId], ref: TAGS.LEAGUE },
     slug: { type: [String] },
     isActive: { type: Boolean, default: true }
   },
   {
     timestamps: true,
-    collation: { locale: 'en', strength: 2 },
+    collation: { locale: LOCALE.EN, strength: 2 },
     collection: TAG,
     toJSON: { virtuals: true },
     toObject: { virtuals: true }

@@ -1,10 +1,11 @@
 export const TAGS = {
-  SDK: 'SDK',
-  PLAYER: 'Player',
-  TEAM: 'Team',
-  GAME: 'Game',
-  ROUND: 'Round',
-  QUESTION: 'Question',
   ANSWER: 'Answer',
-  SCORE: 'Score'
+  GAME: 'Game',
+  LEAGUE: 'League',
+  PLAYER: 'Player',
+  QUESTION: 'Question',
+  ROUND: 'Round',
+  SCORE: 'Score',
+  SDK: 'SDK',
+  TEAM: 'Team'
 }

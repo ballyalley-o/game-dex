@@ -15,49 +15,48 @@ class SDKSetController {
 
   public static async createPlayerBase(_req: Request, res: Response, _next: NextFunction) {
     try {
-      const playerBioData = await axios.get(SDK_DIR.PLAYER_ALL)
-      const playerData = playerBioData.data
+      const [playerBioResponse, playerCommonResponse] = await Promise.all([axios.get(SDK_DIR.PLAYER_ALL), axios.get(SDK_DIR.COMMON_ALL_PLAYER)])
 
-      let players = []
+      const playerData = playerBioResponse.data
+      const playerCommonData = playerCommonResponse.data.CommonAllPlayers
 
-      for (let i = 0; i < playerData.length; i++) {
-        const player = playerData[i]
-        const apiCode = player.id
-        const firstname = player.first_name
-        const lastname = player.last_name
-        const isActive = player.is_active
-
-        const playerBase: Player = { ...apiCode, firstname, lastname, isActive }
-
-        players.push(playerBase)
+      // Check if playerCommonData is an array
+      if (!Array.isArray(playerCommonData)) {
+        console.log('playerCommonData', playerCommonData)
+        throw new TypeError('playerCommonData is not an array')
       }
 
-      const playerCommonData = await axios.get(SDK_DIR.COMMON_ALL_PLAYER)
+      const players = playerData.map((player: Player) => ({
+        apiCode: player.id,
+        firstname: player.first_name,
+        lastname: player.last_name,
+        isActive: player.is_active
+      }))
 
-      for (let i = 0; i < playerCommonData.data.length; i++) {
-        const playerCommon = playerCommonData.data[i]
-        const player = players.find((p) => p.apiCode === playerCommon.PERSON_ID)
-
+      playerCommonData.forEach((playerCommon: Player) => {
+        const player = players.find((p: Player) => p.apiCode === playerCommon.PERSON_ID)
         if (player) {
-          const slug = [playerCommon.PLAYER_SLUG]
-          const playerCode = playerCommon.PLAYERCODE
-          const leagues = [playerCommon.OTHERLEAGUE_EXPERIENCE_CH]
+          player.slug = [playerCommon.PLAYER_SLUG]
+          player.playerCode = playerCommon.PLAYERCODE
+          //   TODO: #7 Add leagues model
 
-          player.slug = slug
-          player.playerCode = playerCode
-          player.leagues = leagues
-
-          await player.save()
+          if (playerCommon.QPARAM.TEAM_ID) {
+            player.leagues = [playerCommon.OTHERLEAGUE_EXPERIENCE_CH]
+          }
+          //   TODO: #6  ERROR HANDLER FOR DUPLICATE mongo
+          //   if (error instanceof MongoBulkWriteError && error.code === 11000) {
+          //     console.error('Duplicate key error:', error.message);
+          //     // Handle the duplicate key error (e.g., log, notify user, etc.)
+          //   } else {
+          //     // Handle other errors
+          //     throw error;
+          //   }
         }
-      }
+      })
 
       await Player.insertMany(players)
 
-      if (players.length > 0) {
-        res.status(CODE.CREATED).send(RESPONSE.CREATED_ALL)
-      } else {
-        res.status(CODE.NO_CONTENT).send(RESPONSE.NO_CONTENT([]))
-      }
+      res.status(players.length > 0 ? CODE.CREATED : CODE.NO_CONTENT).send(players.length > 0 ? RESPONSE.CREATED_ALL : RESPONSE.NO_CONTENT([]))
     } catch (error: any) {
       goodlog.error(error)
       res.status(CODE.INTERNAL_SERVER_ERROR).send(RESPONSE.INTERNAL_SERVER_ERROR)

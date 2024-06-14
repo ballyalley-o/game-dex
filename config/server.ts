@@ -1,6 +1,7 @@
 import express, { Application } from 'express'
 import goodlog from 'good-logs'
 import morgan from 'morgan'
+import { errorHandler, notFound } from 'middleware'
 import { LogInitRequest, ConnectionStatus } from 'decorator'
 import { mainRoute } from 'route'
 import { AppRouter } from 'app-router'
@@ -33,6 +34,8 @@ class App {
     this._PORT = GLOBAL.API_PORT
     this._ENV = GLOBAL.ENV
     this.registerRoute()
+    this._app.use(notFound)
+    this._app.use(errorHandler)
   }
 
   @LogInitRequest

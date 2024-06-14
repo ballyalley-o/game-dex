@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { Player } from 'model'
+import { Player, League } from 'model'
 import axios from 'axios'
 import goodlog from 'good-logs'
 import { SDK_DIR } from 'config/sdk-dir'
@@ -16,7 +16,7 @@ class SDKSetController {
   public static async createPlayerBase(_req: Request, res: Response, _next: NextFunction) {
     try {
       const [playerBioResponse, playerCommonResponse] = await Promise.all([axios.get(SDK_DIR.PLAYER_ALL), axios.get(SDK_DIR.COMMON_ALL_PLAYER)])
-
+      const playerLeagues = await League.find()
       const playerData = playerBioResponse.data
       const playerCommonData = playerCommonResponse.data.CommonAllPlayers
 
@@ -38,19 +38,12 @@ class SDKSetController {
         if (player) {
           player.slug = [playerCommon.PLAYER_SLUG]
           player.playerCode = playerCommon.PLAYERCODE
-          //   TODO: #7 Add leagues model
 
-          if (playerCommon.QPARAM.TEAM_ID) {
-            player.leagues = [playerCommon.OTHERLEAGUE_EXPERIENCE_CH]
-          }
-          //   TODO: #6  ERROR HANDLER FOR DUPLICATE mongo
-          //   if (error instanceof MongoBulkWriteError && error.code === 11000) {
-          //     console.error('Duplicate key error:', error.message);
-          //     // Handle the duplicate key error (e.g., log, notify user, etc.)
-          //   } else {
-          //     // Handle other errors
-          //     throw error;
-          //   }
+          playerLeagues.forEach((league: League) => {
+            if (league.apiCode === playerCommon.OTHERLEAGUE_EXPERIENCE_CH) {
+              player.leagues = [league._id]
+            }
+          })
         }
       })
 

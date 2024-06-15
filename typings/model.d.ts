@@ -154,7 +154,7 @@ interface Franchise {
   divisionTitles: number
   conferenceTitles: number
   championships: number
-  teamHistory: Schema.Types.ObjectId[]
+  teamHistory: Object[]
   isActive: boolean
 }
 

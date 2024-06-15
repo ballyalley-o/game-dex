@@ -133,6 +133,31 @@ declare interface Foul {
   [key: string]: any
 }
 
+interface Franchise {
+  apiCode: string
+  league: Schema.Types.ObjectId
+  ownership: string
+  affliation: string
+  team: Schema.Types.ObjectId
+  teamCity: string
+  teamName: string
+  teamAbbreviation: string
+  founded: string
+  history: string
+  arena: string
+  years: number
+  games: number
+  wins: number
+  losses: number
+  winPercentage: number
+  playoffAppearances: number
+  divisionTitles: number
+  conferenceTitles: number
+  championships: number
+  teamHistory: Schema.Types.ObjectId[]
+  isActive: boolean
+}
+
 declare interface Stats extends Minute, Rebound, Assist, Steal, Block, Turnover, Foul, Point {
   _id: Schema.Types.ObjectId
   apiCode: string

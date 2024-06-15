@@ -24,7 +24,13 @@ export const PATH_DIR = {
    * The league directory path.
    * @route /player
    */
-  LEAGUE: conNexSegment(SEGMENT.API, GLOBAL.API_VERSION, SEGMENT.LEAGUE)
+  LEAGUE: conNexSegment(SEGMENT.API, GLOBAL.API_VERSION, SEGMENT.LEAGUE),
+
+  /**
+   * The team directory path.
+   * @route /franchise
+   */
+  FRANCHISE: conNexSegment(SEGMENT.API, GLOBAL.API_VERSION, SEGMENT.FRANCHISE)
 }
 
 /**
@@ -153,6 +159,12 @@ export const PATH_SDK = {
    * @route /all-time/total
    **/
   ALL_TIME_TOTAL: conNexSegment(SEGMENT.ALL_TIME, SEGMENT.TOTAL),
+
+  /**
+   * The franchise leader directory path.
+   * @route /franchise/leader
+   */
+  FRANCHISE: conNexSegment(SEGMENT.FRANCHISE),
 
   /**
    * The franchise leader by team-id directory path.

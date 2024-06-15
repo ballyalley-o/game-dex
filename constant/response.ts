@@ -223,9 +223,10 @@ const PY = {
 export const MESSAGE = {
   NO_ID: 'No ID provided',
   NO_ABBV: 'No abbreviation provided',
-  NOT_FOUND: '[NOT FOUND]: Resource not found',
   NO_TEAM: 'No team provided',
   NO_STATE: 'No state provided',
+  NOT_FOUND: '[NOT FOUND]: Resource not found',
+  NOT_AN_ARRAY: (data: any) => `This Data is not an array: ${data}`,
   ALREADY_EXISTS: '[BAD REQUEST]: Resource already exists',
   FAILED_CREATE: '[FAILED]: Failed to create resource',
   FAILED_UPDATE: 'FAILED]: Failed to update resource',

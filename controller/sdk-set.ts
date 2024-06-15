@@ -3,7 +3,7 @@ import { Player, League, Franchise } from 'model'
 import axios from 'axios'
 import goodlog from 'good-logs'
 import { SDK_DIR } from 'config/sdk-dir'
-import { CODE, KEY, MESSAGE, RESPONSE, QPARAM, TEAM_ID } from 'constant'
+import { CODE, MESSAGE, RESPONSE } from 'constant'
 
 class SDKSetController {
   private static _playerId: string
@@ -20,10 +20,8 @@ class SDKSetController {
       const playerData = playerBioResponse.data
       const playerCommonData = playerCommonResponse.data.CommonAllPlayers
 
-      // Check if playerCommonData is an array
       if (!Array.isArray(playerCommonData)) {
-        console.log('playerCommonData', playerCommonData)
-        throw new TypeError('playerCommonData is not an array')
+        throw new TypeError(MESSAGE.NOT_AN_ARRAY(playerCommonData))
       }
 
       const players = playerData.map((player: Player) => ({
@@ -75,7 +73,7 @@ class SDKSetController {
         const franchiseLeague = await League.findOne({ apiCode: f.LEAGUE_ID })
 
         if (!franchiseLeague) {
-          goodlog.log('League not found')
+          goodlog.log(MESSAGE.NOT_FOUND)
           continue
         }
 
@@ -114,21 +112,6 @@ class SDKSetController {
 
         return mainHistory
       })
-
-      //   const finalTeamHistories = []
-      //   for (const histories of Object.values(teamHistoriesByTeamId)) {
-      //     if (histories.length === 1) {
-      //       finalTeamHistories.push(histories[0])
-      //       continue
-      //     }
-
-      //     histories.sort((a, b) => b.years - a.years)
-      //     const mainHistory = histories[0]
-      //     const historyDocuments = await Franchise.insertMany(histories.slice(1))
-      //     mainHistory.teamHistory = historyDocuments.map((doc) => doc._id)
-
-      //     finalTeamHistories.push(mainHistory)
-      //   }
 
       await Franchise.insertMany(finalTeamHistories)
 

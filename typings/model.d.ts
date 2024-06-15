@@ -136,7 +136,7 @@ declare interface Foul {
 interface Franchise {
   apiCode: string
   league: Schema.Types.ObjectId
-  ownership: string
+  ownership: string[]
   affliation: string
   team: Schema.Types.ObjectId
   teamCity: string

@@ -16,13 +16,17 @@ export enum SEGMENT {
   DRAFT = 'draft',
   FANTASY = 'fantasy',
   FIND = 'find',
+  FINDER = 'finder',
   FRANCHISE = 'franchise',
+  GAME = 'game',
   HISTORY = 'history',
   ID = ':id',
   INFO = 'info',
   LEADER = 'leader',
   LEAGUE = 'league',
   PLAYER = 'player',
+  PLAYER_1_ID = ':player1Id',
+  PLAYER_2_ID = ':player2Id',
   PT = 'pt',
   POINT = 'point',
   PTS = 'pts',
@@ -35,5 +39,6 @@ export enum SEGMENT {
   SYNERGY = 'synergy',
   TEAM = 'team',
   TOTAL = 'total',
-  USER = 'user'
+  USER = 'user',
+  VS = 'vs'
 }

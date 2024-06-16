@@ -95,6 +95,16 @@ export const SDK_DIR = {
   PLAYER_FANTASY: (id: any) => conNex(GLOBAL.SDK_URL, SEGMENT.PLAYER, id, SEGMENT.FANTASY),
 
   /**
+   * Returns the player vs player directory path for the specified player IDs.
+   *
+   * {base_sdk_url}/player/{player1Id}/vs/{player2Id}
+   *
+   * @param player1Id - The first player ID.
+   * @param player2Id - The second player ID.
+   * @returns The player vs player directory path.
+   */
+  PLAYER_VS_PLAYER: (player1Id: any, player2Id: any) => conNex(GLOBAL.SDK_URL, SEGMENT.PLAYER, player1Id, SEGMENT.VS, player2Id),
+  /**
    * The league leaders directory path.
    *
    * {base_sdk_url}/leader
@@ -191,6 +201,13 @@ export const SDK_DIR = {
    * {base_sdk_url}/common/all/player
    */
   COMMON_ALL_PLAYER: conNex(GLOBAL.SDK_URL, SEGMENT.COMMON, SEGMENT.ALL, SEGMENT.PLAYER),
+
+  /**
+   * Returns the player all directory path.
+   *
+   * {base_sdk_url}/game
+   */
+  GAME_FINDER: conNex(GLOBAL.SDK_URL, SEGMENT.GAME),
 
   /**
    * Returns the synergy directory path for the specified PT.

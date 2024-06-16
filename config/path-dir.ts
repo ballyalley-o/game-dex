@@ -113,6 +113,14 @@ export const PATH_SDK = {
   PLAYER_FANTASY: conNexSegment(SEGMENT.PLAYER, SEGMENT.ID, SEGMENT.FANTASY),
 
   /**
+   * The player compare directory path.
+   * @route /player/{player2Id}/vs/{player2Id}
+   * @param id - The player ID.
+   * @returns The player compare directory path.
+   */
+  PLAYER_VS_PLAYER: conNexSegment(SEGMENT.PLAYER, SEGMENT.PLAYER_1_ID, SEGMENT.VS, SEGMENT.PLAYER_2_ID),
+
+  /**
    * The draft history directory path.
    * @route /draft/history
    */
@@ -195,6 +203,12 @@ export const PATH_SDK = {
    * @route /common/all/player
    */
   COMMON_ALL_PLAYER: conNexSegment(SEGMENT.COMMON, SEGMENT.ALL, SEGMENT.PLAYER),
+
+  /**
+   * The game finder directory path.
+   * @route /game
+   */
+  GAME_FINDER: conNexSegment(SEGMENT.GAME),
 
   /**
    * The synergy playtype directory path.

@@ -315,17 +315,23 @@ declare interface Coach {
 declare interface Team {
   _id: Schema.Types.ObjectId
   apiCode: string
-  name: string
+  teamName: string
   city: string
   abbreviation: string
   conference: string
   division: string
   record: string
+  win: number
+  loss: number
+  winPercentage: number
+  divRank: number
+  confRank: number
+  season: Schema.Types.ObjectId
+  coach: Schema.Types.ObjectId
   stats: Schema.Types.ObjectId
-  championships: number
-  divisionTitles: number
-  conferenceTitles: number
+  franchise: Schema.Types.ObjectId
   retiredJerseys: Schema.Types.ObjectId[]
+  slug: string
   [key: string]: any
 }
 

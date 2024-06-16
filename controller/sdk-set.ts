@@ -13,6 +13,12 @@ class SDKSetController {
     this._playerId = req.params.id
   }
 
+  /**
+   * Creates player base data.
+   *
+   * @returns A promise that resolves to the created players.
+   * @throws {TypeError} If the playerCommonData is not an array.
+   */
   public static async createPlayerBase(_req: Request, res: Response, _next: NextFunction) {
     try {
       const [playerBioResponse, playerCommonResponse] = await Promise.all([axios.get(SDK_DIR.PLAYER_ALL), axios.get(SDK_DIR.COMMON_ALL_PLAYER)])
@@ -54,6 +60,12 @@ class SDKSetController {
     }
   }
 
+  /**
+   * Creates franchise history records based on the NBA API data.
+   *
+   * @returns A promise that resolves to the created franchise history records.
+   * @throws If there is an error while creating the franchise history records.
+   */
   public static async createFranchiseHistory(_req: Request, res: Response, _next: NextFunction) {
     try {
       const franchiseCall = async () => {

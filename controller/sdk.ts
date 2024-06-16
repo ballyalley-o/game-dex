@@ -283,11 +283,49 @@ class SDKController {
     const player2Id = req.params.player2Id
 
     const season = req.query.season
+    const last_n_games = req.query.last_n_games
+    const measure_type_detailed_defense = req.query.measure_type_detailed_defense
+    const month = req.query.month
+    const opponent_team_id = req.query.opponent_team_id
+    const pace_adjust = req.query.pace_adjust
+    const per_mode_detailed = req.query.per_mode_detailed
+    const period = req.query.period
+    const plus_minus = req.query.plus_minus
+    const rank = req.query.rank
+    const season_type_playoffs = req.query.season_type_playoffs
+    const date_from_nullable = req.query.date_from_nullable
+    const date_to_nullable = req.query.date_to_nullable
+    const game_segment_nullable = req.query.game_segment_nullable
+    const league_id_nullable = req.query.league_id_nullable
+    const location_nullable = req.query.location_nullable
+    const outcome_nullable = req.query.outcome_nullable
+    const season_segment_nullable = req.query.season_segment_nullable
+    const vs_conference_nullable = req.query.vs_conference_nullable
+    const vs_division_nullable = req.query.vs_division_nullable
 
     try {
       const playerCareer = await axios.get(SDK_DIR.PLAYER_VS_PLAYER(player1Id, player2Id), {
         params: {
-          season
+          season,
+          last_n_games,
+          measure_type_detailed_defense,
+          month,
+          opponent_team_id,
+          pace_adjust,
+          per_mode_detailed,
+          period,
+          plus_minus,
+          rank,
+          season_type_playoffs,
+          date_from_nullable,
+          date_to_nullable,
+          game_segment_nullable,
+          league_id_nullable,
+          outcome_nullable,
+          location_nullable,
+          season_segment_nullable,
+          vs_conference_nullable,
+          vs_division_nullable
         }
       })
 

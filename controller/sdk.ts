@@ -278,6 +278,30 @@ class SDKController {
     }
   }
 
+  public static async getPlayerVsPlayer(req: Request, res: Response, _next: NextFunction) {
+    const player1Id = req.params.player1Id
+    const player2Id = req.params.player2Id
+
+    const season = req.query.season
+
+    try {
+      const playerCareer = await axios.get(SDK_DIR.PLAYER_VS_PLAYER(player1Id, player2Id), {
+        params: {
+          season
+        }
+      })
+
+      if (!playerCareer.data) {
+        res.status(CODE.NOT_FOUND).send(RESPONSE.NOT_FOUND(MESSAGE.NOT_FOUND))
+      } else {
+        res.status(CODE.OK).send(RESPONSE.OK(playerCareer.data))
+      }
+    } catch (error: any) {
+      goodlog.error(error)
+      res.status(CODE.INTERNAL_SERVER_ERROR).send(RESPONSE.INTERNAL_SERVER_ERROR(error.message))
+    }
+  }
+
   /**
    * Retrieves the draft history.
    *
@@ -608,6 +632,40 @@ class SDKController {
         res.status(CODE.NOT_FOUND).send(RESPONSE.NOT_FOUND(MESSAGE.NOT_FOUND))
       } else {
         res.status(CODE.OK).send(RESPONSE.OK(scoreboard.data))
+      }
+    } catch (error: any) {
+      goodlog.error(error)
+      res.status(CODE.INTERNAL_SERVER_ERROR).send(RESPONSE.INTERNAL_SERVER_ERROR(error.message))
+    }
+  }
+
+  // game
+  public static async getGameFinder(req: Request, res: Response, _next: NextFunction) {
+    try {
+      // const game_date = req.query.game_date
+      // const league_id = req.query.league_id
+      // const day_offset = req.query.day_offset
+      const player_or_team_abbreviation = req.query.player_or_team_abbreviation
+      const league_id_nullable = req.query.league_id_nullable
+      const season_nullable = req.query.season_nullable
+      const season_type_nullable = req.query.season_type_nullable
+
+      const gameFinder = await axios.get(SDK_DIR.GAME_FINDER, {
+        params: {
+          // game_date,
+          // league_id,
+          // day_offset,
+          player_or_team_abbreviation,
+          league_id_nullable,
+          season_nullable,
+          season_type_nullable
+        }
+      })
+
+      if (!gameFinder.data) {
+        res.status(CODE.NOT_FOUND).send(RESPONSE.NOT_FOUND(MESSAGE.NOT_FOUND))
+      } else {
+        res.status(CODE.OK).send(RESPONSE.OK(gameFinder.data))
       }
     } catch (error: any) {
       goodlog.error(error)

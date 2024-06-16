@@ -1,6 +1,6 @@
 from nba_api.stats.endpoints import playerawards, playercareerstats, drafthistory, commonplayerinfo, teaminfocommon
 from nba_api.stats.static import players as players_static, teams as teams_static
-from nba_api.stats.endpoints import alltimeleadersgrids, assistleaders, leagueleaders, franchiseleaders, ScoreboardV2, FranchisePlayers, FranchiseHistory, GameRotation, VideoDetails, CommonAllPlayers, PlayerFantasyProfileBarGraph, SynergyPlayTypes, PlayerCompare, TeamDetails
+from nba_api.stats.endpoints import alltimeleadersgrids, assistleaders, leagueleaders, franchiseleaders, ScoreboardV2, FranchisePlayers, FranchiseHistory, GameRotation, VideoDetails, CommonAllPlayers, PlayerFantasyProfileBarGraph, SynergyPlayTypes, PlayerCompare, TeamDetails, PlayerGameStreakFinder, LeagueGameFinder, PlayerVsPlayer
 import requests
 
 
@@ -79,6 +79,42 @@ def get_player_career(player_id):
     player_career_stats_all = player_career_stats.get_normalized_json()
 
     return player_career_stats_all
+
+
+@app.route('/player/<int:player_id>/vs/<int:vs_player_id>', methods=['GET'])
+def get_player_vs_player(player_id, vs_player_id):
+    """
+    Retrieves the head-to-head statistics between two players.
+
+    Parameters:
+    player_id (int): The ID of the first player.
+    vs_player_id (int): The ID of the second player.
+
+    Returns:
+    dict: A dictionary containing the head-to-head statistics between the two players.
+
+    """
+
+    season = request.args.get('season', '2023-24')
+
+    try:
+        player_vs_player = PlayerVsPlayer(
+            player_id=player_id,
+            vs_player_id=vs_player_id,
+            season=season
+        )
+        player_vs_player_json = player_vs_player.get_normalized_json()
+
+        return player_vs_player_json
+
+    except requests.exceptions.RequestException as e:
+        app.logger.error(f"API request failed: {e}")
+        return jsonify({"error": "Failed to fetch player vs player data"}), 500
+
+    except Exception as e:
+        app.logger.error(f"An error occurred: {e}")
+        return jsonify({"error": "An internal error occurred"}), 500
+
 
 # teams
 
@@ -556,6 +592,110 @@ def get_compare_player():
         app.logger.error(f"API request failed: {e}")
         return jsonify({"error": "Failed to fetch player compare data"}), 500
 
+    except Exception as e:
+        app.logger.error(f"An error occurred: {e}")
+        return jsonify({"error": "An internal error occurred"}), 500
+
+@app.route('/game', methods=['GET'])
+def get_game():
+    """
+    Retrieves information about a specific game.
+
+    Parameters:
+    - game_id (int): The ID of the game.
+
+    Returns:
+    - game_json (str): The game details in JSON format.
+    """
+    player_or_team_abbreviation = request.args.get('player_or_team_abbreviation', 'T')
+    league_id_nullable = request.args.get('league_id_nullable', '00')
+    season_type_nullable = request.args.get('season_type_nullable', 'Regular Season')
+    season_nullable = request.args.get('season_nullable', '2006-07')
+
+    game_details = LeagueGameFinder(
+        player_or_team_abbreviation=player_or_team_abbreviation,
+        league_id_nullable=league_id_nullable,
+        season_nullable=season_nullable,
+        season_type_nullable=season_type_nullable,
+        # team_id_nullable='1610612737',
+        # vs_team_id_nullable='1610612738',
+        # outcome_nullable='W',
+        # location_nullable='Home',
+        # date_from_nullable='2023-10-01',
+        # date_to_nullable='2024-06-01',
+        # game_segment_nullable='First Half',
+        # period_nullable=0,
+        # shot_clock_range_nullable='24-22',
+        # last_n_seconds_nullable=0,
+        # game_scope_simple_nullable='Wins',
+        # game_scope_advanced_nullable='Wins',
+        # player_scope_nullable='All Players',
+        # player_scope_team_id_nullable='1610612737',
+        # player_scope_player_id='2544'
+    )
+    game_json = game_details.get_normalized_json()
+
+    return game_json
+
+@app.route('/streak/finder', methods=['GET'])
+def get_streak_finder():
+    """
+    Retrieves the player game streak finder data from the NBA API.
+
+    Returns:
+        dict: A dictionary containing the player game streak finder data.
+    """
+
+    league_id_nullable = request.args.get('league_id_nullable', '00')
+    season_nullable = request.args.get('season_nullable', '2023-24')
+    season_type_nullable = request.args.get('season_type_nullable', 'Regular Season')
+    last_n_games_nullable = request.args.get('last_n_games_nullable', 0)
+    measure_type_detailed_nullable = request.args.get('measure_type_detailed_nullable', 'Base')
+    date_from_nullable = request.args.get('date_from_nullable')
+    date_to_nullable = request.args.get('date_to_nullable')
+    opponent_team_id_nullable = request.args.get('opponent_team_id_nullable')
+    vs_conference_nullable = request.args.get('vs_conference_nullable')
+    vs_division_nullable = request.args.get('vs_division_nullable')
+    game_segment_nullable = request.args.get('game_segment_nullable')
+    period_nullable = request.args.get('period_nullable', 0)
+    shot_clock_range_nullable = request.args.get('shot_clock_range_nullable')
+    last_n_seconds_nullable = request.args.get('last_n_seconds_nullable', 0)
+    game_scope_simple_nullable = request.args.get('game_scope_simple_nullable')
+    game_scope_advanced_nullable = request.args.get('game_scope_advanced_nullable')
+    player_scope_nullable = request.args.get('player_scope_nullable')
+    player_scope_team_id_nullable = request.args.get('player_scope_team_id_nullable')
+    player_scope_player_id = request.args.get('player_scope_player_id', '2544')
+
+
+    try:
+        player_game_streak_finder = PlayerGameStreakFinder(
+            player_id_nullable=player_scope_player_id,
+        #     league_id_nullable=league_id_nullable,
+        #     season_nullable=session_nullable,
+        #     season_type_nullable=season_type_nullable,
+        #     last_n_games_nullable=last_n_games_nullable,
+        #     measure_type_detailed_nullable=measure_type_detailed_nullable,
+        #     date_from_nullable=date_from_nullable,
+        #     date_to_nullable=date_to_nullable,
+        #     opponent_team_id_nullable=opponent_team_id_nullable,
+        #     vs_conference_nullable=vs_conference_nullable,
+        #     vs_division_nullable=vs_division_nullable,
+        #     game_segment_nullable=game_segment_nullable,
+        #     period_nullable=period_nullable,
+        #     shot_clock_range_nullable=shot_clock_range_nullable,
+        #     last_n_seconds_nullable=last_n_seconds_nullable,
+        #     game_scope_simple_nullable=game_scope_simple_nullable,
+        #     game_scope_advanced_nullable=game_scope_advanced_nullable,
+        #     player_scope_nullable=player_scope_nullable,
+        #     player_scope_team_id_nullable=player_scope_team_id_nullable,
+        #     player_scope_player_id = player_scope_player_id
+        )
+        player_game_streak_finder_json = player_game_streak_finder.get_normalized_json()
+
+        return player_game_streak_finder_json
+    except requests.exceptions.RequestException as e:
+        app.logger.error(f"API request failed: {e}")
+        return jsonify({"error": "Failed to fetch player game streak finder data"}), 500
     except Exception as e:
         app.logger.error(f"An error occurred: {e}")
         return jsonify({"error": "An internal error occurred"}), 500

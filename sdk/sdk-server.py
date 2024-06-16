@@ -96,12 +96,49 @@ def get_player_vs_player(player_id, vs_player_id):
     """
 
     season = request.args.get('season', '2023-24')
+    last_n_games = request.args.get('last_n_games', 0)
+    measure_type_detailed_defense = request.args.get('measure_type_detailed_defense', 'Base')
+    month = request.args.get('month', 0)
+    opponent_team_id = request.args.get('opponent_team_id')
+    pace_adjust = request.args.get('pace_adjust', 'N')
+    per_mode_detailed = request.args.get('per_mode_detailed', 'Totals')
+    period = request.args.get('period', 0)
+    plus_minus = request.args.get('plus_minus', 'N')
+    rank = request.args.get('rank', 'N')
+    season_type_playoffs = request.args.get('season_type_playoffs')
+    date_from_nullable = request.args.get('date_from_nullable')
+    date_to_nullable = request.args.get('date_to_nullable')
+    game_segment_nullable = request.args.get('game_segment_nullable')
+    location_nullable = request.args.get('location_nullable')
+    outcome_nullable = request.args.get('outcome_nullable')
+    season_segment_nullable = request.args.get('season_segment_nullable')
+    vs_conference_nullable = request.args.get('vs_conference_nullable'),
+    vs_division_nullable = request.args.get('vs_division_nullable')
 
     try:
         player_vs_player = PlayerVsPlayer(
             player_id=player_id,
             vs_player_id=vs_player_id,
-            season=season
+            season=season,
+            last_n_games=last_n_games,
+            measure_type_detailed_defense=measure_type_detailed_defense,
+            month=month,
+            opponent_team_id=opponent_team_id,
+            pace_adjust=pace_adjust,
+            per_mode_detailed=per_mode_detailed,
+            period=period,
+            plus_minus=plus_minus,
+            rank=rank,
+            season_type_playoffs=season_type_playoffs,
+            date_from_nullable=date_from_nullable,
+            date_to_nullable=date_to_nullable,
+            game_segment_nullable=game_segment_nullable,
+            league_id_nullable=league_id_nullable,
+            location_nullable=location_nullable,
+            outcome_nullable=outcome_nullable,
+            season_segment_nullable=season_segment_nullable,
+            vs_conference_nullable=vs_conference_nullable,
+            vs_division_nullable=vs_division_nullable
         )
         player_vs_player_json = player_vs_player.get_normalized_json()
 

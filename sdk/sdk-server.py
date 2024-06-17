@@ -1,6 +1,8 @@
 from nba_api.stats.endpoints import playerawards, playercareerstats, drafthistory, commonplayerinfo, teaminfocommon
 from nba_api.stats.static import players as players_static, teams as teams_static
-from nba_api.stats.endpoints import alltimeleadersgrids, assistleaders, leagueleaders, franchiseleaders, ScoreboardV2, FranchisePlayers, FranchiseHistory, GameRotation, VideoDetails, CommonAllPlayers, PlayerFantasyProfileBarGraph, SynergyPlayTypes, PlayerCompare, TeamDetails, PlayerGameStreakFinder, LeagueGameFinder, PlayerVsPlayer
+from nba_api.stats.endpoints import alltimeleadersgrids, assistleaders, leagueleaders, franchiseleaders, ScoreboardV2, FranchisePlayers, FranchiseHistory, GameRotation, VideoDetails, CommonAllPlayers, PlayerFantasyProfileBarGraph, SynergyPlayTypes, PlayerCompare, TeamDetails, PlayerGameStreakFinder, LeagueGameFinder, PlayerVsPlayer, CumeStatsPlayer, TeamStats, PlayerStats
+from nba_api.stats.library.parameters import SeasonType
+from lib import get_game_ids_by_player
 import requests
 
 
@@ -151,6 +153,82 @@ def get_player_vs_player(player_id, vs_player_id):
     except Exception as e:
         app.logger.error(f"An error occurred: {e}")
         return jsonify({"error": "An internal error occurred"}), 500
+
+
+
+#  cume stats
+@app.route('/cume/<int:player_id>/player', methods=['GET'])
+def get_cume_stats_player(player_id):
+    """
+    Retrieves the cumulative statistics of a player based on their player ID.
+
+    Parameters:
+    player_id (int): The unique identifier of the player.
+
+    Returns:
+    dict: A dictionary containing the cumulative statistics of the player in JSON format.
+    """
+    # player_id = request.args.get('player_id', '2544')
+    league_id = request.args.get('league_id', '00')
+    season = request.args.get('season', '2023-24')
+    season_type_all_star = request.args.get('season_type_all_star', 'Regular Season')
+
+    try:
+        game_ids = get_game_ids_by_player(player_id, season, league_id)
+        print(game_ids)
+
+        cume_stats = CumeStatsPlayer(
+            player_id=player_id,
+            game_ids=game_ids,
+            league_id=league_id,
+            season=season,
+            # season_type_all_star=season_type_all_star
+        )
+        cume_stats_json = cume_stats.get_normalized_json()
+
+        return cume_stats_json
+
+    except requests.exceptions.RequestException as e:
+        app.logger.error(f"API request failed: {e}")
+        return jsonify({"error": "Failed to fetch cume stats player data"}), 500
+
+    except Exception as e:
+        app.logger.error(f"An error occurred: {e}")
+        return jsonify({"error": "An internal error occurred"}), 500
+
+# game finder
+@app.route('/player/<int:player_id>/game_ids', methods=['GET'])
+def get_game_ids(player_id):
+    """
+    Retrieves game IDs for a specific player and season.
+
+    Parameters:
+    player_id (int): The unique identifier of the player.
+    season (str): The season (e.g., '2023-24').
+    league_id (str): The league ID, default is '00' for NBA.
+
+    Returns:
+    list: A list of game IDs.
+    """
+
+    player_id = request.args.get('player_id', '2544')
+    season = request.args.get('season', '2023-24')
+    league_id = request.args.get('league_id', '00')
+
+    try:
+        game_finder = LeagueGameFinder(player_id_nullable=player_id, season_nullable=season, league_id_nullable=league_id)
+        games = game_finder.get_normalized_dict()
+        game_ids = [game['GAME_ID'] for game in games['LeagueGameFinderResults']]
+        return game_ids
+
+    except requests.exceptions.RequestException as e:
+        app.logger.error(f"API request failed: {e}")
+        return jsonify({"error": "Failed to fetch game IDs"}), 500
+
+    except Exception as e:
+        app.logger.error(f"An error occurred: {e}")
+        return jsonify({"error": "An internal error occurred"}), 500
+
 
 
 # teams
@@ -851,6 +929,3 @@ def get_scoreboard():
         app.logger.error(f"An error occurred: {e}")
         return jsonify({"error": "An internal error occurred"}), 500
 
-
-if __name__ == '__main__':
-    app.run(port=5001)

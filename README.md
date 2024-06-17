@@ -1,53 +1,116 @@
 ![NBA COVER](https://i.ibb.co/Sy1BpBx/cover.jpg)
 
-# NBA API
+# Goode Playbook
 
 This is a simple API that provides information about NBA teams and players. It was built using Typescript-Node.js, Express.js, and MongoDB. Using a microservice written in Python.
 
-The API provides the following endpoints:
+<hr>
 
-- GET /teams: Returns a list of NBA teams.
-- GET /teams/:id: Returns a single NBA team.
-- GET /players: Returns a list of NBA players.
-- GET /players/:id: Returns a single NBA player.
+> ## SDK
+>
+> The `SDKController` class provides methods for interacting with the NBA API.
 
-  > Statistics are provided by the [NBA API](https://www.balldontlie.io/).
+### Methods
 
-## Installation
+### setPlayerId
 
-1. Clone the repository:
-
-```bash
-git clone
+```typescript
+static setPlayerId(req: Request): void
 ```
 
-2. Install the dependencies:
+Sets the player ID from the request parameters.
 
-```bash
-npm install
+### setTeamId
+
+```typescript
+static setTeamId(req: Request): void
 ```
 
-3. Create a `.env` file in the root directory and add the following environment variables:
+Sets the team ID from the request parameters.
 
-```bash
-PORT=3004
-MONGO_URI=mongodb://localhost:27017/nba
+### setTeamAbbv
+
+```typescript
+static setTeamAbbv(req: Request): void
 ```
 
-4. Start the server:
+Sets the team abbreviation from the request parameters.
 
-```bash
-npm run dev
+### setTeamState
+
+```typescript
+static setTeamState(req: Request): void
 ```
 
-<!-- SCRAPE -->
+Sets the team state from the request parameters.
 
-## Scrape Data
+### setQueryParams
 
-To scrape the data from the NBA API, you need to run the Python microservice. The microservice will scrape the data and save it to the MongoDB database.
+```typescript
+static setQueryParams(req: Request): Record<string, any>
+```
 
-1. run the `scrape` script:
+Sets the query parameters for the request.
 
-```shell
-sh scrape.sh
+### setQueryParamsFranchise
+
+```typescript
+static setQueryParamsFranchise(req: Request): Record<string, any>
+```
+
+Sets the franchise query parameters for the request.
+
+## Routes
+
+### getAllTeam
+
+```typescript
+public static async getAllTeam(_req: Request, res: Response, _next: NextFunction): Promise<void>
+```
+
+Retrieves all teams.
+
+- **Method**: GET
+- **Route**: `/sdk/team`
+- **Access**: Public
+
+### getTeam
+
+```typescript
+public static async getTeam(req: Request, res: Response, _next: NextFunction): Promise<void>
+```
+
+Retrieves information about a specific team.
+
+- **Method**: GET
+- **Route**: `/sdk/team/:_teamId`
+- **Access**: Public
+
+### getTeamByAbbv
+
+```typescript
+public static async getTeamByAbbv(req: Request, res: Response, _next: NextFunction): Promise<void>
+```
+
+Retrieves information about a specific team by abbreviation.
+
+- **Method**: GET
+- **Route**: `/sdk/team/find/:_teamAbbv`
+- **Access**: Public
+
+### getAllTeamByState
+
+```typescript
+public static async getAllTeamByState(req: Request, res: Response, _next: NextFunction): Promise<void>
+```
+
+Retrieves all teams by state.
+
+- **Method**: GET
+- **Route**: `/sdk/team/state/:_teamState`
+- **Access**: Public
+
+```
+
+
 ```

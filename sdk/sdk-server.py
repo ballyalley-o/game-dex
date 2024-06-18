@@ -1,6 +1,5 @@
-from nba_api.stats.endpoints import playerawards, playercareerstats, drafthistory, commonplayerinfo, teaminfocommon
 from nba_api.stats.static import players as players_static, teams as teams_static
-from nba_api.stats.endpoints import alltimeleadersgrids, assistleaders, leagueleaders, franchiseleaders, ScoreboardV2, FranchisePlayers, FranchiseHistory, GameRotation, VideoDetails, CommonAllPlayers, PlayerFantasyProfileBarGraph, SynergyPlayTypes, PlayerCompare, TeamDetails, PlayerGameStreakFinder, LeagueGameFinder, PlayerVsPlayer, CumeStatsPlayer
+from nba_api.stats.endpoints import *
 from nba_api.stats.library.parameters import SeasonType
 from flask import Flask, jsonify, request
 from lib import get_game_ids_by_player
@@ -175,7 +174,7 @@ def get_cume_stats_player(player_id):
         game_ids = get_game_ids_by_player(player_id, season, league_id)
         print(game_ids)
 
-        cume_stats = CumeStatsPlayer(
+        cume_stats = cumestatsplayer.CumeStatsPlayer(
             player_id=player_id,
             game_ids=game_ids,
             league_id=league_id,
@@ -251,7 +250,7 @@ def get_teams_details_all(team_id):
         A JSON response containing all teams.
     """
     try:
-        team_details = TeamDetails(team_id).get_normalized_json()
+        team_details = teamdetails.TeamDetails(team_id).get_normalized_json()
 
         return team_details
 
@@ -322,6 +321,40 @@ def get_team_draft_info():
     draaft_full_info = draaft_info.get_normalized_json()
 
     return draaft_full_info
+
+# league
+@app.route('/league/matchups', methods=['GET'])
+def get_season_matchups():
+
+    league_id = request.args.get('league_id', '00')
+    per_mode_simple = request.args.get('per_mode_simple', 'Totals')
+    season = request.args.get('season', '2023-24')
+    season_type_playoffs = request.args.get('season_type_playoffs', 'Regular Season')
+    def_player_id_nullable = request.args.get('def_player_id_nullable', '')
+    def_team_id_nullable = request.args.get('def_team_id_nullable', None)
+    off_player_id_nullable = request.args.get('off_player_id_nullable', '')
+    off_team_id_nullable = request.args.get('off_team_id_nullable', None)
+
+    try:
+        season_matchups = leagueseasonmatchups.LeagueSeasonMatchups(
+            league_id=league_id,
+            per_mode_simple=per_mode_simple,
+            season=season,
+            season_type_playoffs=season_type_playoffs,
+            def_player_id_nullable=def_player_id_nullable,
+            def_team_id_nullable=def_team_id_nullable,
+            off_player_id_nullable=off_player_id_nullable,
+            off_team_id_nullable=off_team_id_nullable
+        )
+        season_matchups_json = season_matchups.get_normalized_json()
+
+        return season_matchups_json
+    except requests.exceptions.RequestException as e:
+        app.logger.error(f"API request failed: {e}")
+        return jsonify({"error": "Failed to fetch season matchups data"}), 500
+    except Exception as e:
+        app.logger.error(f"An error occurred: {e}")
+        return jsonify({"error": "An internal error occurred"}), 500
 
 # current leader module
 
@@ -476,7 +509,7 @@ def get_franchise_players():
         team_id = request.args.get('team_id', '1610612737')
         league_id = request.args.get('league_id_nullable', '00')
 
-        franchise_player = FranchisePlayers(
+        franchise_player = franchiseplayers.FranchisePlayers(
             league_id=league_id,
             team_id=team_id
         )
@@ -562,7 +595,7 @@ def get_common_all_player():
     Returns:
         dict: A dictionary containing the common all player data.
     """
-    common_all_player = CommonAllPlayers()
+    common_all_player = commonallplayers.CommonAllPlayers()
     common_all_player_json = common_all_player.get_normalized_json()
 
     return common_all_player_json
@@ -582,7 +615,7 @@ def get_player_fantasy_profile(player_id):
     """
     # player_id = request.args.get('player_id', '2544')
 
-    player_fantasy_profile = PlayerFantasyProfileBarGraph(player_id)
+    player_fantasy_profile = playerfantasyprofilebargraph.PlayerFantasyProfileBarGraph(player_id)
     fantasy_profile_json = player_fantasy_profile.get_normalized_json()
 
     return fantasy_profile_json
@@ -670,7 +703,7 @@ def get_compare_player():
     vs_division_nullable = request.args.get('vs_division_nullable')
 
     try:
-        compare_players = PlayerCompare(
+        compare_players = playercompare.PlayerCompare(
             player_id_list=player_id_list,
             vs_player_id_list=vs_player_id_list,
             last_n_games=last_n_games,
@@ -725,7 +758,7 @@ def get_game():
     season_type_nullable = request.args.get('season_type_nullable', 'Regular Season')
     season_nullable = request.args.get('season_nullable', '2006-07')
 
-    game_details = LeagueGameFinder(
+    game_details = leaguegamefinder.LeagueGameFinder(
         player_or_team_abbreviation=player_or_team_abbreviation,
         league_id_nullable=league_id_nullable,
         season_nullable=season_nullable,
@@ -781,7 +814,7 @@ def get_streak_finder():
 
 
     try:
-        player_game_streak_finder = PlayerGameStreakFinder(
+        player_game_streak_finder = playergamestreakfinder.PlayerGameStreakFinder(
             player_id_nullable=player_scope_player_id,
         #     league_id_nullable=league_id_nullable,
         #     season_nullable=session_nullable,
@@ -853,7 +886,7 @@ def get_video_details():
     # vs_conference_nullable  = request.args.get('vs_conference_nullable', 'East')
 
 
-    video_details = VideoDetails(
+    video_details = videodetails.VideoDetails(
         team_id=team_id,
         player_id=player_id,
         clutch_time_nullable=clutch_time_nullable,

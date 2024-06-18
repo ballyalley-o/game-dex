@@ -1,12 +1,10 @@
 from nba_api.stats.endpoints import playerawards, playercareerstats, drafthistory, commonplayerinfo, teaminfocommon
 from nba_api.stats.static import players as players_static, teams as teams_static
-from nba_api.stats.endpoints import alltimeleadersgrids, assistleaders, leagueleaders, franchiseleaders, ScoreboardV2, FranchisePlayers, FranchiseHistory, GameRotation, VideoDetails, CommonAllPlayers, PlayerFantasyProfileBarGraph, SynergyPlayTypes, PlayerCompare, TeamDetails, PlayerGameStreakFinder, LeagueGameFinder, PlayerVsPlayer, CumeStatsPlayer, TeamStats, PlayerStats
+from nba_api.stats.endpoints import alltimeleadersgrids, assistleaders, leagueleaders, franchiseleaders, ScoreboardV2, FranchisePlayers, FranchiseHistory, GameRotation, VideoDetails, CommonAllPlayers, PlayerFantasyProfileBarGraph, SynergyPlayTypes, PlayerCompare, TeamDetails, PlayerGameStreakFinder, LeagueGameFinder, PlayerVsPlayer, CumeStatsPlayer
 from nba_api.stats.library.parameters import SeasonType
+from flask import Flask, jsonify, request
 from lib import get_game_ids_by_player
 import requests
-
-
-from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
@@ -929,3 +927,6 @@ def get_scoreboard():
         app.logger.error(f"An error occurred: {e}")
         return jsonify({"error": "An internal error occurred"}), 500
 
+
+if __name__ == '__main__':
+    app.run(debug=True)

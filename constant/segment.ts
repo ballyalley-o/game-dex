@@ -24,6 +24,7 @@ export enum SEGMENT {
   INFO = 'info',
   LEADER = 'leader',
   LEAGUE = 'league',
+  MATCHUPS = 'matchups',
   PLAYER = 'player',
   PLAYER_1_ID = ':player1Id',
   PLAYER_2_ID = ':player2Id',

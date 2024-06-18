@@ -25,6 +25,8 @@ router.get(PATH_SDK.LEADER_PT_PLAYER, SDKController.getLeaderPtPlayer)
 router.get(PATH_SDK.LEADER_AST, SDKController.getLeaderAstTeam)
 router.get(PATH_SDK.LEADER_AST_PLAYER, SDKController.getLeaderAstPlayer)
 
+router.get(PATH_SDK.LEAGUE_MATCHUPS, SDKController.getLeagueMatchups)
+
 router.get(PATH_SDK.ALL_TIME_LEADER, SDKController.getAllTimeLeader)
 router.get(PATH_SDK.ALL_TIME_TOTAL, SDKController.getAllTimeTotal)
 

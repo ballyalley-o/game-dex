@@ -224,6 +224,13 @@ export const SDK_DIR = {
   COMPARE: conNex(GLOBAL.SDK_URL, SEGMENT.COMPARE),
 
   /**
+   * Returns the league matchups directory path.
+   *
+   * {base_sdk_url}/league/matchups
+   */
+  LEAGUE_MATCHUPS: conNex(GLOBAL.SDK_URL, SEGMENT.LEAGUE, SEGMENT.MATCHUPS),
+
+  /**
    * Returns the scoreboard directory path for latest games.
    *
    * {base_sdk_url}/scoreboard

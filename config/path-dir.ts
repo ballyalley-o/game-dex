@@ -217,6 +217,12 @@ export const PATH_SDK = {
   SYNERGY_PT: conNexSegment(SEGMENT.SYNERGY, SEGMENT.PT),
 
   /**
+   * The league matchups directory path.
+   * @route /league/matchups
+   */
+  LEAGUE_MATCHUPS: conNexSegment(SEGMENT.LEAGUE, SEGMENT.MATCHUPS),
+
+  /**
    * The player compare directory path.
    * @route /compare
    */

@@ -361,6 +361,22 @@ class SDKController {
     }
   }
 
+  // league module
+  public static async getLeagueMatchups(req: Request, res: Response, _next: NextFunction) {
+    try {
+      const leagueMatchups = await axios.get(SDK_DIR.LEAGUE_MATCHUPS)
+
+      if (!leagueMatchups.data) {
+        res.status(CODE.NOT_FOUND).send(RESPONSE.NOT_FOUND(MESSAGE.NOT_FOUND))
+      } else {
+        res.status(CODE.OK).send(RESPONSE.OK(leagueMatchups.data))
+      }
+    } catch (error: any) {
+      goodlog.error(error)
+      res.status(CODE.INTERNAL_SERVER_ERROR).send(RESPONSE.INTERNAL_SERVER_ERROR(error.message))
+    }
+  }
+
   // current leader module
 
   /**

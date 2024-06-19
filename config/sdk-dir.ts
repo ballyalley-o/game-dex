@@ -48,6 +48,16 @@ export const SDK_DIR = {
   TEAM_FIND: (id: any) => conNex(GLOBAL.SDK_URL, SEGMENT.TEAM, SEGMENT.FIND, id),
 
   /**
+   * Returns the team roster directory path for the specified team ID.
+   *
+   * {base_sdk_url}/team/{id}/roster
+   *
+   * @param id - The team ID.
+   * @returns The team roster directory path.
+   */
+  TEAM_ROSTER: (id: any) => conNex(GLOBAL.SDK_URL, SEGMENT.TEAM, id, SEGMENT.ROSTER),
+
+  /**
    * The player all directory path.
    *
    * {base_sdk_url}/player

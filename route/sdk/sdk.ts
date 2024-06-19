@@ -8,6 +8,7 @@ router.get(PATH_SDK.TEAM, SDKController.getAllTeam)
 router.get(PATH_SDK.TEAM_STATE, SDKController.getAllTeamByState)
 router.get(PATH_SDK.TEAM_ID, SDKController.getTeam)
 router.get(PATH_SDK.TEAM_ABBV, SDKController.getTeamByAbbv)
+router.get(PATH_SDK.TEAM_ROSTER, SDKController.getRosterByTeam)
 
 router.get(PATH_SDK.PLAYER, SDKController.getAllPlayer)
 router.post(PATH_SDK.PLAYER, SDKSetController.createPlayerBase)

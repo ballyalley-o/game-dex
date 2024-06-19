@@ -155,6 +155,41 @@ class SDKController {
     }
   }
 
+  public static async getRosterByTeam(req: Request, res: Response, _next: NextFunction) {
+    try {
+      const teamId = req.params.id
+      const season = req.query.season
+      const league_id_nullable = req.query.league_id_nullable
+
+      const teamRoster = await axios.get(SDK_DIR.TEAM_ROSTER(teamId), {
+        params: {
+          season,
+          league_id_nullable
+        }
+      })
+
+      if (!teamId) {
+        res.status(CODE.UNPROCESSABLE_ENTITY).send(RESPONSE.UNPROCESSABLE_ENTITY(MESSAGE.NO_ID))
+      } else {
+        const roster = await axios.get(SDK_DIR.TEAM_ROSTER(teamId), {
+          params: {
+            season,
+            league_id_nullable
+          }
+        })
+
+        if (!roster.data) {
+          res.status(CODE.NOT_FOUND).send(RESPONSE.NOT_FOUND(MESSAGE.NOT_FOUND))
+        } else {
+          res.status(CODE.OK).send(RESPONSE.OK(roster.data))
+        }
+      }
+    } catch (error: any) {
+      goodlog.error(error)
+      res.status(CODE.INTERNAL_SERVER_ERROR).send(RESPONSE.INTERNAL_SERVER_ERROR(error.message))
+    }
+  }
+
   /**
    * Retrieves all players
    *

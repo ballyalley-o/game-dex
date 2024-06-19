@@ -308,6 +308,44 @@ def get_team_by_state(state):
 
     return jsonify(team_state)
 
+# roster
+@app.route('/team/<int:team_id>/roster', methods=['GET'])
+def get_team_roster(team_id):
+    """
+    Retrieves the roster of a specific NBA team.
+
+    Args:
+        team_id (int): The ID of the team.
+
+    Returns:
+        JSON: The roster data of the team.
+
+    Raises:
+        requests.exceptions.RequestException: If the API request fails.
+        Exception: If an internal error occurs.
+    """
+
+    season = request.args.get('season', '2023-24')
+    league_id_nullable = request.args.get('league_id', '00')
+
+    try:
+        team_roster = commonteamroster.CommonTeamRoster(
+            team_id=team_id,
+            season=season,
+            league_id_nullable=league_id_nullable
+        )
+        team_roster_json = team_roster.get_normalized_json()
+
+        return team_roster_json
+
+    except requests.exceptions.RequestException as e:
+        app.logger.error(f"API request failed: {e}")
+        return jsonify({"error": "Failed to fetch team roster data"}), 500
+
+    except Exception as e:
+        app.logger.error(f"An error occurred: {e}")
+        return jsonify({"error": "An internal error occurred"}), 500
+
 
 @app.route('/draft/history', methods=['GET'])
 def get_team_draft_info():

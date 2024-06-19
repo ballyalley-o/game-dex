@@ -33,6 +33,7 @@ export enum SEGMENT {
   PTS = 'pts',
   ROTATION = 'rotation',
   ROOT = '/',
+  ROSTER = 'roster',
   SCOREBOARD = 'scoreboard',
   SDK = 'sdk',
   STATE = 'state',

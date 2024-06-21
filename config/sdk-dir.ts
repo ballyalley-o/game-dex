@@ -48,6 +48,16 @@ export const SDK_DIR = {
   TEAM_FIND: (id: any) => conNex(GLOBAL.SDK_URL, SEGMENT.TEAM, SEGMENT.FIND, id),
 
   /**
+   * Returns the team find directory path for the specified team abbreviation.
+   *
+   * {base_sdk_url}/team/{abbv}/abbv
+   *
+   * @param abbv - The team abbreviation.
+   * @returns The team find directory path.
+   */
+  TEAM_ABBV: (abbv: any) => conNex(GLOBAL.SDK_URL, SEGMENT.TEAM, abbv, SEGMENT.ABBV),
+
+  /**
    * Returns the team roster directory path for the specified team ID.
    *
    * {base_sdk_url}/team/{id}/roster

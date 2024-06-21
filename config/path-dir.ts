@@ -68,19 +68,27 @@ export const PATH_SDK = {
 
   /**
    * Returns the team find directory path for the specified team ID.
-   * @route /team/find/{abbv}
+   * @route /team/abbv/{abbv}
    * @param id - The team ID.
    * @returns The team find directory path.
    */
   TEAM_ABBV: conNexSegment(SEGMENT.TEAM, SEGMENT.ABBV, SEGMENT.ABBV_PARAM),
 
   /**
-   * Returns the team roster directory path for the specified team ID.
-   * @route /team/{id}/roster
+   * Returns the team roster directory path for the /team/abbv/:abbv
+   * @route /team/abbv/:abbv
    * @param id - The team ID.
    * @returns The team roster directory path.
    */
-  TEAM_ROSTER: conNexSegment(SEGMENT.TEAM, SEGMENT.ID, SEGMENT.ROSTER),
+  TEAM_ABBV_CALL: (abbv: any) => conNexSegment(SEGMENT.TEAM, SEGMENT.ABBV, abbv),
+
+  /**
+   * Returns the team roster directory path for the specified team ID.
+   * @route /team/{abbv}/roster
+   * @param id - The team ID.
+   * @returns The team roster directory path.
+   */
+  TEAM_ROSTER: conNexSegment(SEGMENT.TEAM, SEGMENT.ABBV_PARAM, SEGMENT.ROSTER),
 
   /**
    * The player all directory path.

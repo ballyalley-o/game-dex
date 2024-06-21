@@ -262,7 +262,7 @@ def get_teams_details_all(team_id):
         app.logger.error(f"An error occurred: {e}")
         return jsonify({"error": "An internal error occurred"}), 500
 
-@app.route('/team/find/<string:abbv>', methods=['GET'])
+@app.route('/team/<string:abbv>/abbv', methods=['GET'])
 def get_team(abbv):
     """
     Retrieves the team information based on the given abbreviation.
@@ -583,7 +583,7 @@ def get_franchise_history():
     """
     league_id = request.args.get('league_id', '00')
 
-    franchise_history = FranchiseHistory(
+    franchise_history = franchisehistory.FranchiseHistory(
         league_id=league_id
     )
     franchise_history_json = franchise_history.get_normalized_json()
@@ -606,7 +606,7 @@ def get_game_rotation():
         game_id = request.args.get('game_id', '0042300401' )
         league_id = request.args.get('league_id', '00')
 
-        rotation = GameRotation(
+        rotation = gamerotation.GameRotation(
             game_id=game_id,
             league_id=league_id
             )

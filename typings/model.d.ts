@@ -335,6 +335,39 @@ declare interface Team {
   [key: string]: any
 }
 
+declare enum TeamAbbv {
+  ATL = 'ATL' || 'atl',
+  BOS = 'BOS' || 'bos',
+  BKN = 'BKN' || 'bkn',
+  CHA = 'CHA' || 'cha',
+  CHI = 'CHI' || 'chi',
+  CLE = 'CLE' || 'cle',
+  DAL = 'DAL' || 'dal',
+  DEN = 'DEN' || 'den',
+  DET = 'DET' || 'det',
+  GSW = 'GSW' || 'gsw',
+  HOU = 'HOU' || 'hou',
+  IND = 'IND' || 'ind',
+  LAC = 'LAC' || 'lac',
+  LAL = 'LAL' || 'lal',
+  MEM = 'MEM' || 'mem',
+  MIA = 'MIA' || 'mia',
+  MIL = 'MIL' || 'mil',
+  MIN = 'MIN' || 'min',
+  NOP = 'NOP' || 'nop',
+  NYK = 'NYK' || 'nyk',
+  OKC = 'OKC' || 'okc',
+  ORL = 'ORL' || 'orl',
+  PHI = 'PHI' || 'phi',
+  PHX = 'PHX' || 'phx',
+  POR = 'POR' || 'por',
+  SAC = 'SAC' || 'sac',
+  SAS = 'SAS' || 'sas',
+  TOR = 'TOR' || 'tor',
+  UTA = 'UTA' || 'uta',
+  WAS = 'WAS' || 'was'
+}
+
 declare interface Season {
   _id: Schema.Types.ObjectId
   year: Date | string

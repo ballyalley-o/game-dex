@@ -9,11 +9,12 @@ export const SUCCESS = {
    * @param data - The data to be included in the response.
    * @returns The success response object.
    */
-  OK: (data: any) => {
+  OK: (data: any, length?: any) => {
     return {
       success: true,
       code: CODE.OK,
       message: 'Request successful',
+      length,
       data
     }
   },

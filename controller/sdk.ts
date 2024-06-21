@@ -4,6 +4,7 @@ import axios from 'axios'
 import goodlog from 'good-logs'
 import { SDK_DIR } from 'config/sdk-dir'
 import { CODE, KEY, MESSAGE, RESPONSE, QPARAM } from 'constant'
+import { PATH_SDK } from 'config'
 
 /**
  * The SDKController class provides methods for interacting with the NBA API.
@@ -50,6 +51,26 @@ class SDKController {
       team_id,
       league_id,
       game_id
+    }
+  }
+
+  public static async getAllTeamId() {
+    try {
+      const teams = await axios.get(SDK_DIR.TEAM_ALL)
+      const teamIds = teams.data.map((team: any) => team.id)
+      return teamIds
+    } catch (error: any) {
+      goodlog.error(error)
+    }
+  }
+
+  public static async getTeamIdByAbbv(abbv: string) {
+    try {
+      const team = await axios.get(SDK_DIR.TEAM_ABBV(abbv))
+      console.log(team.data.id)
+      return team.data.id
+    } catch (error: any) {
+      goodlog.error(error)
     }
   }
 
@@ -157,10 +178,11 @@ class SDKController {
 
   public static async getRosterByTeam(req: Request, res: Response, _next: NextFunction) {
     try {
-      const teamId = req.params.id
+      const teamId = await SDKController.getTeamIdByAbbv(req.params.abbv)
       const season = req.query.season
       const league_id_nullable = req.query.league_id_nullable
 
+      console.log(teamId)
       const teamRoster = await axios.get(SDK_DIR.TEAM_ROSTER(teamId), {
         params: {
           season,
@@ -170,19 +192,12 @@ class SDKController {
 
       if (!teamId) {
         res.status(CODE.UNPROCESSABLE_ENTITY).send(RESPONSE.UNPROCESSABLE_ENTITY(MESSAGE.NO_ID))
-      } else {
-        const roster = await axios.get(SDK_DIR.TEAM_ROSTER(teamId), {
-          params: {
-            season,
-            league_id_nullable
-          }
-        })
+      }
 
-        if (!roster.data) {
-          res.status(CODE.NOT_FOUND).send(RESPONSE.NOT_FOUND(MESSAGE.NOT_FOUND))
-        } else {
-          res.status(CODE.OK).send(RESPONSE.OK(roster.data))
-        }
+      if (!teamRoster.data) {
+        res.status(CODE.NOT_FOUND).send(RESPONSE.NOT_FOUND(MESSAGE.NOT_FOUND))
+      } else {
+        res.status(CODE.OK).send(RESPONSE.OK(teamRoster.data, teamRoster.data.CommonTeamRoster.length))
       }
     } catch (error: any) {
       goodlog.error(error)
@@ -399,12 +414,26 @@ class SDKController {
   // league module
   public static async getLeagueMatchups(req: Request, res: Response, _next: NextFunction) {
     try {
-      const leagueMatchups = await axios.get(SDK_DIR.LEAGUE_MATCHUPS)
+      const def_league_id_nullable = req.query.def_league_id_nullable
+      const off_team_id_nullable = req.query.off_team_id
+      const season = req.query.season
+      const league_id = req.query.league_id
+      const season_type_playoffs = req.query.season_type_playoffs
+
+      const leagueMatchups = await axios.get(SDK_DIR.LEAGUE_MATCHUPS, {
+        params: {
+          def_league_id_nullable,
+          off_team_id_nullable,
+          season,
+          league_id,
+          season_type_playoffs
+        }
+      })
 
       if (!leagueMatchups.data) {
         res.status(CODE.NOT_FOUND).send(RESPONSE.NOT_FOUND(MESSAGE.NOT_FOUND))
       } else {
-        res.status(CODE.OK).send(RESPONSE.OK(leagueMatchups.data))
+        res.status(CODE.OK).send(RESPONSE.OK(leagueMatchups.data, leagueMatchups.data.SeasonMatchups.length))
       }
     } catch (error: any) {
       goodlog.error(error)

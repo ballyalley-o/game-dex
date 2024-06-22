@@ -3,7 +3,7 @@ import { spawn } from 'child_process'
 import axios from 'axios'
 import goodlog from 'good-logs'
 import { SDK_DIR } from 'config/sdk-dir'
-import { CODE, KEY, MESSAGE, RESPONSE, QPARAM } from 'constant'
+import { CODE, KEY, MESSAGE, RESPONSE, QPARAM, TEAM_ABBV_NAMES } from 'constant'
 import { PATH_SDK } from 'config'
 
 /**
@@ -74,6 +74,66 @@ class SDKController {
     }
   }
 
+  public static async getTeamSeasonStats(abbv: any) {
+    try {
+      const teams = await axios.get(SDK_DIR.TEAM_SEASON_STATS(abbv))
+
+      if (!teams.data) {
+        return null
+      } else {
+        return teams.data
+      }
+    } catch (error: any) {
+      goodlog.error(error)
+    }
+  }
+
+  public static async getAllTeamSeasonYear(abbv: any) {
+    try {
+      const teamAbbv = await this.getTeamSeasonStats(abbv)
+      const teamSeasonYears = []
+
+      for (const year of teamAbbv.TeamStats) {
+        teamSeasonYears.push(year.YEAR)
+      }
+
+      const uniqueYears = [...new Set(teamSeasonYears)]
+      const teamOverview = {
+        team: abbv,
+        yearsActive: teamSeasonYears.length,
+        years: uniqueYears
+      }
+
+      return teamOverview
+    } catch (error: any) {
+      goodlog.error(error)
+    }
+  }
+
+  public static async getAllTeamSeasonYearlyStats() {
+    try {
+      const teams = Object.keys(TEAM_ABBV_NAMES)
+      const allTeams = []
+
+      for (const team of teams) {
+        const teamSeasonYears = await this.getAllTeamSeasonYear(team)
+        allTeams.push(teamSeasonYears)
+      }
+
+      const allTeamsSorted = allTeams.sort((a: any, b: any) => b.yearsActive - a.yearsActive)
+      const mostActiveTeam = allTeamsSorted[0]
+
+      const data = {
+        mostActiveTeam,
+        allTeams
+      }
+
+      return data
+    } catch (error: any) {
+      goodlog.error(error)
+    }
+  }
+
   /**
    * Retrieves all teams.
    *
@@ -108,12 +168,12 @@ class SDKController {
       if (!SDKController._teamId) {
         res.status(CODE.UNPROCESSABLE_ENTITY).send(RESPONSE.UNPROCESSABLE_ENTITY(MESSAGE.NO_ID))
       } else {
-        const teams = await axios.get(SDK_DIR.TEAM_INFO(SDKController._teamId))
+        const team = await axios.get(SDK_DIR.TEAM_INFO(SDKController._teamId))
 
-        if (!teams.data) {
+        if (!team.data) {
           res.status(CODE.NOT_FOUND).send(RESPONSE.NOT_FOUND(MESSAGE.NOT_FOUND))
         } else {
-          res.status(CODE.OK).send(RESPONSE.OK(teams.data))
+          res.status(CODE.OK).send(RESPONSE.OK(team.data))
         }
       }
     } catch (error: any) {
@@ -142,6 +202,31 @@ class SDKController {
         } else {
           res.status(CODE.OK).send(RESPONSE.OK(team.data))
         }
+      }
+    } catch (error: any) {
+      goodlog.error(error)
+      res.status(CODE.INTERNAL_SERVER_ERROR).send(RESPONSE.INTERNAL_SERVER_ERROR(error.message))
+    }
+  }
+
+  /**
+   * Retrieves the team yearly stats by abbreviation.
+   *
+   * @route   {GET} /sdk/team/:abbv/yearly/stats
+   * @access  public
+   */
+  public static async getTeamYearlyStatsByAbbv(req: Request, res: Response, _next: NextFunction) {
+    try {
+      const teamAbbv = req.params.abbv
+      const teamStats = await axios.get(SDK_DIR.TEAM_SEASON_STATS(teamAbbv))
+
+      const firstKey = Object.keys(teamStats.data)[0]
+      const firstKeyValues = teamStats.data[firstKey].length
+
+      if (!teamStats.data) {
+        res.status(CODE.NOT_FOUND).send(RESPONSE.NOT_FOUND(MESSAGE.NOT_FOUND))
+      } else {
+        res.status(CODE.OK).send(RESPONSE.OK(teamStats.data, firstKeyValues))
       }
     } catch (error: any) {
       goodlog.error(error)
@@ -182,7 +267,6 @@ class SDKController {
       const season = req.query.season
       const league_id_nullable = req.query.league_id_nullable
 
-      console.log(teamId)
       const teamRoster = await axios.get(SDK_DIR.TEAM_ROSTER(teamId), {
         params: {
           season,

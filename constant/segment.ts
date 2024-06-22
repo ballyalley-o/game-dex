@@ -36,11 +36,14 @@ export enum SEGMENT {
   ROSTER = 'roster',
   SCOREBOARD = 'scoreboard',
   SDK = 'sdk',
+  SEASON = 'season',
   STATE = 'state',
   STATE_PARAM = ':state',
+  STATS = 'stats',
   SYNERGY = 'synergy',
   TEAM = 'team',
   TOTAL = 'total',
   USER = 'user',
-  VS = 'vs'
+  VS = 'vs',
+  YEARLY = 'yearly'
 }

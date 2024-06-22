@@ -346,6 +346,28 @@ def get_team_roster(team_id):
         app.logger.error(f"An error occurred: {e}")
         return jsonify({"error": "An internal error occurred"}), 500
 
+# team season ids
+@app.route('/team/season/<string:abbv>', methods=['GET'])
+def get_team_season_yearly_stats(abbv):
+    """
+    Retrieves the season yearly stats for a specific team.
+
+    Parameters:
+    team_id (int): The ID of the team.
+
+    Returns:
+    list: A list of season IDs for the team.
+    """
+    team_abbv = teams_static.find_team_by_abbreviation(abbv)
+    team_id = team_abbv['id']
+
+    team_season_ids = teamyearbyyearstats.TeamYearByYearStats(team_id)
+    team_season_ids_json = team_season_ids.get_normalized_json()
+
+    return team_season_ids_json
+
+
+
 
 @app.route('/draft/history', methods=['GET'])
 def get_team_draft_info():

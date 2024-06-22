@@ -155,6 +155,7 @@ interface Franchise {
   conferenceTitles: number
   championships: number
   teamHistory: Object[]
+  retiredJerseys: Schema.Types.ObjectId[]
   isActive: boolean
 }
 
@@ -315,23 +316,19 @@ declare interface Coach {
 declare interface Team {
   _id: Schema.Types.ObjectId
   apiCode: string
-  teamName: string
+  name: string
   city: string
+  state: string
   abbreviation: string
-  conference: string
-  division: string
-  record: string
-  win: number
-  loss: number
-  winPercentage: number
-  divRank: number
-  confRank: number
+  nickname: string
   season: Schema.Types.ObjectId
   coach: Schema.Types.ObjectId
+  players: Schema.Types.ObjectId[]
   stats: Schema.Types.ObjectId
+  statsHistory: Schema.Types.ObjectId[]
   franchise: Schema.Types.ObjectId
   retiredJerseys: Schema.Types.ObjectId[]
-  slug: string
+  slug: string[]
   [key: string]: any
 }
 

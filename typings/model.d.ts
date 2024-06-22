@@ -70,69 +70,6 @@ declare interface League {
   [key: string]: any
 }
 
-declare interface StatCategory {
-  _id: Schema.Types.ObjectId
-  apiCode: string
-  leagueName: string
-  [key: string]: any
-}
-
-declare interface Minute {
-  minutes: number
-}
-
-declare interface Point extends FieldGoal, ThreePoint, FreeThrow {
-  points: number
-}
-
-declare interface FieldGoal {
-  fieldGoalsMade: number
-  fieldGoalsAttempted: number
-  fieldGoalPercentage: number
-}
-
-declare interface ThreePoint {
-  threePointMade: number
-  threePointAttempted: number
-  threePointPercentage: number
-}
-
-declare interface FreeThrow {
-  freeThrowsMade: number
-  freeThrowsAttempted: number
-  freeThrowPercentage: number
-}
-
-declare interface Rebound {
-  offensiveRebounds: number
-  defensiveRebounds: number
-  totalRebounds: number
-}
-
-declare interface Assist {
-  assists: number
-}
-
-declare interface Steal {
-  steals: number
-}
-
-declare interface Block {
-  blocks: number
-}
-
-declare interface Turnover {
-  turnovers: number
-}
-
-declare interface Foul {
-  teamFouls: number
-  personalFouls: number
-  technicalFouls: number
-  flagrantFouls: number
-  [key: string]: any
-}
-
 interface Franchise {
   apiCode: string
   league: Schema.Types.ObjectId
@@ -159,29 +96,219 @@ interface Franchise {
   isActive: boolean
 }
 
+declare interface StatCategory {
+  _id: Schema.Types.ObjectId
+  apiCode: string
+  leagueName: string
+  [key: string]: any
+}
+
+declare interface Minute {
+  minutes: number
+}
+
+declare interface Point extends FieldGoal, ThreePoint, FreeThrow {
+  points: number
+  pointsPerGame: number
+}
+
+declare interface FieldGoal {
+  fieldGoalsMade: number
+  fieldGoalsAttempted: number
+  fieldGoalPercentage: number
+}
+
+declare interface ThreePoint {
+  threePointersMade: number
+  threePointersAttempted: number
+  threePointPercentage: number
+}
+
+declare interface FreeThrow {
+  freeThrowsMade: number
+  freeThrowsAttempted: number
+  freeThrowPercentage: number
+}
+
+declare interface Rebound {
+  offensiveRebounds: number
+  defensiveRebounds: number
+  totalRebounds: number
+  reboundsPerGame: number
+}
+
+declare interface Assist {
+  assists: number
+  assistsPerGame
+}
+
+declare interface Steal {
+  steals: number
+  stealsPerGame: number
+}
+
+declare interface Block {
+  blocks: number
+  blocksPerGame: number
+}
+
+declare interface Turnover {
+  turnovers: number
+  turnoversPerGame: number
+}
+
+declare interface Foul {
+  teamFouls: number
+  personalFouls: number
+  technicalFouls: number
+  flagrantFouls: number
+  personalFoulsPerGame: number
+  technicalFoulsPerGame: number
+  flagrantFoulsPerGame: number
+  teamFoulsPerGame: number
+}
+
 declare interface Stats extends Minute, Rebound, Assist, Steal, Block, Turnover, Foul, Point {
   _id: Schema.Types.ObjectId
   apiCode: string
+  gamesPlayed: number
+  wins: number
+  losses: number
+  winPercentage: number
+  minutes: number
+  doubleDoubles: number
+  tripleDoubles: number
 }
 
 declare interface PlayerStats extends Stats {
   player: Schema.Types.ObjectId
-  regularSeasonStats: Schema.Types.ObjectId
-  allStarStats: Schema.Types.ObjectId
-  playoffStats: Schema.Types.ObjectId
-  finalsStats: Schema.Types.ObjectId
+  plusMinus: number
+  playerEfficiencyRating: number
+  pointsRank: number
+  assistRank: number
+  reboundRank: number
+  stealRank: number
+  blockRank: number
+  fieldGoalPercentageRank: number
+  threePointPercentageRank: number
+  freeThrowPercentageRank: number
+  personalFoulsRank: number
+  pointsPerGameRank: number
+  reboundsPerGameRank: number
+  assistsPerGameRank: number
+  stealsPerGameRank: number
+  blocksPerGameRank: number
+  turnoversPerGameRank: number
+  personalFoulsPerGameRank: number
+  playoffAppearances: number
+  conferenceFinalsAppearances: number
+  finalsAppearances: number
 }
 
 declare interface TeamStats extends Stats {
   team: Schema.Types.ObjectId
+  teamFouls: number
+  pointsRank: number
+  assistRank: number
+  reboundRank: number
+  stealRank: number
+  blockRank: number
+  fieldGoalPercentageRank: number
+  threePointPercentageRank: number
+  freeThrowPercentageRank: number
+  finalsAppearances: number
+  conferenceRank: number
+  divisionRank: number
+  teamFoulsRank: number
+  pointsPerGameRank: number
+  reboundsPerGameRank: number
+  assistsPerGameRank: number
+  stealsPerGameRank: number
+  blocksPerGameRank: number
+  turnoversPerGameRank: number
+  personalFoulsPerGameRank: number
+  playoffAppearances: number
+  conferenceFinalsAppearances: number
+  finalsAppearances: number
 }
 
 declare interface GameStats extends Stats {
   game: Schema.Types.ObjectId
+  playerStats: PlayerGameStats[]
+  teamStats: TeamGameStats[]
+  totalStats: TotalGameStats
+}
+
+declare interface TotalStats extends Minute, Point, Rebound, Assist, Steal, Block, Turnover, Foul {
+  totalMinutes: number
+  totalGamesPlayed: number
+  totalPoints: number
+  totalFieldGoalsMade: number
+  totalFieldGoalsAttempted: number
+  totalThreePointersMade: number
+  totalThreePointersAttempted: number
+  totalFreeThrowsMade: number
+  totalFreeThrowsAttempted: number
+  totalOffensiveRebounds: number
+  totalDefensiveRebounds: number
+  totalRebounds: number
+  totalAssists: number
+  totalSteals: number
+  totalBlocks: number
+  totalTurnovers: number
+  totalPersonalFouls: number
+  totalTeamFouls: number
+}
+
+declare interface Per36Stats extends Minute, Point, Rebound, Assist, Steal, Block, Turnover, Foul {
+  per36Minutes: number
+  pointsPer36: number
+  fieldGoalsMadePer36: number
+  fieldGoalsAttemptedPer36: number
+  threePointersMadePer36: number
+  threePointersAttemptedPer36: number
+  freeThrowsMadePer36: number
+  freeThrowsAttemptedPer36: number
+  offensiveReboundsPer36: number
+  defensiveReboundsPer36: number
+  reboundsPer36: number
+  assistsPer36: number
+  stealsPer36: number
+  blocksPer36: number
+  turnoversPer36: number
+  personalFoulsPer36: number
+  teamFoulsPer36: number
+}
+
+declare interface Per48Stats extends Minute, Point, Rebound, Assist, Steal, Block, Turnover, Foul {
+  per48Minutes: number
+  pointsPer48: number
+  fieldGoalsMadePer48: number
+  fieldGoalsAttemptedPer48: number
+  threePointersMadePer48: number
+  threePointersAttemptedPer48: number
+  freeThrowsMadePer48: number
+  freeThrowsAttemptedPer48: number
+  offensiveReboundsPer48: number
+  defensiveReboundsPer48: number
+  reboundsPer48: number
+  assistsPer48: number
+  stealsPer48: number
+  blocksPer48: number
+  turnoversPer48: number
+  personalFoulsPer48: number
+  teamFoulsPer48: number
+}
+
+declare interface AllStarStats extends Stats {
+  allStar: Schema.Types.ObjectId
 }
 
 declare interface RegularSeasonStats extends Stats {
   season: Schema.Types.ObjectId
+  totals: TotalStats
+  per36: Per36Stats
+  per48: Per48Stats
 }
 
 declare interface AllStarStats extends Stats {
@@ -190,8 +317,10 @@ declare interface AllStarStats extends Stats {
 
 declare interface PlayoffStats extends Stats {
   season: Schema.Types.ObjectId
+  totals: TotalStats
+  per36: Per36Stats
+  per48: Per48Stats
 }
-
 declare interface FinalsStats extends PlayoffStats {
   playoffs: Schema.Types.ObjectId
 }

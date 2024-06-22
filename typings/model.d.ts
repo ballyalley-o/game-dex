@@ -236,7 +236,7 @@ declare interface GameStats extends Stats {
   game: Schema.Types.ObjectId
   playerStats: PlayerGameStats[]
   teamStats: TeamGameStats[]
-  totalStats: TotalGameStats
+  totalStats: TotalStats
 }
 
 declare interface TotalStats extends Minute, Point, Rebound, Assist, Steal, Block, Turnover, Foul {

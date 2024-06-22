@@ -68,6 +68,16 @@ export const SDK_DIR = {
   TEAM_ROSTER: (id: any) => conNex(GLOBAL.SDK_URL, SEGMENT.TEAM, id, SEGMENT.ROSTER),
 
   /**
+   * Returns the team season stats directory path for the specified team ID.
+   *
+   * {base_sdk_url}/team/season/{abbv}
+   *
+   * @param abbv - The team abbvrebiation.
+   * @returns The team season stats directory path.
+   */
+  TEAM_SEASON_STATS: (abbv: any) => conNex(GLOBAL.SDK_URL, SEGMENT.TEAM, SEGMENT.SEASON, abbv),
+
+  /**
    * The player all directory path.
    *
    * {base_sdk_url}/player

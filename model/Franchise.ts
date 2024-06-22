@@ -1,4 +1,4 @@
-import mongoose, { Schema, model } from 'mongoose'
+import { Schema, model } from 'mongoose'
 import slugify from 'slugify'
 import goodlog from 'good-logs'
 import { TAGS, LOCALE } from 'constant'
@@ -53,5 +53,4 @@ FranchiseSchema.post('save', function (doc) {
 
 // FranchiseSchema.index({ teamName: 1 }, { unique: true })
 const Franchise = model<Franchise>(TAG, FranchiseSchema)
-
 export default Franchise

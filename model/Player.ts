@@ -43,7 +43,9 @@ PlayerSchema.virtual('fullname').get(function () {
 })
 
 PlayerSchema.virtual('age').get(function () {
+  if (!this.birthDate) return null
   const diff = Date.now() - this.birthDate.getTime()
+
   const ageDate = new Date(diff)
   return Math.abs(ageDate.getUTCFullYear() - 1970)
 })

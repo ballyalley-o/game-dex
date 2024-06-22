@@ -4,7 +4,6 @@ import axios from 'axios'
 import goodlog from 'good-logs'
 import { SDK_DIR } from 'config/sdk-dir'
 import { CODE, MESSAGE, RESPONSE } from 'constant'
-import SDKController from './sdk'
 
 class SDKSetController {
   private static _playerId: string

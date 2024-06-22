@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from 'express'
-import { Player, League, Franchise } from 'model'
+import { Player, League, Franchise, Team } from 'model'
 import axios from 'axios'
 import goodlog from 'good-logs'
 import { SDK_DIR } from 'config/sdk-dir'
 import { CODE, MESSAGE, RESPONSE } from 'constant'
+import SDKController from './sdk'
 
 class SDKSetController {
   private static _playerId: string
@@ -130,6 +131,54 @@ class SDKSetController {
       res
         .status(finalTeamHistories.length > 0 ? CODE.CREATED : CODE.NO_CONTENT)
         .send(finalTeamHistories.length > 0 ? RESPONSE.CREATED_ALL : RESPONSE.NO_CONTENT([]))
+    } catch (error: any) {
+      goodlog.error(error)
+      res.status(CODE.INTERNAL_SERVER_ERROR).send(RESPONSE.INTERNAL_SERVER_ERROR)
+    }
+  }
+
+  /**
+   * Creates team base data.
+   *
+   * @returns A promise that resolves to the created teams.
+   * @throws If there is an error while creating the teams.
+   */
+  public static async createTeamBase(_req: Request, res: Response, _next: NextFunction) {
+    try {
+      const getTeam = async () => {
+        try {
+          const teams = await axios.get(SDK_DIR.TEAM_ALL)
+          return teams.data
+        } catch (error: any) {
+          goodlog.error(error)
+          res.status(CODE.INTERNAL_SERVER_ERROR).send(RESPONSE.INTERNAL_SERVER_ERROR)
+        }
+      }
+
+      const teamData = await getTeam()
+      const teams = teamData.map((team: Team) => ({
+        apiCode: team.id,
+        name: team.full_name,
+        abbreviation: team.abbreviation,
+        city: team.city,
+        state: team.state,
+        nickname: team.nickname
+      }))
+
+      for (const team of teams) {
+        const franchise = await Franchise.findOne({ apiCode: team.apiCode })
+
+        if (!franchise) {
+          goodlog.log(MESSAGE.NOT_FOUND)
+          continue
+        }
+
+        team.franchise = franchise._id
+      }
+
+      await Team.insertMany(teams)
+
+      res.status(teams.length > 0 ? CODE.CREATED : CODE.NO_CONTENT).send(teams.length > 0 ? RESPONSE.CREATED_ALL : RESPONSE.NO_CONTENT([]))
     } catch (error: any) {
       goodlog.error(error)
       res.status(CODE.INTERNAL_SERVER_ERROR).send(RESPONSE.INTERNAL_SERVER_ERROR)

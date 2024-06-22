@@ -8,5 +8,9 @@ export const TAGS = {
   ROUND: 'Round',
   SCORE: 'Score',
   SDK: 'SDK',
-  TEAM: 'Team'
+  TEAM: 'Team',
+  STATS: 'Stats',
+  PLAYER_STATS: 'PlayerStats',
+  TEAM_STATS: 'TeamStats',
+  GAME_STATS: 'GameStats'
 }

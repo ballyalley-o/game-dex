@@ -30,7 +30,19 @@ export const PATH_DIR = {
    * The team directory path.
    * @route /franchise
    */
-  FRANCHISE: conNexSegment(SEGMENT.API, GLOBAL.API_VERSION, SEGMENT.FRANCHISE)
+  FRANCHISE: conNexSegment(SEGMENT.API, GLOBAL.API_VERSION, SEGMENT.FRANCHISE),
+
+  /**
+   * The team directory path.
+   * @route /team
+   */
+  TEAM: conNexSegment(SEGMENT.API, GLOBAL.API_VERSION, SEGMENT.TEAM),
+
+  /**
+   * The player directory path.
+   * @route /player
+   */
+  PLAYER: conNexSegment(SEGMENT.API, GLOBAL.API_VERSION, SEGMENT.PLAYER)
 }
 
 /**
@@ -89,6 +101,14 @@ export const PATH_SDK = {
    * @returns The team roster directory path.
    */
   TEAM_ROSTER: conNexSegment(SEGMENT.TEAM, SEGMENT.ABBV_PARAM, SEGMENT.ROSTER),
+
+  /**
+   * Returns the team yearly stats directory path for the specified team ID.
+   * @route /team/{abbv}/yearly/stats
+   * @param id - The team ID.
+   * @returns The team yearly stats directory path.
+   */
+  TEAM_YEARLY_STATS: conNexSegment(SEGMENT.TEAM, SEGMENT.ABBV_PARAM, SEGMENT.YEARLY, SEGMENT.STATS),
 
   /**
    * The player all directory path.

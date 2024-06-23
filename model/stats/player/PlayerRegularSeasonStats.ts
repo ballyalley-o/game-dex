@@ -2,15 +2,14 @@ import { Schema } from 'mongoose'
 import { Stats } from 'model'
 import { TAGS } from 'constant'
 
-const TAG = TAGS.PLAYER_STATS
+const TAG = TAGS.PLAYER_REGULAR_SEASON_STATS
 
-const PlayerStatsSchema: Schema<PlayerStats> = new Schema<PlayerStats>(
+const PlayerRegularSeasonStatsSchema: Schema<PlayerStats> = new Schema<PlayerStats>(
   {
-    apiCode: { type: String, required: true, unique: true },
+    apiCode: { type: String, required: true },
+    player: { type: Schema.Types.ObjectId, ref: TAGS.PLAYER },
     plusMinus: { type: Number },
     playerEfficiencyRating: { type: Number },
-    doubleDoubles: { type: Number },
-    tripleDoubles: { type: Number },
     pointsRank: { type: Number },
     assistRank: { type: Number },
     reboundRank: { type: Number },
@@ -19,13 +18,9 @@ const PlayerStatsSchema: Schema<PlayerStats> = new Schema<PlayerStats>(
     fieldGoalPercentageRank: { type: Number },
     threePointPercentageRank: { type: Number },
     freeThrowPercentageRank: { type: Number },
-    pointsPerGame: { type: Number },
-    reboundsPerGame: { type: Number },
-    assistsPerGame: { type: Number },
-    stealsPerGame: { type: Number },
-    blocksPerGame: { type: Number },
-    turnoversPerGame: { type: Number },
-    personalFoulsPerGame: { type: Number }
+    playoffAppearances: { type: Number },
+    conferenceFinalsAppearances: { type: String },
+    finalsAppearances: { type: Number }
   },
   {
     timestamps: true,
@@ -35,5 +30,5 @@ const PlayerStatsSchema: Schema<PlayerStats> = new Schema<PlayerStats>(
   }
 )
 
-const PlayerStats = Stats.discriminator<PlayerStats>(TAG, PlayerStatsSchema)
-export default PlayerStats
+const PlayerRegularSeasonStats = Stats.discriminator<PlayerStats>(TAG, PlayerRegularSeasonStatsSchema)
+export default PlayerRegularSeasonStats

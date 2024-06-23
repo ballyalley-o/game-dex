@@ -1,14 +1,17 @@
-import { Schema, model } from 'mongoose'
+import { Schema } from 'mongoose'
 import { Stats } from 'model'
 import { TAGS } from 'constant'
 
-const TAG = TAGS.TEAM_STATS
+const TAG = TAGS.TEAM_REGULAR_SEASON_STATS
 
-const TeamStatsSchema: Schema<TeamStats> = new Schema<TeamStats>(
+const TeamRegularSeasonStatsSchema: Schema<TeamStats> = new Schema<TeamStats>(
   {
-    apiCode: { type: String, required: true, unique: true },
+    apiCode: { type: String, required: true },
+    team: { type: Schema.Types.ObjectId, ref: TAGS.TEAM },
     gamesPlayed: { type: Number },
     teamFouls: { type: Number },
+    divisionRank: { type: Number },
+    conferenceRank: { type: Number },
     pointsRank: { type: Number },
     assistRank: { type: Number },
     reboundRank: { type: Number },
@@ -24,9 +27,9 @@ const TeamStatsSchema: Schema<TeamStats> = new Schema<TeamStats>(
     blocksPerGameRank: { type: Number },
     turnoversPerGameRank: { type: Number },
     personalFoulsPerGameRank: { type: Number },
-    playoffAppearances: { type: Number },
-    conferenceFinalsAppearances: { type: Number },
-    finalsAppearances: { type: Number }
+    playoffAppearances: { type: String },
+    conferenceFinalsAppearances: { type: String },
+    finalsAppearances: { type: String }
   },
   {
     timestamps: true,
@@ -36,5 +39,5 @@ const TeamStatsSchema: Schema<TeamStats> = new Schema<TeamStats>(
   }
 )
 
-const TeamStats = Stats.discriminator<TeamStats>(TAG, TeamStatsSchema)
-export default TeamStats
+const TeamRegularSeasonStats = Stats.discriminator<TeamStats>(TAG, TeamRegularSeasonStatsSchema)
+export default TeamRegularSeasonStats

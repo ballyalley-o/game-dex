@@ -70,7 +70,7 @@ declare interface League {
   [key: string]: any
 }
 
-interface Franchise {
+declare interface Franchise {
   apiCode: string
   league: Schema.Types.ObjectId
   ownership: string[]
@@ -105,6 +105,7 @@ declare interface StatCategory {
 
 declare interface Minute {
   minutes: number
+  minutesPerGame: number
 }
 
 declare interface Point extends FieldGoal, ThreePoint, FreeThrow {
@@ -116,11 +117,15 @@ declare interface FieldGoal {
   fieldGoalsMade: number
   fieldGoalsAttempted: number
   fieldGoalPercentage: number
+  fieldGoalsMadePerGame: number
+  fieldGoalsAttemptedPerGame: number
 }
 
 declare interface ThreePoint {
   threePointersMade: number
   threePointersAttempted: number
+  threePointersMadePerGame: number
+  threePointersAttemptedPerGame: number
   threePointPercentage: number
 }
 
@@ -128,12 +133,16 @@ declare interface FreeThrow {
   freeThrowsMade: number
   freeThrowsAttempted: number
   freeThrowPercentage: number
+  freeThrowsMadePerGame: number
+  freeThrowsAttemptedPerGame: number
 }
 
 declare interface Rebound {
   offensiveRebounds: number
   defensiveRebounds: number
-  totalRebounds: number
+  rebounds: number
+  offensiveReboundsPerGame: number
+  defensiveReboundsPerGame: number
   reboundsPerGame: number
 }
 
@@ -168,8 +177,37 @@ declare interface Foul {
   teamFoulsPerGame: number
 }
 
+declare interface Totals {
+  mins: number
+  gamesPlayed: number
+  winPercentage: number
+  wins: number
+  loses: number
+  points: number
+  fieldGoalsMade: number
+  fieldGoalsAttempted: number
+  threePointersMade: number
+  threePointersAttempted: number
+  freeThrowsMade: number
+  freeThrowsAttempted: number
+  offensiveRebounds: number
+  defensiveRebounds: number
+  totalRebounds: number
+  assists: number
+  steals: number
+  blocks: number
+  turnovers: number
+  personalFouls: number
+  technicalFouls: number
+  flagrantFouls: number
+  doubleDoubles: number
+  tripleDoubles: number
+}
+
 declare interface Stats extends Minute, Rebound, Assist, Steal, Block, Turnover, Foul, Point {
   _id: Schema.Types.ObjectId
+  team: Schema.Types.ObjectId
+  player: Schema.Types.ObjectId
   apiCode: string
   gamesPlayed: number
   wins: number
@@ -200,13 +238,15 @@ declare interface PlayerStats extends Stats {
   blocksPerGameRank: number
   turnoversPerGameRank: number
   personalFoulsPerGameRank: number
-  playoffAppearances: number
-  conferenceFinalsAppearances: number
-  finalsAppearances: number
+  playoffAppearances: string | number
+  conferenceFinalsAppearances: string | number
+  finalsAppearances: string | number
 }
 
 declare interface TeamStats extends Stats {
   team: Schema.Types.ObjectId
+  // TODO: #35 change to schema whe season module is created
+  season: string
   teamFouls: number
   pointsRank: number
   assistRank: number
@@ -216,7 +256,6 @@ declare interface TeamStats extends Stats {
   fieldGoalPercentageRank: number
   threePointPercentageRank: number
   freeThrowPercentageRank: number
-  finalsAppearances: number
   conferenceRank: number
   divisionRank: number
   teamFoulsRank: number
@@ -227,15 +266,31 @@ declare interface TeamStats extends Stats {
   blocksPerGameRank: number
   turnoversPerGameRank: number
   personalFoulsPerGameRank: number
-  playoffAppearances: number
-  conferenceFinalsAppearances: number
-  finalsAppearances: number
+  playoffAppearances: string
+  conferenceFinalsAppearances: string
+  finalsAppearances: string
+}
+
+declare interface TeamStatsOverview {
+  team: Schema.Types.ObjectId
+  regularSeasonStats: Schema.Types.ObjectId
+  playoffsStats: Schema.Types.ObjectId
+}
+
+declare interface PlayerStatsOverview {
+  player: Schema.Types.ObjectId
+  regularSeasonStats: Schema.Types.ObjectId
+  playoffsStats: Schema.Types.ObjectId
 }
 
 declare interface GameStats extends Stats {
   game: Schema.Types.ObjectId
-  playerStats: PlayerGameStats[]
-  teamStats: TeamGameStats[]
+  // player: Schema.Types.ObjectId[]
+  // team : Schema.Types.ObjectId[]
+  // boxScore: BoxScore
+  // team1Stats: TeamStats
+  // team2Stats: TeamStats
+  // playerTotalStats:
   totalStats: TotalStats
 }
 
@@ -306,6 +361,9 @@ declare interface AllStarStats extends Stats {
 
 declare interface RegularSeasonStats extends Stats {
   season: Schema.Types.ObjectId
+  team: Schema.Types.ObjectId
+  player: Schema.Types.ObjectId
+  coach: Schema.Types.ObjectId
   totals: TotalStats
   per36: Per36Stats
   per48: Per48Stats
@@ -324,6 +382,8 @@ declare interface PlayoffStats extends Stats {
 declare interface FinalsStats extends PlayoffStats {
   playoffs: Schema.Types.ObjectId
 }
+
+declare interface Totals {}
 
 declare interface Awards {
   _id: Schema.Types.ObjectId

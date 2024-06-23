@@ -13,8 +13,8 @@ const TeamSchema: Schema<Team> = new Schema<Team>(
     nickname: { type: String },
     season: { type: String },
     coach: { type: String },
-    stats: { type: Schema.Types.ObjectId, ref: 'TeamStats' },
-    statsHistory: [{ type: Schema.Types.ObjectId, ref: 'TeamStats' }],
+    stats: { type: Schema.Types.ObjectId, ref: TAGS.TEAM_STATS_OVERVIEW },
+    statsHistory: [{ type: Schema.Types.ObjectId, ref: TAGS.TEAM_STATS_OVERVIEW }],
     players: [{ type: Schema.Types.ObjectId, ref: 'Player' }],
     franchise: { type: Schema.Types.ObjectId, ref: 'Franchise' }
   },

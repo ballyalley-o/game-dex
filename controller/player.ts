@@ -1,8 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
-import axios from 'axios'
 import goodlog from 'good-logs'
-import { Player, League } from 'model'
-import { SDK_DIR } from 'config/sdk-dir'
+import { Player } from 'model'
 import { CODE, MESSAGE, RESPONSE } from 'constant'
 
 class PlayerController {

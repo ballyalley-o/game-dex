@@ -1,9 +1,11 @@
 import { Request, Response, NextFunction } from 'express'
-import { Player, League, Franchise, Team } from 'model'
+import { Player, League, Franchise, Team, TeamStatsOverview } from 'model'
 import axios from 'axios'
 import goodlog from 'good-logs'
 import { SDK_DIR } from 'config/sdk-dir'
-import { CODE, MESSAGE, RESPONSE } from 'constant'
+import { CODE, MESSAGE, RESPONSE, TEAM_ABBV_NAMES, TEAM_ABBV_ARR } from 'constant'
+import SDKController from './sdk'
+import { TeamPlayoffsStats, TeamRegularSeasonStats } from 'model/stats'
 
 class SDKSetController {
   private static _playerId: string
@@ -144,7 +146,7 @@ class SDKSetController {
    */
   public static async createTeamBase(_req: Request, res: Response, _next: NextFunction) {
     try {
-      const getTeam = async () => {
+      const getAllTeam = async () => {
         try {
           const teams = await axios.get(SDK_DIR.TEAM_ALL)
           return teams.data
@@ -154,15 +156,19 @@ class SDKSetController {
         }
       }
 
-      const teamData = await getTeam()
+      const teamData = await getAllTeam()
       const teams = teamData.map((team: Team) => ({
         apiCode: team.id,
         name: team.full_name,
         abbreviation: team.abbreviation,
         city: team.city,
         state: team.state,
-        nickname: team.nickname
+        nickname: team.nickname,
+        statsHistory: [],
+        stats: {}
       }))
+
+      const teamStatHistory: { [key: string]: any[] } = {}
 
       for (const team of teams) {
         const franchise = await Franchise.findOne({ apiCode: team.apiCode })
@@ -175,7 +181,75 @@ class SDKSetController {
         team.franchise = franchise._id
       }
 
-      await Team.insertMany(teams)
+      const teamAbbvArr = TEAM_ABBV_ARR
+
+      for (const team of teamAbbvArr) {
+        const teamData = teams.find((t: any) => t.abbreviation === team)
+        const statsHistoryData = await SDKController.getTeamSeasonStats(team)
+
+        if (teamData) {
+          // save to the TeamStats collection first then save the reference to the team
+          for (const statsHistory of statsHistoryData.TeamStats) {
+            const teamStatsRegData = {
+              team: null,
+              apiCode: statsHistory.TEAM_ID,
+              season: statsHistory.YEAR,
+              gamesPlayed: statsHistory.GP,
+              wins: statsHistory.WINS,
+              losses: statsHistory.LOSSES,
+              winPercentage: statsHistory.WIN_PCT,
+              conferenceRank: statsHistory.CONF_RANK,
+              divisionRank: statsHistory.DIV_RANK,
+              finalsAppearances: statsHistory.NBA_FINALS_APPEARANCE,
+              fieldGoalsMade: statsHistory.FGM,
+              fieldGoalsAttempted: statsHistory.FGA,
+              fieldGoalPercentage: statsHistory.FG_PCT,
+              threePointersMade: statsHistory.FG3M,
+              threePointersAttempted: statsHistory.FG3A,
+              threePointPercentage: statsHistory.FG3_PCT,
+              freeThrowsMade: statsHistory.FTM,
+              freeThrowsAttempted: statsHistory.FTA,
+              freeThrowPercentage: statsHistory.FT_PCT,
+              points: statsHistory.PTS,
+              rebounds: statsHistory.REB,
+              offensiveRebounds: statsHistory.OREB,
+              defensiveRebounds: statsHistory.DREB,
+              assists: statsHistory.AST,
+              steals: statsHistory.STL,
+              blocks: statsHistory.BLK,
+              personalFouls: statsHistory.PF,
+              turnovers: statsHistory.TOV,
+              pointsRank: statsHistory.PTS_RANK
+            }
+            const teamStatsPOData = {
+              team: null,
+              apiCode: statsHistory.TEAM_ID,
+              wins: statsHistory.PO_WINS,
+              losses: statsHistory.PO_LOSSES
+            }
+
+            const teamRegStats = await TeamRegularSeasonStats.create(teamStatsRegData)
+            const teamPOStats = await TeamPlayoffsStats.create(teamStatsPOData)
+
+            const teamOverview = {
+              team: null,
+              regularSeasonStats: teamRegStats,
+              playoffsStats: teamPOStats
+            }
+
+            // create the team starts overview
+            const teamOverviewData = await TeamStatsOverview.create(teamOverview)
+            teamData.statsHistory.push(teamOverviewData)
+          }
+          // the index (latest season) of the stats history will be the stats of the team
+          teamData.stats = teamData.statsHistory[teamData.statsHistory.length - 1]
+
+          const newTeam = await Team.create(teamData)
+          for (const statsHistory of teamData.statsHistory) {
+            await TeamStatsOverview.updateOne({ _id: statsHistory._id }, { team: newTeam._id })
+          }
+        }
+      }
 
       res.status(teams.length > 0 ? CODE.CREATED : CODE.NO_CONTENT).send(teams.length > 0 ? RESPONSE.CREATED_ALL : RESPONSE.NO_CONTENT([]))
     } catch (error: any) {

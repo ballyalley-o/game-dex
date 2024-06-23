@@ -39,6 +39,12 @@ export const PATH_DIR = {
   TEAM: conNexSegment(SEGMENT.API, GLOBAL.API_VERSION, SEGMENT.TEAM),
 
   /**
+   * The team info directory path.
+   * @route /team/{id}
+   */
+  TEAM_ID: conNexSegment(SEGMENT.ID),
+
+  /**
    * The player directory path.
    * @route /player
    */

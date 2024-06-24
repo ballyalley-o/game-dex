@@ -1,11 +1,10 @@
 import { Request, Response, NextFunction } from 'express'
-import { Player, League, Franchise, Team, TeamStatsOverview } from 'model'
+import { Player, League, Franchise, Team, TeamStatsOverview, TeamPlayoffsStats, TeamRegularSeasonStats } from 'model'
 import axios from 'axios'
 import goodlog from 'good-logs'
 import { SDK_DIR } from 'config/sdk-dir'
 import { CODE, MESSAGE, RESPONSE, TEAM_ABBV_NAMES, TEAM_ABBV_ARR } from 'constant'
 import SDKController from './sdk'
-import { TeamPlayoffsStats, TeamRegularSeasonStats } from 'model/stats'
 
 class SDKSetController {
   private static _playerId: string
@@ -236,17 +235,16 @@ class SDKSetController {
               regularSeasonStats: teamRegStats,
               playoffsStats: teamPOStats
             }
-
-            // create the team starts overview
             const teamOverviewData = await TeamStatsOverview.create(teamOverview)
             teamData.statsHistory.push(teamOverviewData)
           }
-          // the index (latest season) of the stats history will be the stats of the team
           teamData.stats = teamData.statsHistory[teamData.statsHistory.length - 1]
 
           const newTeam = await Team.create(teamData)
           for (const statsHistory of teamData.statsHistory) {
             await TeamStatsOverview.updateOne({ _id: statsHistory._id }, { team: newTeam._id })
+            await TeamRegularSeasonStats.findOneAndUpdate({ _id: statsHistory.regularSeasonStats }, { $set: { team: newTeam._id } })
+            await TeamPlayoffsStats.findOneAndUpdate({ _id: statsHistory.playoffsStats }, { $set: { team: newTeam._id } })
           }
         }
       }

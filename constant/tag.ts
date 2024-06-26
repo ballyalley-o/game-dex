@@ -1,8 +1,12 @@
 export const TAGS = {
+  ALL_STAR: 'AllStar',
   ANSWER: 'Answer',
+  AWARD: 'Award',
+  DRAFT: 'Draft',
   FRANCHISE: 'Franchise',
   GAME: 'Game',
   GAME_STATS: 'GameStats',
+  JERSEY: 'Jersey',
   LEAGUE: 'League',
   PER36: 'Per36',
   PER48: 'Per48',

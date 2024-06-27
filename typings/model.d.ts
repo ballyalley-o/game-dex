@@ -285,6 +285,8 @@ declare interface PlayerStatsOverview {
 
 declare interface GameStats extends Stats {
   game: Schema.Types.ObjectId
+  playbook: Schema.Types.ObjectId
+  rotation: Schema.Types.ObjectId
   // player: Schema.Types.ObjectId[]
   // team : Schema.Types.ObjectId[]
   // boxScore: BoxScore
@@ -481,6 +483,10 @@ declare interface Player {
   birthPlace: string
   highSchool: string
   college: string
+  school: string
+  fromYear: string
+  toYear: string
+  experience: number
   draft: Schema.Types.ObjectId
   team: Schema.Types.ObjectId[]
   stats: Schema.Types.ObjectId
@@ -554,11 +560,81 @@ declare enum TeamAbbv {
   WAS = 'WAS' || 'was'
 }
 
+declare interface Roster {
+  _id: Schema.Types.ObjectId
+  apiCode: string
+  season: Schema.Types.ObjectId
+  record: Schema.Types.ObjectId
+  playbook: Schema.Types.ObjectId
+  team: Schema.Types.ObjectId
+  players: Schema.Types.ObjectId[]
+  coachStaff: Schema.Types.ObjectId[]
+}
+
+declare interface CoachStaff {
+  _id: Schema.Types.ObjectId
+  apiCode: string
+  season: Schema.Types.ObjectId
+  team: Schema.Types.ObjectId
+  headCoach: Schema.Types.ObjectId
+  staff: Schema.Types.ObjectId[]
+}
+
+declare interface RosterPlayers {
+  _id: Schema.Types.ObjectId
+  apiCode: string
+  teamCode: string
+  season: Schema.Types.ObjectId
+  team: Schema.Types.ObjectId
+  players: Schema.Types.ObjectId[]
+}
+
+declare interface RosterPlayer extends Player {
+  _id: Schema.Types.ObjectId
+  currentPosition: string
+  jersey: number
+}
+
+declare interface Coach {
+  _id: Schema.Types.ObjectId
+  apiCode: string
+  firstname: string
+  lastname: string
+  team: Schema.Types.ObjectId
+  record: Schema.Types.ObjectId
+  isActive: boolean
+}
+
+declare interface Staff {
+  _id: Schema.Types.ObjectId
+  apiCode: string
+  firstname: string
+  lastname: string
+  team: Schema.Types.ObjectId
+  role: string
+  isActive: boolean
+}
+
 declare interface Season {
   _id: Schema.Types.ObjectId
   year: Date | string
   apiCode: string
-  [key: string]: any
+  league: Schema.Types.ObjectId
+  teams: Schema.Types.ObjectId[]
+  games: Schema.Types.ObjectId[]
+  stats: Schema.Types.ObjectId[]
+  leaders: Schema.Types.ObjectId[]
+}
+
+declare interface Record {
+  _id: Schema.Types.ObjectId
+  apiCode: string
+  season: Schema.Types.ObjectId
+  team: Schema.Types.ObjectId
+  wins: number
+  losses: number
+  isPlayoffBound: boolean
+  winPercentage: number
 }
 
 declare interface DraftSeason {

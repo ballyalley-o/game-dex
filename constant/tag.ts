@@ -24,6 +24,7 @@ export const TAGS = {
   ROUND: 'Round',
   SCORE: 'Score',
   SDK: 'SDK',
+  SEASON: 'Season',
   STATS: 'Stats',
   TEAM: 'Team',
   TEAM_STATS: 'TeamStats',

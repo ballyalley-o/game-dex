@@ -48,7 +48,13 @@ export const PATH_DIR = {
    * The player directory path.
    * @route /player
    */
-  PLAYER: conNexSegment(SEGMENT.API, GLOBAL.API_VERSION, SEGMENT.PLAYER)
+  PLAYER: conNexSegment(SEGMENT.API, GLOBAL.API_VERSION, SEGMENT.PLAYER),
+
+  /**
+   * The role directory path.
+   * @route /api/v1/role
+   */
+  ROLE: conNexSegment(SEGMENT.API, GLOBAL.API_VERSION, SEGMENT.ROLE)
 }
 
 /**

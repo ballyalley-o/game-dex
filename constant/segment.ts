@@ -31,6 +31,7 @@ export enum SEGMENT {
   PT = 'pt',
   POINT = 'point',
   PTS = 'pts',
+  ROLE = 'role',
   ROTATION = 'rotation',
   ROOT = '/',
   ROSTER = 'roster',

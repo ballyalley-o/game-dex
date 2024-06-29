@@ -497,17 +497,6 @@ declare interface Player {
   [key: string]: any
 }
 
-declare interface Coach {
-  _id: Schema.Types.ObjectId
-  apiCode: string
-  firstname: string
-  lastname: string
-  team: Schema.Types.ObjectId
-  record: string
-  isActive: boolean
-  [key: string]: any
-}
-
 declare interface Team {
   _id: Schema.Types.ObjectId
   apiCode: string
@@ -519,6 +508,8 @@ declare interface Team {
   season: Schema.Types.ObjectId
   coach: Schema.Types.ObjectId
   players: Schema.Types.ObjectId[]
+  roster: Schema.Types.ObjectId
+  rosterHistory: Schema.Types.ObjectId[]
   stats: Schema.Types.ObjectId
   statsHistory: Schema.Types.ObjectId[]
   franchise: Schema.Types.ObjectId
@@ -600,8 +591,23 @@ declare interface Coach {
   apiCode: string
   firstname: string
   lastname: string
-  team: Schema.Types.ObjectId
+  nickname: string
+  fullname: string
+  birthDate: Date
+  birthPlace: string
+  highSchool: string
+  college: string
+  height: string
+  weight: number
+  coachType: Schema.Types.ObjectId
+  team: Schema.Types.ObjectId[]
+  allStar: Schema.Types.ObjectId
+  awards: Schema.Types.ObjectId[]
   record: Schema.Types.ObjectId
+  leagues: Schema.Types.ObjectId[]
+  isPlayerBefore: boolean
+  playerCode: string
+  slug: string[]
   isActive: boolean
 }
 
@@ -626,11 +632,19 @@ declare interface Season {
   leaders: Schema.Types.ObjectId[]
 }
 
+declare interface Role {
+  _id: Schema.Types.ObjectId
+  apiCode: string
+  role: string
+  level: number
+  description: string
+  isActive: boolean
+}
+
 declare interface Record {
   _id: Schema.Types.ObjectId
   apiCode: string
   season: Schema.Types.ObjectId
-  team: Schema.Types.ObjectId
   wins: number
   losses: number
   isPlayoffBound: boolean

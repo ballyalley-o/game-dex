@@ -2,16 +2,22 @@ import { Request, Response, NextFunction } from 'express'
 import { Player, League, Franchise, Team, TeamStatsOverview, TeamPlayoffsStats, TeamRegularSeasonStats } from 'model'
 import axios from 'axios'
 import goodlog from 'good-logs'
+import { PlayerController } from 'controller'
 import { SDK_DIR } from 'config/sdk-dir'
-import { CODE, MESSAGE, RESPONSE, TEAM_ABBV_NAMES, TEAM_ABBV_ARR } from 'constant'
+import { CODE, MESSAGE, RESPONSE, TEAM_ABBV_NAMES, TEAM_ABBV_ARR, QPARAM } from 'constant'
 import SDKController from './sdk'
 
 class SDKSetController {
   private static _playerId: string
   private static _teamId: string
+  private static _apiCode: string
 
   static setPlayerId(req: Request) {
     this._playerId = req.params.id
+  }
+
+  static setApiCode(req: Request) {
+    this._apiCode = req.params.apiCode
   }
 
   /**
@@ -20,7 +26,7 @@ class SDKSetController {
    * @returns A promise that resolves to the created players.
    * @throws {TypeError} If the playerCommonData is not an array.
    */
-  public static async createPlayerBase(_req: Request, res: Response, _next: NextFunction) {
+  public static async createAllPlayerBase(_req: Request, res: Response, _next: NextFunction) {
     try {
       const [playerBioResponse, playerCommonResponse] = await Promise.all([axios.get(SDK_DIR.PLAYER_ALL), axios.get(SDK_DIR.COMMON_ALL_PLAYER)])
       const playerLeagues = await League.find()
@@ -31,15 +37,15 @@ class SDKSetController {
         throw new TypeError(MESSAGE.NOT_AN_ARRAY(playerCommonData))
       }
 
-      const players = playerData.map((player: Player) => ({
+      const players = playerData.map((player: any) => ({
         apiCode: player.id,
         firstname: player.first_name,
         lastname: player.last_name,
         isActive: player.is_active
       }))
 
-      playerCommonData.forEach((playerCommon: Player) => {
-        const player = players.find((p: Player) => p.apiCode === playerCommon.PERSON_ID)
+      playerCommonData.forEach((playerCommon: any) => {
+        const player = players.find((p: any) => p.apiCode === playerCommon.PERSON_ID)
         if (player) {
           player.slug = [playerCommon.PLAYER_SLUG]
           player.playerCode = playerCommon.PLAYERCODE
@@ -55,6 +61,57 @@ class SDKSetController {
       await Player.insertMany(players)
 
       res.status(players.length > 0 ? CODE.CREATED : CODE.NO_CONTENT).send(players.length > 0 ? RESPONSE.CREATED_ALL : RESPONSE.NO_CONTENT([]))
+    } catch (error: any) {
+      goodlog.error(error)
+      res.status(CODE.INTERNAL_SERVER_ERROR).send(RESPONSE.INTERNAL_SERVER_ERROR)
+    }
+  }
+
+  public static async createPlayerBaseByApiCode(req: Request, res: Response, _next: NextFunction) {
+    SDKSetController.setApiCode(req)
+    try {
+      const player = await axios.get(SDK_DIR.PLAYER_COMMON_INFO(SDKSetController._apiCode))
+      const nba = await League.find({ apiCode: QPARAM.nba })
+      const gLeague = await League.find({ apiCode: QPARAM.g_league })
+      const playerCommonData = player.data.CommonPlayerInfo[0]
+
+      const headlineStats = (playerHeadlineStats: any) => {
+        return {
+          playerCode: playerHeadlineStats.PLAYER_ID,
+          timeFrame: playerHeadlineStats.TimeFrame,
+          ppg: playerHeadlineStats.PTS,
+          apg: playerHeadlineStats.AST,
+          rpg: playerHeadlineStats.REB,
+          allStarAppearances: playerHeadlineStats.ALL_STAR_APPEARANCES
+        }
+      }
+
+      const newPlayer = {
+        apiCode: playerCommonData.PERSON_ID,
+        playerCode: playerCommonData.PLAYERCODE,
+        firstname: playerCommonData.FIRST_NAME,
+        lastname: playerCommonData.LAST_NAME,
+        birthDate: playerCommonData.BIRTHDATE,
+        height: playerCommonData.HEIGHT,
+        weight: playerCommonData.WEIGHT,
+        position: [playerCommonData.POSITION],
+        fromYear: playerCommonData.FROM_YEAR,
+        toYear: playerCommonData.TO_YEAR,
+        nationality: playerCommonData.COUNTRY,
+        headlineStats: headlineStats(player.data.PlayerHeadlineStats[0]),
+        school: playerCommonData.SCHOOL,
+        isActive: playerCommonData.ROSTERSTATUS === 'Inactive' ? false : true,
+        isGreatest75: playerCommonData.GREATEST_75_FLAG === 'Y' ? true : false,
+        slug: [playerCommonData.PLAYER_SLUG]
+      } as Player
+
+      if (playerCommonData.NBA_FLAG !== undefined && playerCommonData.DLEAGUE_FLAG !== undefined) {
+        newPlayer.leagues = PlayerController.playerLeagues(playerCommonData.NBA_FLAG, nba, playerCommonData.DLEAGUE_FLAG, gLeague)
+      }
+
+      const newCreatedPlayer = await Player.create(newPlayer)
+
+      res.status(CODE.CREATED).send(RESPONSE.CREATED(newCreatedPlayer))
     } catch (error: any) {
       goodlog.error(error)
       res.status(CODE.INTERNAL_SERVER_ERROR).send(RESPONSE.INTERNAL_SERVER_ERROR)
@@ -250,6 +307,14 @@ class SDKSetController {
       }
 
       res.status(teams.length > 0 ? CODE.CREATED : CODE.NO_CONTENT).send(teams.length > 0 ? RESPONSE.CREATED_ALL : RESPONSE.NO_CONTENT([]))
+    } catch (error: any) {
+      goodlog.error(error)
+      res.status(CODE.INTERNAL_SERVER_ERROR).send(RESPONSE.INTERNAL_SERVER_ERROR)
+    }
+  }
+
+  public static async createTeamRosterHistory(req: Request, res: Response, next: NextFunction) {
+    try {
     } catch (error: any) {
       goodlog.error(error)
       res.status(CODE.INTERNAL_SERVER_ERROR).send(RESPONSE.INTERNAL_SERVER_ERROR)

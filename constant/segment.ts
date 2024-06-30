@@ -7,6 +7,7 @@ export enum SEGMENT {
   ALL_TIME = 'all-time',
   ALL = 'all',
   API = 'api',
+  API_CODE = ':apiCode',
   AST = 'ast',
   ASSIST = 'assist',
   AWARD = 'award',

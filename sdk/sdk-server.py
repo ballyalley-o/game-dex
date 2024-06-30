@@ -660,6 +660,30 @@ def get_common_all_player():
 
     return common_all_player_json
 
+@app.route('/common/player/<int:player_id>', methods=['GET'])
+def get_common_player_id(player_id):
+    """
+    Retrieves the common single player data from the NBA API.
+
+    Returns:
+        dict: A dictionary containing the common all player data.
+    """
+    try:
+        # player_id = request.args.get('player_id', '2544')
+
+        common_all_player = commonplayerinfo.CommonPlayerInfo(player_id=player_id)
+        common_all_player_json = common_all_player.get_normalized_json()
+
+        return common_all_player_json
+
+    except requests.exceptions.RequestException as e:
+        app.logger.error(f"API request failed: {e}")
+        return jsonify({"error": "Failed to fetch common player data"}), 500
+
+    except Exception as e:
+        app.logger.error(f"An error occurred: {e}")
+        return jsonify({"error": "An internal error occurred"}), 500
+
 # fantasy profile
 @app.route('/player/<int:player_id>/fantasy', methods=['GET'])
 def get_player_fantasy_profile(player_id):

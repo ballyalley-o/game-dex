@@ -17,6 +17,19 @@ class LeagueController {
     }
   }
 
+  public static async getLeagueById(req: Request, res: Response, next: NextFunction) {
+    try {
+      const league = await League.findOne({ _id: req.params.id })
+      if (!league) {
+        return res.status(CODE.NOT_FOUND).send(RESPONSE.NOT_FOUND(MESSAGE.NOT_FOUND))
+      }
+      res.status(CODE.OK).send(RESPONSE.OK(league))
+    } catch (error: any) {
+      goodlog.error(error)
+      res.status(CODE.INTERNAL_SERVER_ERROR).send(RESPONSE.INTERNAL_SERVER_ERROR(error.message))
+    }
+  }
+
   public static async createLeague(req: Request, res: Response, next: NextFunction) {
     try {
       const { apiCode, league, commissioner, founded, teams, headquarters, website, logo } = req.body

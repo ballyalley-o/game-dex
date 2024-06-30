@@ -3,6 +3,9 @@ export { default as League } from './League'
 export { default as Franchise } from './Franchise'
 export { default as Team } from './Team'
 export { default as Role } from './Role'
+export { default as Roster } from './Roster'
+export { default as Coach } from './coach/Coach'
+export { default as CoachStaff } from './coach/CoachStaff'
 
 // stats:
 export { default as Stats } from './stats/Stats'

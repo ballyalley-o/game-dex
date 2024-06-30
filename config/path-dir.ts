@@ -13,6 +13,12 @@ export const PATH_DIR = {
   API: conNexSegment(SEGMENT.API, GLOBAL.API_VERSION),
 
   /**
+   * The directory path for the API code segment.
+   * @route /:apiCode
+   */
+  API_CODE: conNexSegment(SEGMENT.API_CODE),
+
+  /**
    * The directory path for the SDK segment.
    * @route /api/v1/sdk
    */
@@ -40,9 +46,9 @@ export const PATH_DIR = {
 
   /**
    * The team info directory path.
-   * @route /team/{id}
+   * @route /:id
    */
-  TEAM_ID: conNexSegment(SEGMENT.ID),
+  ID: conNexSegment(SEGMENT.ID),
 
   /**
    * The player directory path.
@@ -127,6 +133,14 @@ export const PATH_SDK = {
    * @route /player
    */
   PLAYER: conNexSegment(SEGMENT.PLAYER),
+
+  /**
+   * The player info directory path.
+   * @route /common/player/:apiCode
+   * @param api - The player ID or API code.
+   * @returns The player info directory path.
+   */
+  PLAYER_COMMON_APICODE: conNexSegment(SEGMENT.COMMON, SEGMENT.PLAYER, SEGMENT.API_CODE),
 
   /**
    * Returns the player info directory path for the specified player ID.

@@ -596,10 +596,13 @@ declare interface RosterPlayers {
 
 declare interface RosterPlayer extends Player {
   _id: Schema.Types.ObjectId
-  roster: Schema.Types.ObjectId
+  season: Schema.Types.ObjectId
+  experience: string
   player: Schema.Types.ObjectId
+  roster: Schema.Types.ObjectId
   position: string
-  jersey: number
+  jersey: Schema.Types.ObjectId
+  howAcquired: string
 }
 
 declare interface Coach {
@@ -770,18 +773,21 @@ declare interface ConferenceTitle {
   team: Schema.Types.ObjectId
 }
 
-declare interface RetiredJersey {
-  _id: Schema.Types.ObjectId
-  apiCode: string
-  team: Schema.Types.ObjectId
-  player: Schema.Types.ObjectId
-  jersey: number
-}
+// declare interface RetiredJersey {
+//   _id: Schema.Types.ObjectId
+//   apiCode: string
+//   team: Schema.Types.ObjectId
+//   player: Schema.Types.ObjectId
+//   jersey: number
+// }
 
 declare interface Jersey {
   _id: Schema.Types.ObjectId
   apiCode: string
   team: Schema.Types.ObjectId
-  player: Schema.Types.ObjectId
-  jersey: number
+  players: Schema.Types.ObjectId[]
+  number: number
+  isRetired: boolean
+  retiredTo: Schema.Types.ObjectId
+  seasonRetired: Schema.Types.ObjectId
 }

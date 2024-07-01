@@ -1,7 +1,5 @@
 ![NBA COVER](https://i.ibb.co/Sy1BpBx/cover.jpg)
 
-# Goode Playbook
-
 This is a simple API that provides information about NBA teams and players. It was built using Typescript-Node.js, Express.js, and MongoDB. Using a microservice written in Python.
 
 <hr>

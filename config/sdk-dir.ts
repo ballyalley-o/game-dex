@@ -95,6 +95,16 @@ export const SDK_DIR = {
   PLAYER_INFO: (id: any) => conNex(GLOBAL.SDK_URL, SEGMENT.PLAYER, id, SEGMENT.INFO),
 
   /**
+   * Returns the player common info directory path for the specified player ID.
+   *
+   * {base_sdk_url}/common/player/:id
+   *
+   * @param id - The player ID.
+   * @returns The player common info directory path.
+   */
+  PLAYER_COMMON_INFO: (id: any) => conNex(GLOBAL.SDK_URL, SEGMENT.COMMON, SEGMENT.PLAYER, id),
+
+  /**
    * Returns the player award directory path for the specified player ID.
    *
    * {base_sdk_url}/player/{id}/award

@@ -8,7 +8,7 @@ const LeagueSchema: Schema<League> = new Schema<League>(
   {
     apiCode: { type: String, required: true, unique: true },
     league: { type: String },
-    abbv: { type: String },
+    abbv: { type: String, unique: true },
     commissioner: { type: String },
     teams: { type: [Schema.Types.ObjectId], ref: TAGS.TEAM },
     founded: { type: String },

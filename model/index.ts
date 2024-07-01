@@ -1,6 +1,11 @@
-export { default as Player } from './Player'
-export { default as League } from './League'
+export { default as Coach } from './coach/Coach'
+export { default as CoachStaff } from './coach/CoachStaff'
 export { default as Franchise } from './Franchise'
+export { default as Jersey } from './Jersey'
+export { default as League } from './League'
+export { default as Player } from './Player'
+export { default as Role } from './Role'
+export { default as Roster } from './Roster'
 export { default as Team } from './Team'
 
 // stats:

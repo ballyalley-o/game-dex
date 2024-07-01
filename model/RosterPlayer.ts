@@ -6,9 +6,17 @@ const TAG = TAGS.ROSTER_PLAYER
 const RosterPlayerSchema: Schema<RosterPlayer> = new Schema<RosterPlayer>(
   {
     roster: { type: Schema.Types.ObjectId, ref: TAGS.ROSTER },
+    apiCode: { type: String },
+    season: { type: Schema.Types.ObjectId, ref: TAGS.SEASON },
+    nickname: [{ type: String }],
+    // props need from player firstname, lastname, birthdate, apiCode, school
     player: { type: Schema.Types.ObjectId, ref: TAGS.PLAYER },
     position: { type: String },
-    jersey: { type: Number },
+    height: { type: String },
+    weight: { type: String },
+    jersey: { type: Schema.Types.ObjectId, ref: TAGS.JERSEY },
+    howAcquired: { type: String },
+    slug: [{ type: String }],
     isActive: { type: Boolean, default: true }
   },
   {

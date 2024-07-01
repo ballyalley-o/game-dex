@@ -35,7 +35,7 @@ class PlayerController {
         return
       }
 
-      res.status(CODE.OK).send(RESPONSE.OK(players))
+      res.status(CODE.OK).send(RESPONSE.OK(players, players.length))
     } catch (error: any) {
       goodlog.error(error)
       res.status(CODE.INTERNAL_SERVER_ERROR).send(RESPONSE.INTERNAL_SERVER_ERROR)
@@ -72,7 +72,7 @@ class PlayerController {
   public static async updateAllPlayer(_req: Request, res: Response, _next: NextFunction) {
     try {
       const allPlayer = await Player.find()
-      let updatedPlayer
+      let updatedPlayers
       let count = 0
 
       if (!allPlayer) {
@@ -133,10 +133,10 @@ class PlayerController {
         update.isActive = playerCommonInfo.ROSTERSTATUS === 'Inactive' ? false : true
         update.isGreatest75 = playerCommonInfo.GREATEST_75_FLAG === 'Y' ? true : false
 
-        updatedPlayer = await Player.findByIdAndUpdate(player._id, update, { new: true })
+        updatedPlayers = await Player.findByIdAndUpdate(player._id, update, { new: true })
 
         count++
-        goodlog.info(`[${count}] Updated player: ${update.firstname} ${update.lastname} with ID: ${update._id}`)
+        goodlog.custom('brightGreen', `[${count}] Updated player: ${playerCommonInfo.DISPLAY_LAST_COMMA_FIRST} with ID: ${update.apiCode}`)
       }
 
       res.status(CODE.OK).send(RESPONSE.OK(MESSAGE.CREATED_ALL, count))
@@ -223,6 +223,8 @@ class PlayerController {
       }
       update.isActive = playerCommonInfo.ROSTERSTATUS === 'Inactive' ? false : true
       update.isGreatest75 = playerCommonInfo.GREATEST_75_FLAG === 'Y' ? true : false
+
+      goodlog.custom('brightGreen', `Updated player: ${playerCommonInfo.DISPLAY_LAST_COMMA_FIRST} with ID: ${update.apiCode}`)
 
       const updatedPlayer = await Player.findByIdAndUpdate(player._id, update, { new: true })
       res.status(CODE.OK).send(RESPONSE.OK(updatedPlayer))

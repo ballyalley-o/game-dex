@@ -17,10 +17,21 @@ const PlayerSchema: Schema<Player> = new Schema<Player>(
     highSchool: { type: String },
     college: { type: String },
     height: { type: String },
-    weight: { type: Number },
+    weight: { type: String },
     position: { type: [String] },
+    fromYear: { type: Number },
+    toYear: { type: Number },
+    nationality: { type: String },
     draft: { type: Schema.Types.ObjectId, ref: TAGS.DRAFT },
     team: [{ type: Schema.Types.ObjectId, ref: TAGS.TEAM }],
+    headlineStats: {
+      playerCode: { type: String },
+      timeFrame: { type: String },
+      ppg: { type: Number },
+      rpg: { type: Number },
+      apg: { type: Number },
+      allStarAppearances: { type: Number }
+    },
     stats: { type: Schema.Types.ObjectId, ref: TAGS.PLAYER_STATS_OVERVIEW },
     statsHistory: { type: [Schema.Types.ObjectId], ref: TAGS.PLAYER_STATS_OVERVIEW },
     allStar: { type: Schema.Types.ObjectId, ref: TAGS.ALL_STAR },
@@ -28,7 +39,8 @@ const PlayerSchema: Schema<Player> = new Schema<Player>(
     jerseys: { type: [Schema.Types.ObjectId], ref: TAGS.JERSEY },
     leagues: { type: [Schema.Types.ObjectId], ref: TAGS.LEAGUE },
     slug: { type: [String] },
-    isActive: { type: Boolean, default: true }
+    isActive: { type: Boolean, default: true },
+    isGreatest75: { type: Boolean, default: false }
   },
   {
     timestamps: true,

@@ -222,6 +222,7 @@ const PY = {
 }
 
 export const MESSAGE = {
+  CREATED_ALL: 'All resources created',
   NO_ID: 'No ID provided',
   NO_ABBV: 'No abbreviation provided',
   NO_TEAM: 'No team provided',

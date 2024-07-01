@@ -54,6 +54,20 @@ class SDKController {
     }
   }
 
+  public static async getPlayerByApiCode(apiCode: string) {
+    try {
+      const player = await axios.get(SDK_DIR.PLAYER_INFO(apiCode))
+
+      if (!player) {
+        return RESPONSE.NOT_FOUND
+      }
+
+      return player.data
+    } catch (error: any) {
+      goodlog.error(error)
+    }
+  }
+
   public static async getAllTeamId() {
     try {
       const teams = await axios.get(SDK_DIR.TEAM_ALL)

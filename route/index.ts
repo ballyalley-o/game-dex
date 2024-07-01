@@ -4,6 +4,7 @@ import { linkLeagueRoute } from 'route/league'
 import { linkFranchiseRoute } from 'route/franchise'
 import { linkPlayerRoute } from './player'
 import { linkTeamRoute } from './team'
+import { linkRoleRoute } from './role'
 
 const mainRoute = (app: Application) => {
   linkSdkRoute(app)
@@ -11,6 +12,7 @@ const mainRoute = (app: Application) => {
   linkFranchiseRoute(app)
   linkTeamRoute(app)
   linkPlayerRoute(app)
+  linkRoleRoute(app)
 }
 
 export { mainRoute }

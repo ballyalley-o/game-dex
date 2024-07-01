@@ -467,6 +467,15 @@ declare interface Playoffs {
   [key: string]: any
 }
 
+declare interface PlayerHeadlineStats {
+  playerCode: string
+  timeFrame: string
+  ppg: number
+  rpg: number
+  apg: number
+  allStarAppearances: number
+}
+
 declare interface Player {
   _id: Schema.Types.ObjectId
   apiCode: string
@@ -477,35 +486,29 @@ declare interface Player {
   nickname: string[]
   age: number
   height: string
-  weight: number
+  weight: string
   position: string[]
-  dateOfBirth: Date
+  birthDate: Date
   birthPlace: string
   highSchool: string
   college: string
   school: string
-  fromYear: string
-  toYear: string
+  nationality: string
+  fromYear: number
+  toYear: number
   experience: number
   draft: Schema.Types.ObjectId
   team: Schema.Types.ObjectId[]
+  headlineStats: PlayerHeadlineStats
   stats: Schema.Types.ObjectId
+  statsHistory: Schema.Types.ObjectId[]
   allStar: Schema.Types.ObjectId
   awards: Schema.Types.ObjectId[]
   jerseys: Schema.Types.ObjectId[]
+  leagues: Schema.Types.ObjectId[]
+  slug: string[]
   isActive: boolean
-  [key: string]: any
-}
-
-declare interface Coach {
-  _id: Schema.Types.ObjectId
-  apiCode: string
-  firstname: string
-  lastname: string
-  team: Schema.Types.ObjectId
-  record: string
-  isActive: boolean
-  [key: string]: any
+  isGreatest75: boolean
 }
 
 declare interface Team {
@@ -519,6 +522,8 @@ declare interface Team {
   season: Schema.Types.ObjectId
   coach: Schema.Types.ObjectId
   players: Schema.Types.ObjectId[]
+  roster: Schema.Types.ObjectId
+  rosterHistory: Schema.Types.ObjectId[]
   stats: Schema.Types.ObjectId
   statsHistory: Schema.Types.ObjectId[]
   franchise: Schema.Types.ObjectId
@@ -568,7 +573,7 @@ declare interface Roster {
   playbook: Schema.Types.ObjectId
   team: Schema.Types.ObjectId
   players: Schema.Types.ObjectId[]
-  coachStaff: Schema.Types.ObjectId[]
+  coachStaff: Schema.Types.ObjectId
 }
 
 declare interface CoachStaff {
@@ -591,8 +596,13 @@ declare interface RosterPlayers {
 
 declare interface RosterPlayer extends Player {
   _id: Schema.Types.ObjectId
-  currentPosition: string
-  jersey: number
+  season: Schema.Types.ObjectId
+  experience: string
+  player: Schema.Types.ObjectId
+  roster: Schema.Types.ObjectId
+  position: string
+  jersey: Schema.Types.ObjectId
+  howAcquired: string
 }
 
 declare interface Coach {
@@ -600,8 +610,23 @@ declare interface Coach {
   apiCode: string
   firstname: string
   lastname: string
-  team: Schema.Types.ObjectId
+  nickname: string
+  fullname: string
+  birthDate: Date
+  birthPlace: string
+  highSchool: string
+  college: string
+  height: string
+  weight: number
+  coachType: Schema.Types.ObjectId
+  team: Schema.Types.ObjectId[]
+  allStar: Schema.Types.ObjectId
+  awards: Schema.Types.ObjectId[]
   record: Schema.Types.ObjectId
+  leagues: Schema.Types.ObjectId[]
+  isPlayerBefore: boolean
+  playerCode: string
+  slug: string[]
   isActive: boolean
 }
 
@@ -626,13 +651,22 @@ declare interface Season {
   leaders: Schema.Types.ObjectId[]
 }
 
-declare interface Record {
+declare interface Role {
+  _id: Schema.Types.ObjectId
+  apiCode: string
+  role: string
+  level: number
+  description: string
+  isActive: boolean
+}
+
+declare interface IRecord {
   _id: Schema.Types.ObjectId
   apiCode: string
   season: Schema.Types.ObjectId
-  team: Schema.Types.ObjectId
   wins: number
   losses: number
+  record: string
   isPlayoffBound: boolean
   winPercentage: number
 }
@@ -739,18 +773,21 @@ declare interface ConferenceTitle {
   team: Schema.Types.ObjectId
 }
 
-declare interface RetiredJersey {
-  _id: Schema.Types.ObjectId
-  apiCode: string
-  team: Schema.Types.ObjectId
-  player: Schema.Types.ObjectId
-  jersey: number
-}
+// declare interface RetiredJersey {
+//   _id: Schema.Types.ObjectId
+//   apiCode: string
+//   team: Schema.Types.ObjectId
+//   player: Schema.Types.ObjectId
+//   jersey: number
+// }
 
 declare interface Jersey {
   _id: Schema.Types.ObjectId
   apiCode: string
   team: Schema.Types.ObjectId
-  player: Schema.Types.ObjectId
-  jersey: number
+  players: Schema.Types.ObjectId[]
+  number: number
+  isRetired: boolean
+  retiredTo: Schema.Types.ObjectId
+  seasonRetired: Schema.Types.ObjectId
 }

@@ -1,12 +1,13 @@
 import { Router } from 'express'
 import { LeagueController } from 'controller'
 import { SEGMENT } from 'constant'
+import { PATH_DIR } from 'config'
 
 const router = Router()
 
 router.get(SEGMENT.ROOT, LeagueController.getAllLeague)
 router.post(SEGMENT.ROOT, LeagueController.createLeague)
-router.put(SEGMENT.ROOT, LeagueController.updateLeague)
+router.put(PATH_DIR.API_CODE, LeagueController.updateLeague)
 router.delete(SEGMENT.ROOT, LeagueController.deleteLeague)
 
 /**

@@ -102,7 +102,12 @@ class SDKController {
     }
   }
 
-  public static async getAllTeamSeasonYear(abbv: any) {
+  /**
+   * Retrieves all team seasons for a given abbreviation.
+   * @param abbv - The abbreviation of the team.
+   * @returns An object containing team information and the list of unique years.
+   */
+  public static async getAllTeamSeasons(abbv: any) {
     try {
       const teamAbbv = await this.getTeamSeasonStats(abbv)
       const teamSeasonYears = []
@@ -130,7 +135,7 @@ class SDKController {
       const allTeams = []
 
       for (const team of teams) {
-        const teamSeasonYears = await this.getAllTeamSeasonYear(team)
+        const teamSeasonYears = await this.getAllTeamSeasons(team)
         allTeams.push(teamSeasonYears)
       }
 

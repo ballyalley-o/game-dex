@@ -21,6 +21,7 @@ const CoachSchema: Schema<Coach> = new Schema<Coach>(
     allStar: { type: Schema.Types.ObjectId, ref: TAGS.ALL_STAR },
     awards: { type: [Schema.Types.ObjectId], ref: TAGS.AWARD },
     leagues: { type: [Schema.Types.ObjectId], ref: TAGS.LEAGUE },
+    playerCode: { type: String },
     slug: { type: [String] },
     isActive: { type: Boolean, default: true }
   },

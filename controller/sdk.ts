@@ -102,6 +102,11 @@ class SDKController {
     }
   }
 
+  /**
+   * Retrieves all team seasons for a given abbreviation.
+   * @param abbv - The abbreviation of the team.
+   * @returns An object containing team information and the list of unique years.
+   */
   public static async getAllTeamSeasons(abbv: any) {
     try {
       const teamAbbv = await this.getTeamSeasonStats(abbv)

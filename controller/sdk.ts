@@ -102,7 +102,7 @@ class SDKController {
     }
   }
 
-  public static async getAllTeamSeasonYear(abbv: any) {
+  public static async getAllTeamSeasons(abbv: any) {
     try {
       const teamAbbv = await this.getTeamSeasonStats(abbv)
       const teamSeasonYears = []
@@ -130,7 +130,7 @@ class SDKController {
       const allTeams = []
 
       for (const team of teams) {
-        const teamSeasonYears = await this.getAllTeamSeasonYear(team)
+        const teamSeasonYears = await this.getAllTeamSeasons(team)
         allTeams.push(teamSeasonYears)
       }
 

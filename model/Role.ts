@@ -7,7 +7,6 @@ const RoleSchema: Schema<Role> = new Schema<Role>(
   {
     apiCode: { type: String },
     role: { type: String, unique: true, required: true },
-    level: { type: Number },
     description: { type: String },
     isActive: { type: Boolean, default: true }
   },

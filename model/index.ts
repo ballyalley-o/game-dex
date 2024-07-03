@@ -6,6 +6,7 @@ export { default as League } from './League'
 export { default as Player } from './Player'
 export { default as Role } from './Role'
 export { default as Roster } from './Roster'
+export { default as Season } from './Season'
 export { default as Team } from './Team'
 
 // stats:

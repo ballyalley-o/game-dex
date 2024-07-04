@@ -14,6 +14,8 @@ const RosterPlayerSchema: Schema<RosterPlayer> = new Schema<RosterPlayer>(
     position: { type: String },
     height: { type: String },
     weight: { type: String },
+    age: { type: Number },
+    experience: { type: String },
     jersey: { type: Schema.Types.ObjectId, ref: TAGS.JERSEY },
     howAcquired: { type: String },
     slug: [{ type: String }],

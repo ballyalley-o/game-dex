@@ -1,11 +1,26 @@
 import { Request, Response, NextFunction } from 'express'
-import { Player, League, Franchise, Team, TeamStatsOverview, TeamPlayoffsStats, TeamRegularSeasonStats } from 'model'
+import {
+  Player,
+  League,
+  Franchise,
+  Season,
+  Team,
+  TeamStatsOverview,
+  TeamPlayoffsStats,
+  TeamRegularSeasonStats,
+  Roster,
+  Jersey,
+  Coach,
+  Role,
+  CoachStaff
+} from 'model'
 import axios from 'axios'
 import goodlog from 'good-logs'
 import { PlayerController } from 'controller'
 import { SDK_DIR } from 'config/sdk-dir'
 import { CODE, MESSAGE, RESPONSE, TEAM_ABBV_NAMES, TEAM_ABBV_ARR, QPARAM } from 'constant'
 import SDKController from './sdk'
+import RosterPlayer from 'model/RosterPlayer'
 
 class SDKSetController {
   private static _playerId: string
@@ -313,8 +328,115 @@ class SDKSetController {
     }
   }
 
-  public static async createTeamRosterHistory(req: Request, res: Response, next: NextFunction) {
+  public static async createTeamRosterHistory(_req: Request, res: Response, next: NextFunction) {
     try {
+      const teams = await Team.find()
+      let count = 0
+
+      for (const team of teams) {
+        const allSeasons = await SDKController.getAllTeamSeasons(team.abbreviation)
+
+        for (const season of allSeasons?.years ?? []) {
+          const teamRoster = await axios.get(SDK_DIR.TEAM_ROSTER(team.apiCode), {
+            params: {
+              season: season
+            }
+          })
+          const teamRosterData = teamRoster.data.CommonTeamRoster
+          const teamRosterCoach = teamRoster.data.Coaches
+          let rosterHistory = []
+          const roster = {
+            team: team._id,
+            season: season._id,
+            players: [],
+            coachStaff: {}
+          }
+
+          console.log('SEASON: ', season)
+
+          for (const player of teamRosterData) {
+            // console.log('PLAYER: ', player)
+
+            const teamPlayer = await Player.findOne({ apiCode: player.PERSON_ID })
+            if (!teamPlayer) {
+              goodlog.log(MESSAGE.NOT_FOUND)
+              continue
+            }
+
+            const playerJersey = {
+              apiCode: player.TeamID,
+              number: player.NUM,
+              team: team._id,
+              players: [teamPlayer._id]
+            }
+
+            const rosterPlayerJersey = await Jersey.create(playerJersey)
+            const rosterSeason = await Season.findOne({ fromYear: player.SEASON })
+
+            const teamRosterPlayer = {
+              team: team._id,
+              player: teamPlayer?._id,
+              nickname: player.NICKNAME,
+              season: rosterSeason?._id,
+              jersey: rosterPlayerJersey?._id,
+              position: player.POSITION,
+              height: player.HEIGHT,
+              weight: player.WEIGHT,
+              age: player.AGE,
+              experience: player.EXP,
+              howAcquired: player.HOW_ACQUIRED,
+              slug: [player.PLAYER_SLUG]
+            }
+
+            await RosterPlayer.create(teamRosterPlayer)
+
+            for (const coach of teamRosterCoach) {
+              const teamCoach = await Coach.findOne({ apiCode: coach.PERSON_ID })
+              if (!teamCoach) {
+                goodlog.log(MESSAGE.NOT_FOUND)
+                continue
+              }
+
+              const coachStaffRole = await Role.findOne({ role: coach.COACH_TYPE })
+
+              const teamRosterCoach = {
+                apiCode: coach.COACH_ID,
+                team: team._id,
+                firstname: coach.FIRST_NAME,
+                lastname: coach.LAST_NAME,
+                coachType: coachStaffRole?._id,
+                level: coach.IS_ASSISTANT,
+                season: rosterSeason?._id,
+                isActive: coach.IS_ACTIVE
+              }
+
+              const newCoach = await Coach.create(teamRosterCoach)
+
+              const coachStaff = {
+                team: team._id,
+                season: rosterSeason?._id,
+                // headcoach should be created first then updated?, filter the coachtype?
+                headCoach: newCoach.coachType.role === 'Head Coach' ? newCoach._id : null,
+                // get the role types and push them to staff if they are not head coach
+                staff: newCoach.coachType.role !== 'Head Coach' ? [newCoach._id] : []
+              }
+
+              const newCoachStaff = await CoachStaff.create(coachStaff)
+              roster.coachStaff = newCoachStaff._id
+
+              // create the roster
+              const newRoster = await Roster.create(roster)
+              rosterHistory.push(newRoster)
+            }
+          }
+          await Team.findOneAndUpdate({ _id: team._id }, { $set: { rosterHistory, roster: rosterHistory[0] } })
+
+          count++
+          goodlog.custom('brightGreen', String(count) + ` ${team.name} roster history created`)
+        }
+      }
+
+      res.status(CODE.CREATED).send(RESPONSE.CREATED_ALL)
     } catch (error: any) {
       goodlog.error(error)
       res.status(CODE.INTERNAL_SERVER_ERROR).send(RESPONSE.INTERNAL_SERVER_ERROR)

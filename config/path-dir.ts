@@ -39,6 +39,12 @@ export const PATH_DIR = {
   FRANCHISE: conNexSegment(SEGMENT.API, GLOBAL.API_VERSION, SEGMENT.FRANCHISE),
 
   /**
+   * The season directory path.
+   * @route /api/v1/season
+   */
+  SEASON: conNexSegment(SEGMENT.API, GLOBAL.API_VERSION, SEGMENT.SEASON),
+
+  /**
    * The team directory path.
    * @route /team
    */

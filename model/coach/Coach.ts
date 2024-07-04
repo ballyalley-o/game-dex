@@ -16,6 +16,7 @@ const CoachSchema: Schema<Coach> = new Schema<Coach>(
     height: { type: String },
     weight: { type: Number },
     coachType: { type: Schema.Types.ObjectId, ref: TAGS.ROLE },
+    level: { type: Number },
     team: [{ type: Schema.Types.ObjectId, ref: TAGS.TEAM }],
     record: { type: Schema.Types.ObjectId, ref: TAGS.RECORD },
     allStar: { type: Schema.Types.ObjectId, ref: TAGS.ALL_STAR },

@@ -619,6 +619,7 @@ declare interface Coach {
   height: string
   weight: number
   coachType: Schema.Types.ObjectId
+  level: number
   team: Schema.Types.ObjectId[]
   allStar: Schema.Types.ObjectId
   awards: Schema.Types.ObjectId[]
@@ -641,14 +642,23 @@ declare interface Staff {
 
 declare interface Season {
   _id: Schema.Types.ObjectId
-  year: Date | string
   apiCode: string
-  league: Schema.Types.ObjectId
+  fromYear: string
+  toYear: string
+  season: string
   teams: Schema.Types.ObjectId[]
+  players: Schema.Types.ObjectId[]
   games: Schema.Types.ObjectId[]
   stats: Schema.Types.ObjectId[]
   leaders: Schema.Types.ObjectId[]
+  awards: Schema.Types.ObjectId[]
+  hof: Schema.Types.ObjectId[]
+  notableEvents: Schema.Types.ObjectId[]
+  status: SeasonStatus
+  slug: string[]
 }
+
+declare type SeasonStatus = 'completed' | 'in-progress' | 'upcoming'
 
 declare interface Role {
   _id: Schema.Types.ObjectId

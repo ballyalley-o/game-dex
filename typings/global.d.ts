@@ -5,7 +5,10 @@ declare interface IConNex {
 declare interface Env {
   PRODUCTION: 'production'
   DEVELOPMENT: 'development'
+  TEST: 'test'
 }
+
+declare type Env = 'production' | 'development' | 'test'
 
 declare interface IsConnected {
   isConnected: boolean

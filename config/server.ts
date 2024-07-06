@@ -59,7 +59,7 @@ class App {
    * Starts the application server.
    */
   public start() {
-    let _ENV = this._ENV === KEY.DEVELOPMENT ? ('DEVELOPMENT' as keyof Env) : ('PRODUCTION' as keyof Env)
+    let _ENV = this._ENV === KEY.DEVELOPMENT ? (KEY.DEVELOPMENT as unknown as Env) : (KEY.PRODUCTION as unknown as Env)
 
     try {
       this._app.listen(this._PORT, () => {

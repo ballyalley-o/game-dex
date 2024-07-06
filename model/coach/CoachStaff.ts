@@ -5,7 +5,7 @@ const TAG = TAGS.COACH_STAFF
 
 const CoachStaffSchema: Schema<CoachStaff> = new Schema<CoachStaff>(
   {
-    apiCode: { type: String, required: true },
+    apiCode: { type: String },
     season: { type: Schema.Types.ObjectId, ref: TAGS.SEASON },
     team: { type: Schema.Types.ObjectId, ref: TAGS.TEAM },
     headCoach: { type: Schema.Types.ObjectId, ref: TAGS.COACH },

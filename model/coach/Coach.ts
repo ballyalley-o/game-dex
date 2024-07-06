@@ -5,7 +5,7 @@ const TAG = TAGS.COACH
 
 const CoachSchema: Schema<Coach> = new Schema<Coach>(
   {
-    apiCode: { type: String, required: true },
+    apiCode: { type: String },
     firstname: { type: String },
     lastname: { type: String },
     nickname: { type: String },
@@ -22,6 +22,7 @@ const CoachSchema: Schema<Coach> = new Schema<Coach>(
     allStar: { type: Schema.Types.ObjectId, ref: TAGS.ALL_STAR },
     awards: { type: [Schema.Types.ObjectId], ref: TAGS.AWARD },
     leagues: { type: [Schema.Types.ObjectId], ref: TAGS.LEAGUE },
+    season: [{ type: Schema.Types.ObjectId, ref: TAGS.SEASON }],
     playerCode: { type: String },
     slug: { type: [String] },
     isActive: { type: Boolean, default: true }
@@ -46,8 +47,6 @@ CoachSchema.virtual('age').get(function () {
   const ageDate = new Date(diff)
   return Math.abs(ageDate.getUTCFullYear() - 1970)
 })
-
-CoachSchema.index({ apiCode: 1 }, { unique: true })
 
 const Coach = model<Coach>(TAG, CoachSchema)
 export default Coach

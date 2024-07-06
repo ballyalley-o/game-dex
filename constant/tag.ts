@@ -29,6 +29,7 @@ export const TAGS = {
   ROUND: 'Round',
   SCORE: 'Score',
   SDK: 'SDK',
+  SDK_SET_CONTROLLER: 'SDKSetController',
   SEASON: 'Season',
   SEASON_CONTROLLER: 'SeasonController',
   STATS: 'Stats',

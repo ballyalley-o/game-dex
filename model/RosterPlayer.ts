@@ -5,8 +5,8 @@ const TAG = TAGS.ROSTER_PLAYER
 
 const RosterPlayerSchema: Schema<RosterPlayer> = new Schema<RosterPlayer>(
   {
-    roster: { type: Schema.Types.ObjectId, ref: TAGS.ROSTER },
     apiCode: { type: String },
+    roster: { type: Schema.Types.ObjectId, ref: TAGS.ROSTER },
     season: { type: Schema.Types.ObjectId, ref: TAGS.SEASON },
     nickname: [{ type: String }],
     // props need from player firstname, lastname, birthdate, apiCode, school

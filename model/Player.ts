@@ -7,7 +7,7 @@ const TAG = TAGS.PLAYER
 
 const PlayerSchema: Schema<Player> = new Schema<Player>(
   {
-    apiCode: { type: String, required: true, unique: true },
+    apiCode: { type: String, required: true },
     playerCode: { type: String },
     firstname: { type: String },
     lastname: { type: String },

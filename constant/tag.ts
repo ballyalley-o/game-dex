@@ -34,6 +34,7 @@ export const TAGS = {
   SEASON_CONTROLLER: 'SeasonController',
   STATS: 'Stats',
   TEAM: 'Team',
+  TEAM_CONTROLLER: 'TeamController',
   TEAM_STATS: 'TeamStats',
   TEAM_STATS_OVERVIEW: 'TeamStatsOverview',
   TEAM_PLAYOFFS_STATS: 'TeamPlayoffsStats',

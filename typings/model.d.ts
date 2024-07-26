@@ -625,6 +625,7 @@ declare interface Coach {
   awards: Schema.Types.ObjectId[]
   record: Schema.Types.ObjectId
   leagues: Schema.Types.ObjectId[]
+  season: Schema.Types.ObjectId[]
   playerCode: string
   slug: string[]
   isActive: boolean

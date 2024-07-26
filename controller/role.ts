@@ -15,7 +15,6 @@ class RoleController {
 
   /**
    * Get all roles
-   *
    */
   public static async getAllRole(_req: Request, res: Response, _next: NextFunction) {
     try {
@@ -35,9 +34,6 @@ class RoleController {
 
   /**
    * Get a role by ID.
-   * @param _req - The request object.
-   * @param res - The response object.
-   * @param _next - The next function.
    */
   public static async getRoleById(_req: Request, res: Response, _next: NextFunction) {
     try {
@@ -57,9 +53,6 @@ class RoleController {
 
   /**
    * Create a new role.
-   * @param _req - The request object.
-   * @param res - The response object.
-   * @param _next - The next function.
    */
   public static async createRole(_req: Request, res: Response, _next: NextFunction) {
     try {
@@ -74,9 +67,6 @@ class RoleController {
 
   /**
    * Update a role by ID.
-   * @param _req - The request object.
-   * @param res - The response object.
-   * @param _next - The next function.
    */
   public static async updateRole(_req: Request, res: Response, _next: NextFunction) {
     try {
@@ -97,9 +87,6 @@ class RoleController {
 
   /**
    * Delete a role by ID.
-   * @param _req - The request object.
-   * @param res - The response object.
-   * @param _next - The next function.
    */
   public static async deleteRole(_req: Request, res: Response, _next: NextFunction) {
     try {

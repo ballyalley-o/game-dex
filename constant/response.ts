@@ -38,6 +38,12 @@ export const SUCCESS = {
     message: 'All resources created'
   },
 
+  UPDATED_ALL: {
+    success: true,
+    code: CODE.OK,
+    message: 'All resources updated'
+  },
+
   /**
    * Returns a success response with ACCEPTED status code.
    * @param data - The data to be included in the response.
@@ -223,6 +229,7 @@ const PY = {
 
 export const MESSAGE = {
   CREATED_ALL: 'All resources created',
+  UPDATED_ALL: 'All resources updated',
   NO_ID: 'No ID provided',
   NO_ABBV: 'No abbreviation provided',
   NO_TEAM: 'No team provided',

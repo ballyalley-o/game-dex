@@ -51,13 +51,16 @@ class App {
   public async connectDb() {
     try {
       await connectDb(true)
-    } catch (error) {}
+    } catch (error: any) {
+      goodlog.error(error.message)
+      this.isConnected = false
+    }
   }
 
-  @ConnectionStatus
   /**
    * Starts the application server.
    */
+  @ConnectionStatus
   public start() {
     let _ENV = this._ENV === KEY.DEVELOPMENT ? (KEY.DEVELOPMENT as unknown as Env) : (KEY.PRODUCTION as unknown as Env)
 

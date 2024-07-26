@@ -6,7 +6,7 @@ const TAG = TAGS.TEAM
 
 const TeamSchema: Schema<Team> = new Schema<Team>(
   {
-    apiCode: { type: String, required: true },
+    apiCode: { type: String },
     name: { type: String, required: true },
     city: { type: String, required: true },
     abbreviation: { type: String, required: true },

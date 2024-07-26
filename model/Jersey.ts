@@ -5,8 +5,8 @@ const TAG = TAGS.JERSEY
 
 const JerseySchema: Schema<Jersey> = new Schema<Jersey>(
   {
-    apiCode: { type: String, required: true },
-    number: { type: Number, required: true },
+    apiCode: { type: String },
+    number: { type: Number },
     team: { type: Schema.Types.ObjectId, ref: TAGS.TEAM },
     players: [{ type: Schema.Types.ObjectId, ref: TAGS.PLAYER }],
     isRetired: { type: Boolean, default: false },

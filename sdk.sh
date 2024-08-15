@@ -5,3 +5,4 @@
 # python3 sdk/server-players-teams.py
 
 python3 sdk/sdk-server.py
+# gunicorn -w 4 sdk/sdk-server:app

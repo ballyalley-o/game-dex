@@ -491,6 +491,8 @@ class SDKSetController {
       const teams = await Team.find()
       let count = 0
 
+      let coachStaff: any
+
       for (const team of teams) {
         const allSeasons = await SDKController.getAllTeamSeasons(team.abbreviation)
         for (const season of allSeasons?.years ?? []) {
@@ -501,59 +503,60 @@ class SDKSetController {
           })
           const teamRosterCoach = teamRoster.data.Coaches
 
-          try {
-            for (const coach of teamRosterCoach) {
-              const coachStaffRole = await Role.findOne({ role: coach.COACH_TYPE })
-              const rosterSeason = await Season.findOne({ fromYear: coach.SEASON })
+          coachStaff = {
+            team: team._id,
+            season: null,
+            headCoach: '',
+            staff: []
+          }
 
-              // use uid for apiCode if it doesn't exist
-              const teamRosterCoach = {
-                apiCode: coach.COACH_ID && coach.TEAM_ID ? coach.TEAM_ID + '-' + coach.COACH_ID : null,
-                team: team._id,
-                firstname: coach.FIRST_NAME,
-                lastname: coach.LAST_NAME,
-                coachType: coachStaffRole?._id,
-                level: coach.IS_ASSISTANT,
-                season: [rosterSeason?._id],
-                isActive: coach.IS_ACTIVE
-              }
+          for (const coach of teamRosterCoach) {
+            const coachStaffRole = await Role.findOne({ role: coach.COACH_TYPE })
+            const rosterSeason = await Season.findOne({ fromYear: coach.SEASON })
 
-              // check if coach exists, if it does, update the coach with the new season
-              const existingCoach = await Coach.findOne({ apiCode: teamRosterCoach.apiCode })
-              if (existingCoach) {
-                existingCoach.season.push(rosterSeason?._id)
-                await Coach.findOneAndUpdate({ _id: existingCoach._id }, { $set: { season: existingCoach.season } })
-              } else {
-                const newCoach = await Coach.create(teamRosterCoach)
+            coachStaff.season = rosterSeason?._id
 
-                const coachStaff = {
-                  team: team._id,
-                  season: rosterSeason?._id,
-                  // headcoach should be created first then updated?, filter the coachtype?
-                  headCoach: coachStaffRole?.role === 'Head Coach' ? newCoach._id : null,
-                  // get the role types and push them to staff if they are not head coach
-                  staff: coachStaffRole?.role !== 'Head Coach' ? [newCoach._id] : []
-                }
-
-                const newCoachStaff = await CoachStaff.create(coachStaff)
-                // update the roster with the new coach staff
-                for (const roster of team.rosterHistory) {
-                  const newRoster = await Roster.findByIdAndUpdate(roster._id, { coachStaff: newCoachStaff._id }, { new: true })
-                }
-
-                count++
-                goodlog.custom('brightGreen', String(count) + ` ${team.name} coach staff history created`)
-              }
+            // use uid for apiCode if it doesn't exist
+            const teamRosterCoach = {
+              apiCode: coach.COACH_ID && coach.TEAM_ID ? coach.TEAM_ID + '-' + coach.COACH_ID : null,
+              team: team._id,
+              firstname: coach.FIRST_NAME,
+              lastname: coach.LAST_NAME,
+              coachType: coachStaffRole?._id,
+              level: coach.IS_ASSISTANT,
+              season: [rosterSeason?._id],
+              isActive: coach.IS_ACTIVE
             }
-            res.status(CODE.OK).send(RESPONSE.UPDATED_ALL)
-          } catch (error: any) {
-            goodlog.error(error)
-            res.status(CODE.INTERNAL_SERVER_ERROR).send(RESPONSE.INTERNAL_SERVER_ERROR)
+
+            // check if coach exists, if it does, update the coach with the new season
+            const existingCoach = await Coach.findOne({ apiCode: teamRosterCoach.apiCode })
+            if (existingCoach) {
+              existingCoach.season.push(rosterSeason?._id)
+              await Coach.findOneAndUpdate({ _id: existingCoach._id }, { $set: { season: existingCoach.season } })
+            } else {
+              const newCoach = await Coach.create(teamRosterCoach)
+
+              if (coach.COACH_TYPE === 'Head Coach') {
+                Object.assign(coachStaff, { headCoach: newCoach._id })
+              } else {
+                coachStaff.staff.push(newCoach._id)
+              }
+
+              const newCoachStaff = await CoachStaff.create(coachStaff)
+              // update the roster with the new coach staff
+              for (const roster of team.rosterHistory) {
+                const newRoster = await Roster.findByIdAndUpdate(roster._id, { coachStaff: newCoachStaff._id }, { new: true })
+              }
+
+              count++
+              goodlog.custom('brightGreen', String(count) + ` ${team.name} coach staff history created`)
+            }
           }
         }
       }
+      res.status(CODE.OK).send(RESPONSE.UPDATED_ALL)
     } catch (error: any) {
-      goodlog.error(error, TAG, ' updateCoachHistory ')
+      goodlog.error(error, TAG, ' updateRosterHistoryWithCoachData ')
       res.status(CODE.INTERNAL_SERVER_ERROR).send(RESPONSE.INTERNAL_SERVER_ERROR)
     }
   }

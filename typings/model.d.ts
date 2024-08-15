@@ -578,7 +578,7 @@ declare interface Roster {
 
 declare interface CoachStaff {
   _id: Schema.Types.ObjectId
-  apiCode: string
+  apiCode?: string
   season: Schema.Types.ObjectId
   team: Schema.Types.ObjectId
   headCoach: Schema.Types.ObjectId
